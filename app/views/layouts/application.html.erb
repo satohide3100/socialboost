@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SNS Management Application</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag "application" %>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#"><strong>SNS Management Application</strong></a>
+      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="ナビゲーションの切替">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-user"></i>&nbspusername</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-list-alt"></i>&nbspアカウント一覧</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i>&nbspログアウト</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="row">
+      <div class="col-2">
+        <div class="card bg-dark text-white rounded-0 border-top-0">
+          <img class="card-img-top rounded-0" src="https://pbs.twimg.com/media/DuGJQGBUcAAwCuT.jpg">
+          <!--
+          <img class="card-img-top rounded-0" src="https://www.thaich.net/wp-content/uploads/2018/03/sns-icon.jpg">
+        -->
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-dark post"><i class="fas fa-pen-square"></i>&nbsp&nbspタイムライン投稿</li>
+            <li class="list-group-item text-body postsub d-flex justify-content-between align-items-center" onclick="location.href='/post/bulk'">
+              <small>&nbsp&nbsp&nbsp一括投稿</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item text-body postsub d-flex justify-content-between align-items-center" onclick="location.href='/post/auto'">
+              <small>&nbsp&nbsp&nbsp自動投稿(BOT)</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item bg-dark follow"><i class="fas fa-user-plus"></i>&nbsp&nbspフォロー</li>
+            <li class="list-group-item text-body followsub d-flex justify-content-between align-items-center" onclick="location.href='/follow/list'">
+              <small>&nbsp&nbsp&nbspフォローリスト</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item bg-dark unfollow"><i class="fas fa-user-minus"></i>&nbsp&nbspアンフォロー</li>
+            <li class="list-group-item text-body unfollowsub d-flex justify-content-between align-items-center" onclick="location.href='/unfollow/list'">
+              <small>&nbsp&nbsp&nbspアンフォローリスト</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item bg-dark fav"><i class="far fa-thumbs-up"></i>&nbsp&nbspいいね</li>
+            <li class="list-group-item text-body favsub d-flex justify-content-between align-items-center" onclick="location.href='/fav/list'">
+              <small>&nbsp&nbsp&nbspいいねリスト</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item bg-dark message"><i class="far fa-envelope"></i>&nbsp&nbspメッセージ</li>
+            <li class="list-group-item text-body messagesub d-flex justify-content-between align-items-center">
+              <small>&nbsp&nbsp&nbspメッセージ一覧</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item text-body messagesub d-flex justify-content-between align-items-center">
+              <small>&nbsp&nbsp&nbspメッセージ送信リスト</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item bg-dark marketing"><i class="fas fa-chart-bar"></i>&nbsp&nbsp分析</li>
+            <li class="list-group-item text-body messagesub d-flex justify-content-between align-items-center">
+              <small>&nbsp&nbsp&nbspTwitter</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item text-body messagesub d-flex justify-content-between align-items-center">
+              <small>&nbsp&nbsp&nbspInstagram</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+            <li class="list-group-item text-body messagesub d-flex justify-content-between align-items-center">
+              <small>&nbsp&nbsp&nbspFacebook</small>
+              <span><i class="fas fa-chevron-circle-right"></i></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="container">
+          <br><br><br>
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

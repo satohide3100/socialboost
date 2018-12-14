@@ -1,0 +1,32 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require font-awesome
+ *= require jquery-ui
+ */
+
+@import "bootstrap";
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
+}
+html {
+  font-size: 1rem;
+}
+
+.list-group-item.text-body {
+  cursor: pointer;
+}
+.list-group-item.text-body:hover {
+  background: -moz-linear-gradient(65deg, #F13F79, #FFC778);
+background: -webkit-linear-gradient(65deg, #F13F79, #FFC778);
+background: linear-gradient(25deg, #F13F79, #FFC778); 
+}
