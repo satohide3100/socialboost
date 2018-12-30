@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  target_username: MyString
+  target_name: MyString
+  target_image: MyString
+  follow_flg: 1
+  account: one
+
+two:
+  target_username: MyString
+  target_name: MyString
+  target_image: MyString
+  follow_flg: 1
+  account: two

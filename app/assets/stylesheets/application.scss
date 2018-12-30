@@ -28,5 +28,11 @@ html {
 .list-group-item.text-body:hover {
   background: -moz-linear-gradient(65deg, #F13F79, #FFC778);
 background: -webkit-linear-gradient(65deg, #F13F79, #FFC778);
-background: linear-gradient(25deg, #F13F79, #FFC778); 
+background: linear-gradient(25deg, #F13F79, #FFC778);
+}
+
+.login_container {
+  background-image: image-url("login_back.jpg");
+  height: 1000px;
+  background-size:cover;
 }

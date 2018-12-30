@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  follow_count: 1
+  follower_count: 1
+  post_count: 1
+  faved_count: 1
+  profile_image: MyString
+  account: one
+
+two:
+  follow_count: 1
+  follower_count: 1
+  post_count: 1
+  faved_count: 1
+  profile_image: MyString
+  account: two

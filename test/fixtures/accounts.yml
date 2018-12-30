@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sns_type: 1
+  username: MyString
+  pass: MyString
+  active_flg: 1
+
+two:
+  sns_type: 1
+  username: MyString
+  pass: MyString
+  active_flg: 1

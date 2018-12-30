@@ -65,7 +65,7 @@ gem 'mechanize'
 gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
-
+gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
@@ -73,3 +73,4 @@ gem 'autoprefixer-rails'
 
 gem "font-awesome-rails"
 gem 'selenium-webdriver'
+gem 'devise'

@@ -1,0 +1,205 @@
+<h3><strong>アカウントリスト</strong></h3>
+<p class="text-muted">各SNSのアカウントの追加と確認を行います。</p><br>
+<div class="row">
+  <div class="col-6">
+    <h4><strong><i class="fab fa-twitter-square"></i>&nbspTwitter</strong></h4>
+  </div>
+  <div class="col-6 text-right">
+    <button class="btn btn-sm btn-success twitter-btn"><i class="fas fa-plus-square"></i>&nbspアカウント追加</button>
+  </div>
+</div>
+<div class="card twitter-form shadow">
+  <div class="card-body">
+    <form action="/account/create">
+      <div class="form-group" hidden>
+        <label for="sns_type">sns_type</label>
+        <input name="sns_type" type="number" class="form-control" id="sns_type" value="1">
+      </div>
+      <div class="form-group">
+        <label for="username">ユーザー名</label>
+        <input name="username" type="text" class="form-control" id="username">
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input name="pass" type="password" class="form-control" id="password">
+      </div>
+      <button type="submit" class="btn btn-primary">追加する</button>
+    </form>
+  </div>
+</div>
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table text-center">
+      <thead class="thead-light">
+        <tr>
+          <th>アイコン画像</th>
+          <th>アカウント名</th>
+          <th>フォロー数</th>
+          <th>フォロワー数</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @accounts1.each do |account| %>
+        <% analyze = @analyzes.where(account_id:account.id).limit(1) %>
+        <% if account.active_flg == 1 %>
+        <tr class="table-primary">
+          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle") %></td>
+          <td class="align-middle"><%= account.profile_name %></td>
+          <td class="align-middle"><%= number_with_delimiter(analyze[0].follow_count) %></td>
+          <td class="align-middle"><%= number_with_delimiter(analyze[0].follower_count) %></td>
+          <td class="align-middle"></td>
+          <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+        </tr>
+        <% else %>
+        <tr>
+          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle") %></td>
+          <td class="align-middle"><%= account.profile_name %></td>
+          <td class="align-middle"><%= number_with_delimiter(analyze[0].follow_count) %></td>
+          <td class="align-middle"><%= number_with_delimiter(analyze[0].follower_count) %></td>
+          <td class="align-middle"> <a href="/account/active?id=<%= account.id %>" class="btn btn-sm btn-primary">アクティブにする</a> </td>
+          <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+        </tr>
+        <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-6">
+    <h4><strong><i class="fab fa-instagram"></i>&nbspInstagram</strong></h4>
+  </div>
+  <div class="col-6 text-right">
+    <btn class="btn btn-sm btn-success instagram-btn"><i class="fas fa-plus-square"></i>&nbspアカウント追加</btn>
+  </div>
+</div>
+<div class="card instagram-form shadow">
+  <div class="card-body">
+    <form action="/account/create">
+      <div class="form-group" hidden>
+        <label for="sns_type">sns_type</label>
+        <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
+      </div>
+      <div class="form-group">
+        <label for="username">ユーザー名</label>
+        <input type="text" class="form-control" id="username" name="username">
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" class="form-control" id="password" name="pass">
+      </div>
+      <button type="submit" class="btn btn-primary">追加する</button>
+    </form>
+  </div>
+</div>
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table text-center">
+      <thead class="thead-light">
+        <tr>
+          <th>アイコン画像</th>
+          <th>アカウント名</th>
+          <th>フォロー数</th>
+          <th>フォロワー数</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @accounts2.each do |account| %>
+        <% analyze = @analyzes.where(account_id:account.id).limit(1) %>
+        <% if account.active_flg == 1 %>
+        <tr class="table-primary">
+          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle") %></td>
+          <td class="align-middle"><%= account.profile_name %></td>
+          <td class="align-middle"><%= number_with_delimiter(analyze[0].follow_count) %></td>
+          <td class="align-middle"><%= number_with_delimiter(analyze[0].follower_count) %></td>
+          <td class="align-middle"></td>
+          <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+        </tr>
+        <% else %>
+        <tr>
+          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle") %></td>
+          <td class="align-middle"><%= account.profile_name %></td>
+          <td class="align-middle"><%= number_with_delimiter(analyze[0].follow_count) %></td>
+          <td class="align-middle"><%= number_with_delimiter(analyze[0].follower_count) %></td>
+          <td class="align-middle"> <a href="/account/active?id=<%= account.id %>" class="btn btn-sm btn-primary">アクティブにする</a> </td>
+          <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+        </tr>
+        <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-6">
+    <h4><strong><i class="fab fa-facebook-square"></i>&nbspFacebook</strong></h4>
+  </div>
+  <div class="col-6 text-right">
+    <btn class="btn btn-sm btn-success facebook-btn"><i class="fas fa-plus-square"></i>&nbspアカウント追加</btn>
+  </div>
+</div>
+<div class="card facebook-form shadow">
+  <div class="card-body">
+    <form action="/account/create">
+      <div class="form-group" hidden>
+        <label for="sns_type">sns_type</label>
+        <input name="sns_type" type="number" class="form-control" id="sns_type" value="3">
+      </div>
+      <div class="form-group">
+        <label for="username">ユーザー名</label>
+        <input type="text" class="form-control" id="username">
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" class="form-control" id="password">
+      </div>
+      <button type="submit" class="btn btn-primary">追加する</button>
+    </form>
+  </div>
+</div>
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th>アイコン画像</th>
+          <th>アカウント名</th>
+          <th>フォロー数</th>
+          <th>フォロワー数</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @accounts3.each do |account| %>
+        <tr>
+          <td></td>
+          <td><%= account.profile_name %></td>
+          <td></td>
+          <td></td>
+          <td> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div><br><br>
+<script>
+$('.twitter-form').hide();
+$('.instagram-form').hide();
+$('.facebook-form').hide();
+$('.twitter-btn').click(function() {
+  $('.twitter-form').fadeToggle();
+})
+$('.instagram-btn').click(function() {
+  $('.instagram-form').fadeToggle();
+})
+$('.facebook-btn').click(function() {
+  $('.facebook-form').fadeToggle();
+})
+</script>

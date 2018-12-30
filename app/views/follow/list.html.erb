@@ -1,76 +1,343 @@
 <h3><strong>フォローリスト</strong></h3>
 <p class="text-muted">自動フォローするアカウントのリストの確認と追加を行います。</p><br>
-<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+<ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
   <li class="nav-item">
-    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Twitter</a>
+    <a class="nav-link active" id="twitter-tab" data-toggle="pill" href="#twitter" role="tab" aria-controls="twitter" aria-selected="true"><i class="fab fa-twitter-square"></i>&nbspTwitter</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Facebook</a>
+    <a class="nav-link" id="instagram-tab" data-toggle="pill" href="#instagram" role="tab" aria-controls="instagram" aria-selected="false"><i class="fab fa-instagram"></i>&nbspInstagram</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Instagram</a>
+    <a class="nav-link disabled" id="facebook-tab" data-toggle="pill" href="#facebook" role="tab" aria-controls="facebook" aria-selected="false" tabindex="-1" aria-disabled="true"><i class="fab fa-facebook-square"></i>&nbspFacebook</a>
   </li>
 </ul>
-<div class="card">
-  <div class="card-header">
-    <strong>フォローリスト追加</strong>
-  </div>
-  <div class="card-body">
-    <form>
-      <div class="row">
-        <div class="col-6">
-          <select class="custom-select" id="addoption">
-            <option selected>フォローリスト追加方法</option>
-            <option value="1">指定したユーザーのフォロワー全員を追加</option>
-            <option value="2">指定したユーザーのフォロー全員を追加</option>
-            <option value="3">特定のキーワードを投稿しているユーザーを追加</option>
-            <option value="4">特定の投稿にいいねしているユーザーを追加</option>
-            <option value="5">特定の投稿をRTしているユーザーを追加</option>
-          </select>
-        </div>
-        <div class="col-6">
-        </div>
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="twitter" role="tabpanel" aria-labelledby="twitter-tab">
+    <div class="media">
+      <a href="#" class="align-self-center mr-3">
+        <img src="<%= @twitterActiveImage[0].profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
+      </a>
+      <div class="media-body">
+        <br><p class="mb-0"><%= @twitterActive[0].profile_name %></p>
       </div>
-      <br>
-      <div class="row">
-        <div class="col-6">
-          <div class="form-group user showform" style="display:none;">
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
-          </div>
-          <div class="form-group word showform" style="display:none;">
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="特定のキーワード">
-          </div>
-          <div class="form-group post showform" style="display:none;">
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="投稿のURL">
-          </div>
-        </div>
+    </div><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>フォロー設定</strong>
       </div>
+      <div class="card-body">
+        <form>
+          <div class="form-group row">
+            <label for="limit" class="col-2 col-form-label">1日の上限</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <input name="limit" type="number" class="form-control" id="limit" min="1" max="24">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">件</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-6">
+              <div class="input-group mb-3">
+                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">時間おきに</span>
+                </div>
+                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon3">件フォローする</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </form>
+      </div>
+    </div><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>フォローリスト追加</strong>
+      </div>
+      <div class="card-body">
+        <form action="/follow/create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="1">
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <select name="option" class="custom-select addoption1" id="addoption">
+                <option selected>フォローリスト追加方法</option>
+                <option value="1">指定したユーザーのフォロワーを追加</option>
+                <option value="2">指定したユーザーのフォローを追加</option>
+                <option value="3">特定のキーワードを投稿しているユーザーを追加</option>
+              </select>
+            </div>
+            <div class="col-6">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group user1 showform1" style="display:none;">
+                <input type="text" name="user" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
+              </div>
+              <div class="form-group word1 showform1" style="display:none;">
+                <input type="text" name="word" class="form-control" id="exampleInputEmail1" placeholder="特定のキーワード">
+              </div>
+              <div class="form-group post1 showform1" style="display:none;">
+                <input type="text" name="post" class="form-control" id="exampleInputEmail1" placeholder="投稿のURL">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <input type="number" name="count" class="form-control" id="count" placeholder="追加ユーザー数" min="100" max="10000" step="100">
+              </div>
+            </div>
+          </div>
 
-      <button type="submit" class="btn btn-primary">追加</button>
-    </form>
+          <button type="submit" class="btn btn-primary">追加</button>
+        </form>
+      </div>
+    </div><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>フォローリスト一覧 （<%= @follows1.count %>人）</strong>
+      </div>
+      <div class="card-body text-center">
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>アイコン画像</th>
+              <th>アカウント名</th>
+              <th>ユーザーネーム</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @follows1.each do |follow| %>
+            <tr onclick="window.open().location.href='https://twitter.com/<%= follow.target_username %>'">
+              <td class="align-middle"><%= image_tag(follow.target_image, size:"100×100", class:"rounded-circle") %></td>
+              <td class="align-middle"><%= follow.target_name %></td>
+              <td class="align-middle"><%= follow.target_username %></td>
+              <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div><br><br>
   </div>
-</div><br><br>
-<div class="card">
-  <div class="card-header">
-    <strong>フォローリスト一覧</strong>
+  <div class="tab-pane fade" id="instagram" role="tabpanel" aria-labelledby="instagram-tab">
+    <div class="media">
+      <a href="#" class="align-self-center mr-3">
+        <img src="<%= @instagramActiveImage[0].profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
+      </a>
+      <div class="media-body">
+        <br><p class="mb-0"><%= @instagramActive[0].profile_name %></p>
+      </div>
+    </div><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>フォロー設定</strong>
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="form-group row">
+            <label for="limit" class="col-2 col-form-label">1日の上限</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <input name="limit" type="number" class="form-control" id="limit" min="1" max="24">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">件</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-6">
+              <div class="input-group mb-3">
+                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">時間おきに</span>
+                </div>
+                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon3">件フォローする</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </form>
+      </div>
+    </div><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>フォローリスト追加</strong>
+      </div>
+      <div class="card-body">
+        <form action="/follow/create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <select name="option" class="custom-select addoption2" id="addoption">
+                <option selected>フォローリスト追加方法</option>
+                <option value="1">指定したユーザーのフォロワーを追加</option>
+                <option value="2">指定したユーザーのフォローを追加</option>
+                <option value="3">特定のハッシュタグを投稿しているユーザーを追加</option>
+                <option value="4">特定の投稿にいいねしているユーザーを追加</option>
+              </select>
+            </div>
+            <div class="col-6">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group user2 showform2" style="display:none;">
+                <input type="text" name="user" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
+              </div>
+              <div class="form-group word2 showform2" style="display:none;">
+                <input type="text" name="word" class="form-control" id="exampleInputEmail1" placeholder="特定のハッシュタグ">
+              </div>
+              <div class="form-group post2 showform2" style="display:none;">
+                <input type="text" name="post" class="form-control" id="exampleInputEmail1" placeholder="投稿のURL">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <input type="number" name="count" class="form-control" id="count" placeholder="追加ユーザー数" min="100" max="10000" step="100">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">追加</button>
+        </form>
+      </div>
+    </div><br><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>フォローリスト一覧 （<%= @follows2.count %>人）</strong>
+      </div>
+      <div class="card-body text-center">
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>アイコン画像</th>
+              <th>アカウント名</th>
+              <th>ユーザーネーム</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @follows2.each do |follow| %>
+            <tr onclick="window.open().location.href='https://www.instagram.com/<%= follow.target_username %>/'">
+              <td class="align-middle"><%= image_tag(follow.target_image, size:"100×100", class:"rounded-circle") %></td>
+              <td class="align-middle"><%= follow.target_name %></td>
+              <td class="align-middle"><%= follow.target_username %></td>
+              <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div><br><br>
   </div>
-  <div class="card-body">
+  <div class="tab-pane fade" id="facebook" role="tabpanel" aria-labelledby="facebook-tab">
+    <div class="media">
+      <a href="#" class="align-self-center mr-3">
+        <img src="<%= @twitterActiveImage[0].profile_image %>" alt="中メディアの画像" class="rounded-circle">
+      </a>
+      <div class="media-body">
+        <br><p class="mb-0"><%= @twitterActive[0].profile_name %></p>
+      </div>
+    </div><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>フォローリスト追加</strong>
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="row">
+            <div class="col-6">
+              <select class="custom-select" id="addoption">
+                <option selected>フォローリスト追加方法</option>
+                <option value="1">指定したユーザーのフォロワーを追加</option>
+                <option value="2">指定したユーザーのフォローを追加</option>
+                <option value="3">特定のキーワードを投稿しているユーザーを追加</option>
+                <option value="4">特定の投稿にいいねしているユーザーを追加</option>
+                <option value="5">特定の投稿をRTしているユーザーを追加</option>
+              </select>
+            </div>
+            <div class="col-6">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group user showform" style="display:none;">
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
+              </div>
+              <div class="form-group word showform" style="display:none;">
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="特定のキーワード">
+              </div>
+              <div class="form-group post showform" style="display:none;">
+                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="投稿のURL">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <input type="number" class="form-control" id="count" placeholder="追加ユーザー数" min="100" max="10000" step="100">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">追加</button>
+        </form>
+      </div>
+    </div><br><br>
 
   </div>
 </div>
 
+
 <script>
-  $('#addoption').change(function () {
-    var text = $('option:selected').val();
+  $('.addoption1').change(function () {
+    var text = $('.addoption1>option:selected').val();
     if (text == "1" || text == "2") {
-      $('.showform').hide();
-      $('.user').fadeIn();
+      $('.showform1').hide();
+      $('.user1').fadeIn();
     } else if (text == "3") {
-      $('.showform').hide();
-      $('.word').fadeIn();
+      $('.showform1').hide();
+      $('.word1').fadeIn();
     } else if (text == "4" || text == "5") {
-      $('.showform').hide();
-      $('.post').fadeIn();
+      $('.showform1').hide();
+      $('.post1').fadeIn();
+    }
+  })
+  $('.addoption2').change(function () {
+    var text = $('.addoption2>option:selected').val();
+    if (text == "1" || text == "2") {
+      $('.showform2').hide();
+      $('.user2').fadeIn();
+    } else if (text == "3") {
+      $('.showform2').hide();
+      $('.word2').fadeIn();
+    } else if (text == "4" || text == "5") {
+      $('.showform2').hide();
+      $('.post2').fadeIn();
     }
   })
 </script>
