@@ -2,12 +2,18 @@ class FollowController < ApplicationController
   before_action :authenticate_user!
   USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-Mobile; +http://www.google.com/mobile/adsbot.html)'
   def list
-    @twitterActive = Account.where(user_id:current_user.id).where(sns_type:1).where(active_flg:1)
-    @twitterActiveImage = Analyze.where(account_id:@twitterActive[0].id)
-    @instagramActive = Account.where(user_id:current_user.id).where(sns_type:2).where(active_flg:1)
-    @instagramActiveImage = Analyze.where(account_id:@instagramActive[0].id)
-    @follows1 = Follow.where(account_id:@twitterActive[0].id)
-    @follows2 = Follow.where(account_id:@instagramActive[0].id)
+    @twitterActive = Account.find_by(user_id:current_user.id,sns_type:1,active_flg:1)
+    if @twitterActive
+      @twitterActiveImage = Analyze.find_by(account_id:@twitterActive.id)
+    end
+
+    @instagramActive = Account.find_by(user_id:current_user.id,sns_type:2,active_flg:1)
+    if @instagramActive
+      @instagramActiveImage = Analyze.find_by(account_id:@instagramActive.id)
+    end
+
+    @follows1 = Follow.where(account_id:@twitterActive.id)
+    @follows2 = Follow.where(account_id:@instagramActive.id)
   end
   def create
 
