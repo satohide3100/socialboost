@@ -22,6 +22,8 @@
         <br><p class="mb-0"><%= @twitterActive.profile_name %></p>
       </div>
     </div><br>
+    <% else %>
+    <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
     <% end %>
     <div class="card shadow">
       <div class="card-header">
@@ -144,6 +146,8 @@
         <br><p class="mb-0"><%= @instagramActive.profile_name %></p>
       </div>
     </div><br>
+    <% else %>
+    <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
     <% end %>
     <div class="card shadow">
       <div class="card-header">

@@ -13,34 +13,46 @@
 </ul>
 <div class="tab-content" id="pills-tabContent">
   <div class="tab-pane fade show active" id="twitter" role="tabpanel" aria-labelledby="twitter-tab">
+    <% if @twitterActive %>
     <div class="media">
       <a href="#" class="align-self-center mr-3">
-        <img src="<%= @twitterActiveImage[0].profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
+        <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
       </a>
       <div class="media-body">
-        <br><p class="mb-0"><%= @twitterActive[0].profile_name %></p>
+        <br><p class="mb-0"><%= @twitterActive.profile_name %></p>
       </div>
     </div><br>
+    <% else %>
+    <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
+    <% end %>
   </div>
   <div class="tab-pane fade" id="instagram" role="tabpanel" aria-labelledby="instagram-tab">
+    <% if @instagramActive %>
     <div class="media">
       <a href="#" class="align-self-center mr-3">
-        <img src="<%= @instagramActiveImage[0].profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
+        <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
       </a>
       <div class="media-body">
-        <br><p class="mb-0"><%= @instagramActive[0].profile_name %></p>
+        <br><p class="mb-0"><%= @instagramActive.profile_name %></p>
       </div>
     </div><br>
+    <% else %>
+    <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
+    <% end %>
   </div>
   <div class="tab-pane fade" id="facebook" role="tabpanel" aria-labelledby="facebook-tab">
+    <% if @facebookActive %>
     <div class="media">
       <a href="#" class="align-self-center mr-3">
-        <img src="<%= @twitterActiveImage[0].profile_image %>" alt="中メディアの画像" class="rounded-circle">
+        <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle">
       </a>
       <div class="media-body">
-        <br><p class="mb-0"><%= @twitterActive[0].profile_name %></p>
+        <br><p class="mb-0"><%= @twitterActive.profile_name %></p>
       </div>
     </div><br>
+    <% else %>
+    <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
+    <% end %>
   </div>
 </div>
 <div class="card">
