@@ -30,12 +30,20 @@
         <strong>いいね設定</strong>
       </div>
       <div class="card-body">
-        <form>
+        <form action="/fav/setting_create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="1">
+          </div>
           <div class="form-group row">
-            <label for="limit" class="col-2 col-form-label">1日の上限</label>
+            <label for="dayLimit" class="col-2 col-form-label">1日の上限</label>
             <div class="col-2">
               <div class="input-group mb-3">
-                <input name="limit" type="number" class="form-control" id="limit" min="1" max="24">
+                <% if @twitterSetting %>
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @twitterSetting.dayLimit %>">
+                <% else %>
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">件</span>
                 </div>
@@ -45,11 +53,19 @@
           <div class="form-group row">
             <div class="col-6">
               <div class="input-group mb-3">
-                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% if @twitterSetting %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" max="12" value="<%= @twitterSetting.interval %>">
+                <% else %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" max="12">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
-                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% if @twitterSetting %>
+                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1" value="<%= @twitterSetting.count_by_interval %>">
+                <% else %>
+                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon3">件いいねする</span>
                 </div>
@@ -60,6 +76,82 @@
         </form>
       </div>
     </div><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>いいねリスト追加</strong>
+      </div>
+      <div class="card-body">
+        <form action="/fav/create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="1">
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <select name="option" class="custom-select addoption1" id="addoption1">
+                <option selected>いいねリスト追加方法</option>
+                <option value="1">特定のキーワードの投稿を追加</option>
+                <option value="2">特定のユーザーの投稿を追加</option>
+              </select>
+            </div>
+            <div class="col-6">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group user1 showform1" style="display:none;">
+                <input name="user" type="text" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
+              </div>
+              <div class="form-group word1 showform1" style="display:none;">
+                <input name="word" type="text" class="form-control" id="exampleInputEmail1" placeholder="特定のキーワード">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <input type="number" name="count" class="form-control" id="count" placeholder="追加ユーザー数" min="0" max="10000" step="100">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">追加</button>
+        </form>
+      </div>
+    </div><br><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>いいねリスト一覧 （<%= @fav1.count %>投稿）</strong>
+      </div>
+      <div class="card-body text-center">
+        <% if @fav1.count > 0 %>
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>アイコン</th>
+              <th>アカウント名</th>
+              <th>投稿URL</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @fav1.each do |fav| %>
+            <tr onclick="window.open().location.href='<%= fav.target_postLink %>'">
+              <td class="align-middle"><%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle") %></td>
+              <td class="align-middle"><%= fav.target_name.truncate(20) %></td>
+              <td class="align-middle"><%= link_to("投稿リンク",fav.target_postLink) %></td>
+              <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% else %>
+        現在、いいね予定の投稿はありません。
+        <% end %>
+
+      </div>
+    </div><br><br>
   </div>
   <div class="tab-pane fade" id="instagram" role="tabpanel" aria-labelledby="instagram-tab">
     <% if @instagramActive %>
@@ -74,74 +166,156 @@
     <% else %>
     <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
     <% end %>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>いいね設定</strong>
+      </div>
+      <div class="card-body">
+        <form action="/fav/setting_create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
+          </div>
+          <div class="form-group row">
+            <label for="dayLimit" class="col-2 col-form-label">1日の上限</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <% if @instagramSetting %>
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @instagramSetting.dayLimit %>">
+                <% else %>
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1">
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">件</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-6">
+              <div class="input-group mb-3">
+                <% if @instagramSetting %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" value="<%= @instagramSetting.interval %>">
+                <% else %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">時間おきに</span>
+                </div>
+                <% if @instagramSetting %>
+                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1" value="<%= @instagramSetting.count_by_interval %>">
+                <% else %>
+                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1">
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon3">件いいねする</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </form>
+      </div>
+    </div><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>いいねリスト追加</strong>
+      </div>
+      <div class="card-body">
+        <form action="/fav/create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <select name="option" class="custom-select addoption2" id="addoption2">
+                <option selected>いいねリスト追加方法</option>
+                <option value="1">特定のハッシュタグの投稿を追加</option>
+              </select>
+            </div>
+            <div class="col-6">
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group user2 showform2" style="display:none;">
+                <input name="user" type="text" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
+              </div>
+              <div class="form-group word2 showform2" style="display:none;">
+                <input name="word" type="text" class="form-control" id="exampleInputEmail1" placeholder="特定のハッシュタグ">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <input type="number" name="count" class="form-control" id="count" placeholder="追加ユーザー数" min="0" max="10000" step="100">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">追加</button>
+        </form>
+      </div>
+    </div><br><br>
+    <div class="card shadow">
+      <div class="card-header">
+        <strong>いいねリスト一覧 （<%= @fav2.count %>投稿）</strong>
+      </div>
+      <div class="card-body text-center">
+        <% if @fav2.count > 0 %>
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>アイコン</th>
+              <th>アカウント名</th>
+              <th>投稿URL</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @fav2.each do |fav| %>
+            <tr onclick="window.open().location.href='<%= fav.target_postLink %>'">
+              <td class="align-middle"><%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle") %></td>
+              <td class="align-middle"><%= fav.target_username.truncate(20) %></td>
+              <td class="align-middle"><%= link_to("投稿リンク",fav.target_postLink) %></td>
+              <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% else %>
+        現在、いいね予定の投稿はありません。
+        <% end %>
+      </div>
+    </div><br><br>
   </div>
   <div class="tab-pane fade" id="facebook" role="tabpanel" aria-labelledby="facebook-tab">
-    
+
   </div>
 </div>
-<div class="card shadow">
-  <div class="card-header">
-    <strong>いいねリスト追加</strong>
-  </div>
-  <div class="card-body">
-    <form>
-      <div class="row">
-        <div class="col-6">
-          <select class="custom-select" id="addoption">
-            <option selected>いいねリスト追加方法</option>
-            <option value="1">特定のキーワードの投稿を追加</option>
-            <option value="2">特定のユーザーの投稿を追加</option>
-          </select>
-        </div>
-        <div class="col-6">
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-6">
-          <div class="form-group user showform" style="display:none;">
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
-          </div>
-          <div class="form-group word showform" style="display:none;">
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="特定のキーワード">
-          </div>
-        </div>
-      </div>
-
-      <button type="submit" class="btn btn-primary">追加</button>
-    </form>
-  </div>
-</div><br><br>
-<div class="card shadow">
-  <div class="card-header">
-    <strong>いいねリスト一覧</strong>
-  </div>
-  <div class="card-body text-center">
-    <table class="table table-hover">
-      <thead class="thead-light">
-        <tr>
-          <th>アイコン画像</th>
-          <th>アカウント名</th>
-          <th>ユーザーネーム</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-
-      </tbody>
-    </table>
-  </div>
-</div><br><br>
 
 <script>
-$('#addoption').change(function () {
-  var text = $('option:selected').val();
+$('#addoption1').change(function () {
+  var text = $('.addoption1>option:selected').val();
   if (text == "2") {
-    $('.showform').hide();
-    $('.user').fadeIn();
+    $('.showform1').hide();
+    $('.user1').fadeIn();
   } else if (text == "1") {
-    $('.showform').hide();
-    $('.word').fadeIn();
+    $('.showform1').hide();
+    $('.word1').fadeIn();
+  }
+})
+$('#addoption2').change(function () {
+  var text = $('.addoption2>option:selected').val();
+  if (text == "2") {
+    $('.showform2').hide();
+    $('.user2').fadeIn();
+  } else if (text == "1") {
+    $('.showform2').hide();
+    $('.word2').fadeIn();
   }
 })
 </script>

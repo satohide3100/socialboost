@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  dayLimit: 1
+  intervalDay: 1
+  account: one
+
+two:
+  dayLimit: 1
+  intervalDay: 1
+  account: two

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  dayLimit: 1
+  interval: 1
+  count_by_interval: 1
+  account: one
+
+two:
+  dayLimit: 1
+  interval: 1
+  count_by_interval: 1
+  account: two

@@ -25,6 +25,58 @@
     <% else %>
     <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
     <% end %>
+    <div class="card">
+      <div class="card-header">
+        <strong>アンフォロー設定</strong>&nbsp&nbsp&nbsp<strong class="small">フォローバックされていないユーザーをアンフォローします。</strong>
+      </div>
+      <div class="card-body">
+        <form action="/unfollow/setting_create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="1">
+          </div>
+          <div class="form-group row">
+            <label for="interval" class="col-2 col-form-label">経過日数</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <% if @twitterSetting %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" value="<%= @twitterSetting.intervalDay %>">
+                <% else %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">日</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="dayLimit" class="col-2 col-form-label">1日の上限</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <% if @twitterSetting %>
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @twitterSetting.dayLimit %>">
+                <% else %>
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1">
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">件</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </form>
+      </div>
+    </div><br><br>
+    <div class="card">
+      <div class="card-header">
+        <strong>アンフォローリスト一覧</strong>
+      </div>
+      <div class="card-body">
+        現在、アンフォロー予定のアカウントはありません。
+      </div>
+    </div>
   </div>
   <div class="tab-pane fade" id="instagram" role="tabpanel" aria-labelledby="instagram-tab">
     <% if @instagramActive %>
@@ -39,59 +91,59 @@
     <% else %>
     <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
     <% end %>
+    <div class="card">
+      <div class="card-header">
+        <strong>アンフォロー設定</strong>&nbsp&nbsp&nbsp<strong class="small">フォローバックされていないユーザーをアンフォローします。</strong>
+      </div>
+      <div class="card-body">
+        <form action="/unfollow/setting_create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
+          </div>
+          <div class="form-group row">
+            <label for="interval" class="col-2 col-form-label">経過日数</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <% if @instagramSetting %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" value="<%= @instagramSetting.intervalDay %>">
+                <% else %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">日</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="dayLimit" class="col-2 col-form-label">1日の上限</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <% if @instagramSetting %>
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @instagramSetting.dayLimit %>">
+                <% else %>
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1">
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">件</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </form>
+      </div>
+    </div><br><br>
+    <div class="card">
+      <div class="card-header">
+        <strong>アンフォローリスト一覧</strong>
+      </div>
+      <div class="card-body">
+        現在、アンフォロー予定のアカウントはありません。
+      </div>
+    </div>
   </div>
   <div class="tab-pane fade" id="facebook" role="tabpanel" aria-labelledby="facebook-tab">
-    <% if @facebookActive %>
-    <div class="media">
-      <a href="#" class="align-self-center mr-3">
-        <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle">
-      </a>
-      <div class="media-body">
-        <br><p class="mb-0"><%= @twitterActive.profile_name %></p>
-      </div>
-    </div><br>
-    <% else %>
-    <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
-    <% end %>
-  </div>
-</div>
-<div class="card">
-  <div class="card-header">
-    <strong>アンフォロー設定</strong>&nbsp&nbsp&nbsp<strong class="small">フォローバックされていないユーザーをアンフォローします。</strong>
-  </div>
-  <div class="card-body">
-    <form>
-      <div class="form-group row">
-        <label for="interval" class="col-2 col-form-label">経過日数</label>
-        <div class="col-2">
-          <div class="input-group mb-3">
-            <input name="interval" type="number" class="form-control" id="interval" min="1">
-            <div class="input-group-append">
-              <span class="input-group-text" id="basic-addon2">日</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="limit" class="col-2 col-form-label">1日の上限</label>
-        <div class="col-2">
-          <div class="input-group mb-3">
-            <input name="limit" type="number" class="form-control" id="limit" min="1">
-            <div class="input-group-append">
-              <span class="input-group-text" id="basic-addon2">件</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-primary">保存</button>
-    </form>
-  </div>
-</div><br><br>
-<div class="card">
-  <div class="card-header">
-    <strong>アンフォローリスト一覧</strong>
-  </div>
-  <div class="card-body">
-    現在、アンフォロー予定のアカウントはありません。
   </div>
 </div>

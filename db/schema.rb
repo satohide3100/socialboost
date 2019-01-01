@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_29_174542) do
+ActiveRecord::Schema.define(version: 2019_01_01_101737) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "sns_type"
@@ -36,6 +36,38 @@ ActiveRecord::Schema.define(version: 2018_12_29_174542) do
     t.index ["account_id"], name: "index_analyzes_on_account_id"
   end
 
+  create_table "fav_settings", force: :cascade do |t|
+    t.integer "dayLimit"
+    t.integer "interval"
+    t.integer "count_by_interval"
+    t.integer "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_fav_settings_on_account_id"
+  end
+
+  create_table "favs", force: :cascade do |t|
+    t.string "target_postLink"
+    t.string "target_postImage"
+    t.string "target_username"
+    t.string "target_name"
+    t.integer "fav_flg"
+    t.integer "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_favs_on_account_id"
+  end
+
+  create_table "follow_settings", force: :cascade do |t|
+    t.integer "dayLimit"
+    t.integer "interval"
+    t.integer "count_by_interval"
+    t.integer "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_follow_settings_on_account_id"
+  end
+
   create_table "follows", force: :cascade do |t|
     t.string "target_username"
     t.string "target_name"
@@ -45,6 +77,25 @@ ActiveRecord::Schema.define(version: 2018_12_29_174542) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_follows_on_account_id"
+  end
+
+  create_table "un_follow_settings", force: :cascade do |t|
+    t.integer "dayLimit"
+    t.integer "intervalDay"
+    t.integer "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_un_follow_settings_on_account_id"
+  end
+
+  create_table "unfollows", force: :cascade do |t|
+    t.string "target_username"
+    t.string "target_name"
+    t.string "target_image"
+    t.integer "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_unfollows_on_account_id"
   end
 
   create_table "users", force: :cascade do |t|

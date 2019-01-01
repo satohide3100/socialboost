@@ -6,6 +6,7 @@ class FollowController < ApplicationController
     if @twitterActive
       @twitterActiveImage = Analyze.find_by(account_id:@twitterActive.id)
       @follows1 = Follow.where(account_id:@twitterActive.id)
+      @twitterSetting = FollowSetting.find_by(account_id:@twitterActive.id)
     else
       @follows1 = []
     end
@@ -14,6 +15,7 @@ class FollowController < ApplicationController
     if @instagramActive
       @instagramActiveImage = Analyze.find_by(account_id:@instagramActive.id)
       @follows2 = Follow.where(account_id:@instagramActive.id)
+      @instagramSetting = FollowSetting.find_by(account_id:@instagramActive.id)
     else
       @follows2 = []
     end
@@ -25,11 +27,36 @@ class FollowController < ApplicationController
     else
       @follows3 = []
     end
-
-
-
-
   end
+
+  def setting_create
+    sns_type = params[:sns_type]
+    dayLimit = params[:dayLimit]
+    interval = params[:interval]
+    count_by_interval = params[:count_by_interval]
+    if sns_type == "1"
+      @account = Account.find_by(user_id:current_user.id,sns_type:1,active_flg:1)
+      account_id = @account.id
+    elsif sns_type == "2"
+      @account = Account.find_by(user_id:current_user.id,sns_type:2,active_flg:1)
+      account_id = @account.id
+    end
+    followSetting = FollowSetting.find_by(account_id:account_id)
+    if followSetting == nil
+      FollowSetting.create(
+        dayLimit:dayLimit,interval:interval,count_by_interval:count_by_interval,account_id:account_id
+      )
+      flash[:notice] = "フォロー設定を新規追加しました。"
+    else
+      FollowSetting.where(account_id:account_id).update(
+        dayLimit:dayLimit,interval:interval,count_by_interval:count_by_interval
+      )
+      flash[:notice] = "フォロー設定を更新しました。"
+    end
+
+    redirect_to("/follow/list")
+  end
+
   def create
 
     sns_type = params[:sns_type]
@@ -43,29 +70,30 @@ class FollowController < ApplicationController
     target_imageList = []
 
     if sns_type == "1"
-      require 'selenium-webdriver'
-      caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-        "chromeOptions" => {
-        #binary: "/app/.apt/usr/bin/google-chrome",
-        #args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox']
-        args: ["--user-data-dir=./profile1"]
-        }
-      )
-      driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
-      wait = Selenium::WebDriver::Wait.new(:timeout => 5)
       @account = Account.find_by(user_id:current_user.id,sns_type:1,active_flg:1)
       account_id = @account.id
       username = @account.username
       pass = @account.pass
+      require 'selenium-webdriver'
+      caps = Selenium::WebDriver::Remote::Capabilities.chrome(
+        "chromeOptions" => {
+        #binary: "/app/.apt/usr/bin/google-chrome",
+        args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox'#,"--user-data-dir=./profile#{current_user.id}#{account_id}"
+        ]
+        }
+      )
+      puts "#{current_user.id}#{account_id}"
+      driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+      wait = Selenium::WebDriver::Wait.new(:timeout => 5)
       case option
       when "1" #指定したユーザーのフォロワーを追加
-        #driver.get("https://twitter.com/login")
-        #wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
-        #driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys(username)
-        #wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
-        #driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys(pass)
-        #driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
-        driver.get("https://twitter.com/#{user}/followers")
+        driver.get("https://twitter.com/login")
+        wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
+        driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys(username)
+        wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
+        driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys(pass)
+        driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
+        driver.navigate.to("https://twitter.com/#{user}/followers")
         gridCount = 0
         while gridCount < count
           wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
@@ -89,14 +117,14 @@ class FollowController < ApplicationController
         puts target_nameList.count
         puts target_imageList.count
         driver.close
-      when "2"
-        #driver.get("https://twitter.com/login")
-        #wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
-        #driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys(username)
-        #wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
-        #driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys(pass)
-        #driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
-        driver.get("https://twitter.com/#{user}/following")
+      when "2" #指定したユーザーのフォローを追加
+        driver.get("https://twitter.com/login")
+        wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
+        driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys(username)
+        wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
+        driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys(pass)
+        driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
+        driver.navigate.to("https://twitter.com/#{user}/following")
         gridCount = 0
         while gridCount < count
           wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
@@ -120,13 +148,7 @@ class FollowController < ApplicationController
         puts target_nameList.count
         puts target_imageList.count
         driver.close
-      when "3"
-        #driver.get("https://twitter.com/login")
-        #wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
-        #driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys(username)
-        #wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
-        #driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys(pass)
-        #driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
+      when "3" #特定のキーワードを投稿しているユーザーを追加
         driver.get("https://twitter.com/search?f=tweets&vertical=default&q=#{word}&l=ja&src=typd")
         gridCount = 0
         while gridCount < count
@@ -163,27 +185,33 @@ class FollowController < ApplicationController
         caps = Selenium::WebDriver::Remote::Capabilities.chrome(
           "chromeOptions" => {
           #binary: "/app/.apt/usr/bin/google-chrome",
-          #args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox']
-          args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--user-data-dir=./profileInsta"]
+          args: [
+            "--window-size=375,667","--user-agent=#{USER_AGENT}","--start-maximized","--headless",'--no-sandbox'
+          ]
           }
         )
         driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
         wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-        #driver.get("https://www.instagram.com/accounts/login/?hl=ja")
-        #wait.until {driver.find_element(name: 'username').displayed?}
-        #driver.find_element(name: 'username').send_keys(username)
-        #wait.until {driver.find_element(name: 'password').displayed?}
-        #driver.find_element(name: 'password').send_keys(pass)
-        #driver.find_elements(class: 'sqdOP')[1].click
-        driver.get("https://www.instagram.com/#{user}/")
+        driver.get("https://www.instagram.com/accounts/login/?hl=ja")
+        wait.until {driver.find_element(name: 'username').displayed?}
+        driver.find_element(name: 'username').send_keys(username)
+        wait.until {driver.find_element(name: 'password').displayed?}
+        driver.find_element(name: 'password').send_keys(pass)
+        driver.find_elements(tag_name: "button")[2].click
+        #ßdriver.find_elements(class: 'sqdOP')[1].click
+        sleep(2)
+        driver.navigate.to("https://www.instagram.com/#{user}/")
         wait.until {driver.find_element(tag_name: 'a').displayed?}
         driver.find_element(tag_name: 'a').click
         gridCount = 0
+        c = 0
         while gridCount < count
-          #wait.until {driver.find_elements(tag_name: "li").last.displayed?}
-          sleep(3)
+          sleep(2)
           puts gridCount = driver.find_elements(tag_name: "li").count
-          #driver.find_elements(tag_name: "li").last.location_once_scrolled_into_view
+          c += 1
+          if c > 10
+            break
+          end
         end
         target_usernames = driver.find_elements(class: 'FPmhX')
         target_usernames.each do |e|
@@ -203,27 +231,30 @@ class FollowController < ApplicationController
         caps = Selenium::WebDriver::Remote::Capabilities.chrome(
           "chromeOptions" => {
           #binary: "/app/.apt/usr/bin/google-chrome",
-          #args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox']
-          args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--user-data-dir=./profileInsta"]
+          args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--start-maximized","--headless",'--no-sandbox']
           }
         )
         driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
         wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-        #driver.get("https://www.instagram.com/accounts/login/?hl=ja")
-        #wait.until {driver.find_element(name: 'username').displayed?}
-        #driver.find_element(name: 'username').send_keys(username)
-        #wait.until {driver.find_element(name: 'password').displayed?}
-        #driver.find_element(name: 'password').send_keys(pass)
-        #driver.find_elements(class: 'sqdOP')[1].click
+        driver.get("https://www.instagram.com/accounts/login/?hl=ja")
+        wait.until {driver.find_element(name: 'username').displayed?}
+        driver.find_element(name: 'username').send_keys(username)
+        wait.until {driver.find_element(name: 'password').displayed?}
+        driver.find_element(name: 'password').send_keys(pass)
+        driver.find_elements(tag_name: "button")[2].click
+        sleep(2)
         driver.get("https://www.instagram.com/#{user}/")
         wait.until {driver.find_elements(tag_name: 'a')[1].displayed?}
         driver.find_elements(tag_name: 'a')[1].click
         gridCount = 0
+        c = 0
         while gridCount < count
-          #wait.until {driver.find_elements(tag_name: "li").last.displayed?}
           sleep(3)
           puts gridCount = driver.find_elements(tag_name: "li").count
-          #driver.find_elements(tag_name: "li").last.location_once_scrolled_into_view
+          c += 1
+          if c > 10
+            break
+          end
         end
         target_usernames = driver.find_elements(class: 'FPmhX')
         target_usernames.each do |e|
@@ -243,18 +274,13 @@ class FollowController < ApplicationController
         caps = Selenium::WebDriver::Remote::Capabilities.chrome(
           "chromeOptions" => {
           #binary: "/app/.apt/usr/bin/google-chrome",
-          #args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox']
-          #args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--user-data-dir=./profileInsta"]
+          args: [
+            "--start-maximized","--headless",'--no-sandbox'
+          ]
           }
         )
         driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
         wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-        #driver.get("https://www.instagram.com/accounts/login/?hl=ja")
-        #wait.until {driver.find_element(name: 'username').displayed?}
-        #driver.find_element(name: 'username').send_keys(username)
-        #wait.until {driver.find_element(name: 'password').displayed?}
-        #driver.find_element(name: 'password').send_keys(pass)
-        #driver.find_elements(class: 'sqdOP')[1].click
         driver.get("https://www.instagram.com/explore/tags/#{word}/")
         i = 0
         wait.until {driver.find_element(class: 'v1Nh3').displayed?}
@@ -278,27 +304,20 @@ class FollowController < ApplicationController
         caps = Selenium::WebDriver::Remote::Capabilities.chrome(
           "chromeOptions" => {
           #binary: "/app/.apt/usr/bin/google-chrome",
-          args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox']
-          #args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--user-data-dir=./profileInsta"]
+          args: [
+            "--start-maximized"#,"--headless",'--no-sandbox'
+          ]
           }
         )
         driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
         wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-        #driver.get("https://www.instagram.com/accounts/login/?hl=ja")
-        #wait.until {driver.find_element(name: 'username').displayed?}
-        #driver.find_element(name: 'username').send_keys(username)
-        #wait.until {driver.find_element(name: 'password').displayed?}
-        #driver.find_element(name: 'password').send_keys(pass)
-        #driver.find_elements(class: 'sqdOP')[1].click
         driver.get(post)
         wait.until {driver.find_element(class: 'zV_Nj').displayed?}
         driver.find_elements(tag_name: "footer").last.location_once_scrolled_into_view
         driver.find_element(class: 'zV_Nj').click
-
         gridCount = 0
         while gridCount < count
-          #wait.until {driver.find_elements(class: "wo9IH").last.displayed?}
-          sleep(2)
+          sleep(1)
           puts gridCount = driver.find_elements(class: "wo9IH").count
           driver.find_elements(class: "wo9IH").last.location_once_scrolled_into_view
         end

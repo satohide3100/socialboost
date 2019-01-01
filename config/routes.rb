@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
+  get 'analyze/twitter'
   devise_for :users
   root 'account#list'
   get 'fav/list'
+  get 'fav/create'
+  get 'fav/setting_create'
   get 'unfollow/list'
+  get 'unfollow/setting_create'
   get 'follow/list'
   get 'follow/create'
+  get 'follow/setting_create'
   get 'post/bulk'
   get 'post/auto'
   get 'home/top'

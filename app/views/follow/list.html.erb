@@ -30,12 +30,20 @@
         <strong>フォロー設定</strong>
       </div>
       <div class="card-body">
-        <form>
+        <form action="/follow/setting_create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="1">
+          </div>
           <div class="form-group row">
             <label for="limit" class="col-2 col-form-label">1日の上限</label>
             <div class="col-2">
               <div class="input-group mb-3">
-                <input name="limit" type="number" class="form-control" id="limit" min="1" max="24">
+                <% if @twitterSetting %>
+                <input name="dayLimit" type="number" class="form-control" id="limit" min="1" value="<%= @twitterSetting.dayLimit %>">
+                <% else %>
+                <input name="dayLimit" type="number" class="form-control" id="limit" min="1">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">件</span>
                 </div>
@@ -45,11 +53,19 @@
           <div class="form-group row">
             <div class="col-6">
               <div class="input-group mb-3">
-                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% if @twitterSetting %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" max="24" value="<%= @twitterSetting.interval %>">
+                <% else %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" max="24">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
-                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% if @twitterSetting %>
+                <input name="count_by_interval" type="number" class="form-control" id="interval" min="1" value="<%= @twitterSetting.count_by_interval %>">
+                <% else %>
+                <input name="count_by_interval" type="number" class="form-control" id="interval" min="1">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon3">件フォローする</span>
                 </div>
@@ -104,7 +120,11 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary">追加</button>
+          <button type="submit" class="btn btn-primary addLoading">追加</button>
+          <button class="btn btn-primary loading" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Now Loading...
+          </button>
         </form>
       </div>
     </div><br>
@@ -113,6 +133,7 @@
         <strong>フォローリスト一覧 （<%= @follows1.count %>人）</strong>
       </div>
       <div class="card-body text-center">
+        <% if @follows1.count > 0 %>
         <table class="table table-hover">
           <thead class="thead-light">
             <tr>
@@ -125,7 +146,7 @@
           <tbody>
             <% @follows1.each do |follow| %>
             <tr onclick="window.open().location.href='https://twitter.com/<%= follow.target_username %>'">
-              <td class="align-middle"><%= image_tag(follow.target_image, size:"100×100", class:"rounded-circle") %></td>
+              <td class="align-middle"><%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle") %></td>
               <td class="align-middle"><%= follow.target_name %></td>
               <td class="align-middle"><%= follow.target_username %></td>
               <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
@@ -133,6 +154,9 @@
             <% end %>
           </tbody>
         </table>
+        <% else %>
+        現在、フォロー予定のアカウントはありません。
+        <% end %>
       </div>
     </div><br><br>
   </div>
@@ -154,12 +178,20 @@
         <strong>フォロー設定</strong>
       </div>
       <div class="card-body">
-        <form>
+        <form action="/follow/setting_create">
+          <div class="form-group" hidden>
+            <label for="sns_type">sns_type</label>
+            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
+          </div>
           <div class="form-group row">
             <label for="limit" class="col-2 col-form-label">1日の上限</label>
             <div class="col-2">
               <div class="input-group mb-3">
-                <input name="limit" type="number" class="form-control" id="limit" min="1" max="24">
+                <% if @instagramSetting %>
+                <input name="dayLimit" type="number" class="form-control" id="limit" min="1" value="<%= @instagramSetting.dayLimit %>">
+                <% else %>
+                <input name="dayLimit" type="number" class="form-control" id="limit" min="1">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">件</span>
                 </div>
@@ -169,11 +201,19 @@
           <div class="form-group row">
             <div class="col-6">
               <div class="input-group mb-3">
-                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% if @instagramSetting %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" max="24" value="<%= @instagramSetting.interval %>">
+                <% else %>
+                <input name="interval" type="number" class="form-control" id="interval" min="1" max="24">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
-                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <% if @instagramSetting %>
+                <input name="count_by_interval" type="number" class="form-control" id="interval" min="1" value="<%= @instagramSetting.count_by_interval %>">
+                <% else %>
+                <input name="count_by_interval" type="number" class="form-control" id="interval" min="1">
+                <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon3">件フォローする</span>
                 </div>
@@ -238,6 +278,7 @@
         <strong>フォローリスト一覧 （<%= @follows2.count %>人）</strong>
       </div>
       <div class="card-body text-center">
+        <% if @follows2.count > 0 %>
         <table class="table table-hover">
           <thead class="thead-light">
             <tr>
@@ -250,7 +291,7 @@
           <tbody>
             <% @follows2.each do |follow| %>
             <tr onclick="window.open().location.href='https://www.instagram.com/<%= follow.target_username %>/'">
-              <td class="align-middle"><%= image_tag(follow.target_image, size:"100×100", class:"rounded-circle") %></td>
+              <td class="align-middle"><%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle") %></td>
               <td class="align-middle"><%= follow.target_name %></td>
               <td class="align-middle"><%= follow.target_username %></td>
               <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
@@ -258,15 +299,24 @@
             <% end %>
           </tbody>
         </table>
+        <% else %>
+        現在、フォロー予定のアカウントはありません。
+        <% end %>
       </div>
     </div><br><br>
   </div>
   <div class="tab-pane fade" id="facebook" role="tabpanel" aria-labelledby="facebook-tab">
+
   </div>
 </div>
 
 
 <script>
+  $('.loading').hide();
+  $('.addLoading').click(function () {
+    $(this).hide();
+    $('.loading').show();
+  })
   $('.addoption1').change(function () {
     var text = $('.addoption1>option:selected').val();
     if (text == "1" || text == "2") {
