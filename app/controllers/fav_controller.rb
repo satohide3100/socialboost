@@ -40,7 +40,7 @@ class FavController < ApplicationController
       require 'selenium-webdriver'
       caps = Selenium::WebDriver::Remote::Capabilities.chrome(
         "chromeOptions" => {
-        #binary: "/app/.apt/usr/bin/google-chrome",
+        binary: "/app/.apt/usr/bin/google-chrome",
         args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox'
         ]
         }
@@ -90,7 +90,7 @@ class FavController < ApplicationController
       when "1"
         caps = Selenium::WebDriver::Remote::Capabilities.chrome(
           "chromeOptions" => {
-          #binary: "/app/.apt/usr/bin/google-chrome",
+          binary: "/app/.apt/usr/bin/google-chrome",
           args: [
             "--start-maximized"#,"--headless",'--no-sandbox'
           ]
