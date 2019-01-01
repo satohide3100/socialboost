@@ -1,10 +1,12 @@
 namespace :main do
+  USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
 
   task :test => :environment do
     require 'selenium-webdriver'
     options = Selenium::WebDriver::Chrome::Options.new
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
+    options.add_argument("--user-agent=#{USER_AGENT}")
     driver = Selenium::WebDriver.for :chrome, options: options
     wait = Selenium::WebDriver::Wait.new(:timeout => 5)
     driver.get("https://twitter.com/login?lang=ja")
