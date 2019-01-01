@@ -1,5 +1,22 @@
 namespace :main do
 
+  task :test => :environment do
+    require 'selenium-webdriver'
+    options = Selenium::WebDriver::Chrome::Options.new
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    driver = Selenium::WebDriver.for :chrome, options: options
+    wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+    driver.get("https://twitter.com/login?lang=ja")
+    wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
+    driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys("Satohide1994")
+    wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
+    driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys("oneokrock")
+    driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
+    sleep(2)
+    puts driver.find_element(tag_name:"body").text
+  end
+
   task :seleniumfix => :environment do
     require 'selenium-webdriver'
     caps = Selenium::WebDriver::Remote::Capabilities.chrome(
