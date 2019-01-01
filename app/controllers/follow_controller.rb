@@ -75,15 +75,11 @@ class FollowController < ApplicationController
       username = @account.username
       pass = @account.pass
       require 'selenium-webdriver'
-      caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-        "chromeOptions" => {
-        binary: "/app/.apt/usr/bin/google-chrome",
-        args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox'#,"--user-data-dir=./profile#{current_user.id}#{account_id}"
-        ]
-        }
-      )
-      puts "#{current_user.id}#{account_id}"
-      driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+      options = Selenium::WebDriver::Chrome::Options.new
+      options.add_argument('--headless')
+      options.add_argument('--disable-gpu')
+
+      driver = Selenium::WebDriver.for :chrome, options: options
       wait = Selenium::WebDriver::Wait.new(:timeout => 5)
       case option
       when "1" #指定したユーザーのフォロワーを追加
