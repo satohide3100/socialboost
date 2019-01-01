@@ -18,13 +18,11 @@ class AccountController < ApplicationController
 
   def create
     require 'selenium-webdriver'
-    caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-      "chromeOptions" => {
-      binary: "/app/.apt/usr/bin/google-chrome",
-      args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox']
-      }
-    )
-    driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+    options = Selenium::WebDriver::Chrome::Options.new
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+
+    driver = Selenium::WebDriver.for :chrome, options: options
     wait = Selenium::WebDriver::Wait.new(:timeout => 5)
     sns_type = params[:sns_type]
     username = params[:username]
