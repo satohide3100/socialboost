@@ -1,5 +1,19 @@
 namespace :main do
-  
+
+  task :seleniumfix => :environment do
+    require 'selenium-webdriver'
+    caps = Selenium::WebDriver::Remote::Capabilities.chrome(
+      "chromeOptions" => {
+      binary: "/app/.apt/usr/bin/google-chrome",
+      args: [
+        "--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox'
+      ]
+      }
+    )
+    driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+    driver.quit
+  end
+
   task :follow => :environment do
     require 'selenium-webdriver'
     todayHour = Time.new.hour
