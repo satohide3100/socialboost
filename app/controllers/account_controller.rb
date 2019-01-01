@@ -20,7 +20,7 @@ class AccountController < ApplicationController
     require 'selenium-webdriver'
     caps = Selenium::WebDriver::Remote::Capabilities.chrome(
       "chromeOptions" => {
-      #binary: "/app/.apt/usr/bin/google-chrome",
+      binary: "/app/.apt/usr/bin/google-chrome",
       args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox']
       }
     )
@@ -32,7 +32,7 @@ class AccountController < ApplicationController
     user_id = current_user.id
     begin
       if sns_type == "1"
-        driver.navigate.to "https://twitter.com/login"
+        driver.navigate.to "https://twitter.com/login?lang=ja"
         wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
         driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys(username)
         wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
