@@ -3,11 +3,15 @@ namespace :main do
 
   task :test => :environment do
     require 'selenium-webdriver'
-    options = Selenium::WebDriver::Chrome::Options.new
-    options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
-    options.add_argument("--user-agent=#{USER_AGENT}")
-    driver = Selenium::WebDriver.for :chrome, options: options
+    caps = Selenium::WebDriver::Remote::Capabilities.chrome(
+      "chromeOptions" => {
+      binary: "/app/.apt/usr/bin/google-chrome",
+      args: ["--window-size=1920,1080",
+        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
+        "--start-maximized","--headless"]
+      }
+    )
+    driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
     wait = Selenium::WebDriver::Wait.new(:timeout => 5)
     driver.get("https://twitter.com/login?lang=ja")
     wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
