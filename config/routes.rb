@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get 'post/bulk'
   get 'post/auto'
   get 'home/top'
+  get 'home/test'
   get 'home/setting'
   get 'account/list'
   get 'account/create'
