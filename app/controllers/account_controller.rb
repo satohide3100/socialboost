@@ -21,7 +21,7 @@ class AccountController < ApplicationController
     caps = Selenium::WebDriver::Remote::Capabilities.chrome(
       "chromeOptions" => {
       binary: "/usr/bin/google-chrome",
-      args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox'
+      args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
       ]
       }
     )

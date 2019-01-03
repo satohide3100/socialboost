@@ -181,7 +181,7 @@ class FollowController < ApplicationController
         caps = Selenium::WebDriver::Remote::Capabilities.chrome(
           "chromeOptions" => {
           binary: "/usr/bin/google-chrome",
-          args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox'
+          args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
           ]
           }
         )
@@ -226,7 +226,7 @@ class FollowController < ApplicationController
         caps = Selenium::WebDriver::Remote::Capabilities.chrome(
           "chromeOptions" => {
           binary: "/usr/bin/google-chrome",
-          args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--start-maximized","--headless",'--no-sandbox']
+          args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage']
           }
         )
         driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
@@ -270,7 +270,7 @@ class FollowController < ApplicationController
           "chromeOptions" => {
           binary: "/usr/bin/google-chrome",
           args: [
-            "--start-maximized","--headless",'--no-sandbox'
+            "--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
           ]
           }
         )
@@ -300,7 +300,7 @@ class FollowController < ApplicationController
           "chromeOptions" => {
           binary: "/usr/bin/google-chrome",
           args: [
-            "--start-maximized"#,"--headless",'--no-sandbox'
+            "--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
           ]
           }
         )
