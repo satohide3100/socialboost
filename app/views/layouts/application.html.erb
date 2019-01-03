@@ -5,6 +5,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -14,7 +15,7 @@
   <% if user_signed_in? %>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#"><%= image_tag("logo_wide.png", :size => "200x40") %></a>
+      <a class="navbar-brand" href="/"><%= image_tag("logo_wide.png", :size => "200x40") %></a>
       <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="ナビゲーションの切替">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -128,6 +129,24 @@
           <%= yield %>
         </div>
       </div>
+      <div class="col-2">
+        <br>
+        <% Notification.where(isRead:0).each do |n| %>
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img class="rounded mr-2" src="https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes/128/notification-circle-blue-512.png" alt="" width="20px" height="20px">
+            <strong class="mr-auto">SocialBoost</strong>
+            <!--<small>11分前</small>-->
+            <a href="/notification/destroy?id=<%= n.id %>" class="btn ml-2 mb-1 close" data-dismiss="toast" aria-label="閉じる">
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+          <div class="toast-body">
+            <%= n.content %>
+          </div>
+        </div>
+        <% end %>
+      </div>
     </div>
   </body>
   <% else %>
@@ -155,4 +174,14 @@
 
 <script>
  $('.dropdown-toggle').dropdown()
+ $('.toast').toast({
+   autohide: false
+ }).toast('show')
+ $('.toast').fadeOut()
+ $('.toast').fadeIn()
+ setTimeout(function(){
+   $('.toast').fadeOut()
+   $('.toast').fadeIn()
+ },1000)
+
 </script>

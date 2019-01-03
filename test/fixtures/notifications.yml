@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  content: MyText
+  notification_type: 1
+  isRead: 1
+  account: one
+
+two:
+  title: MyString
+  content: MyText
+  notification_type: 1
+  isRead: 1
+  account: two

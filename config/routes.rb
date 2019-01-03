@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'notification/destroy'
   get 'analyze/twitter'
   devise_for :users
   root 'account#list'
