@@ -49,15 +49,16 @@
               <% end %>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="#"><i class="fas fa-user"></i>&nbsp<%= current_user.email.split("@")[0] %></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/account/list"><i class="fas fa-list-alt"></i>&nbspアカウント一覧</a>
-          </li>
-          <li class="nav-item">
-            <%= link_to 'ログアウト', destroy_user_session_path, class: "nav-link" %>
-          </li>
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user"></i>&nbsp<%= current_user.email.split("@")[0] %>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/account/list"><i class="fas fa-list-alt"></i>&nbspアカウント一覧</a>
+                <%= link_to 'ログアウト', destroy_user_session_path, class: "dropdown-item" %>
+              </div>
+            </li>
           <% else %>
           <% end %>
         </ul>

@@ -40,9 +40,9 @@
             <div class="col-2">
               <div class="input-group mb-3">
                 <% if @twitterSetting %>
-                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @twitterSetting.dayLimit %>">
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @twitterSetting.dayLimit %>" required>
                 <% else %>
-                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1">
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" required>
                 <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">件</span>
@@ -54,17 +54,17 @@
             <div class="col-6">
               <div class="input-group mb-3">
                 <% if @twitterSetting %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" max="12" value="<%= @twitterSetting.interval %>">
+                <input name="interval" type="number" class="form-control" id="interval" min="1" max="12" value="<%= @twitterSetting.interval %>" required>
                 <% else %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" max="12">
+                <input name="interval" type="number" class="form-control" id="interval" min="1" max="12" required>
                 <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
                 <% if @twitterSetting %>
-                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1" value="<%= @twitterSetting.count_by_interval %>">
+                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1" value="<%= @twitterSetting.count_by_interval %>" required>
                 <% else %>
-                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1">
+                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1" required>
                 <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon3">件いいねする</span>
@@ -88,8 +88,8 @@
           </div>
           <div class="row">
             <div class="col-6">
-              <select name="option" class="custom-select addoption1" id="addoption1">
-                <option selected>いいねリスト追加方法</option>
+              <select name="option" class="custom-select addoption1" id="addoption1" required>
+                <option selected disabled value="">いいねリスト追加方法</option>
                 <option value="1">あるキーワードの投稿を追加</option>
                 <option value="2">あるユーザーのフォロワー〇〇人の最新投稿を追加</option>
                 <option value="3">あるユーザーのフォロー〇〇人の最新投稿を追加</option>
@@ -112,8 +112,8 @@
           <div class="row">
             <div class="col-6">
               <div class="form-group">
-                <select name="count" id="count" class="custom-select">
-                  <option selected>リスト追加数を選択</option>
+                <select name="count" id="count" class="custom-select" required>
+                  <option selected value="">リスト追加数を選択</option>
                   <option value=50>50</option>
                   <option value=100>100</option>
                   <option value=150>150</option>
@@ -194,9 +194,9 @@
             <div class="col-2">
               <div class="input-group mb-3">
                 <% if @instagramSetting %>
-                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @instagramSetting.dayLimit %>">
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @instagramSetting.dayLimit %>" required>
                 <% else %>
-                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1">
+                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" required>
                 <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">件</span>
@@ -208,17 +208,17 @@
             <div class="col-6">
               <div class="input-group mb-3">
                 <% if @instagramSetting %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" value="<%= @instagramSetting.interval %>">
+                <input name="interval" type="number" class="form-control" id="interval" min="1" value="<%= @instagramSetting.interval %>" required>
                 <% else %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1">
+                <input name="interval" type="number" class="form-control" id="interval" min="1" required>
                 <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
                 <% if @instagramSetting %>
-                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1" value="<%= @instagramSetting.count_by_interval %>">
+                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1" value="<%= @instagramSetting.count_by_interval %>" required>
                 <% else %>
-                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1">
+                <input name="count_by_interval" type="number" class="form-control" id="count_by_interval" min="1" required>
                 <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon3">件いいねする</span>

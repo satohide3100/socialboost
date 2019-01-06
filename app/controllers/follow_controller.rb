@@ -57,6 +57,21 @@ class FollowController < ApplicationController
     word = params[:word]
     count = params[:count].to_i
     user_id = current_user.id
+    if (option == "1" || option = "2") && user == ""
+      flash[:alert] = "ユーザー名を入力してください。"
+      redirect_to("/follow/list")
+      return
+    end
+    if option == "3" && word == ""
+      flash[:alert] = "キーワードを入力してください。"
+      redirect_to("/follow/list")
+      return
+    end
+    if option == "4" && post == ""
+      flash[:alert] = "投稿URLを入力してください。"
+      redirect_to("/follow/list")
+      return
+    end
     AddFollowJob.perform_later(sns_type,option,user,post,word,count,user_id)
     flash[:notice] = "フォローリストの追加処理を開始しました。"
     redirect_to("/follow/list")
