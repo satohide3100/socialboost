@@ -24,11 +24,11 @@ namespace :main do
     driver.find_element(name: 'username').send_keys("selecity_sale")
     wait.until {driver.find_element(name: 'password').displayed?}
     driver.find_element(name: 'password').send_keys("oneokrock")
-    wait.until {driver.find_elements(tag_name: "button")[1].displayed?}
+    wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
     puts driver.find_elements(tag_name: "button")[0].text
     puts driver.find_elements(tag_name: "button")[1].text
-    puts driver.find_elements(tag_name: "button")[3].text
-    driver.find_elements(tag_name: "button")[1].click
+    puts driver.find_elements(tag_name: "button")[2].text
+    driver.find_elements(tag_name: "button")[2].click
     sleep(3)
     puts "------------"
     puts body = driver.find_element(tag_name: "body").text
