@@ -192,10 +192,7 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'password').send_keys(pass)
           wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
           driver.find_elements(tag_name: "button")[2].click
-          sleep(60)
-          if driver.current_url != "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
-            driver.find_elements(tag_name: "button")[1].click
-          end
+          sleep(3)
           driver.navigate.to("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
           follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').text.gsub(/[^\d]/, "").to_i
@@ -256,9 +253,7 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'password').send_keys(pass)
           wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
           driver.find_elements(tag_name: "button")[2].click
-          wait.until {
-            driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
-          }
+          sleep(3)
           driver.navigate.to("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').displayed?}
           follow = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').text.gsub(/[^\d]/, "").to_i
