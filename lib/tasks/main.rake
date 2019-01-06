@@ -8,10 +8,10 @@ namespace :main do
   task :test => :environment do
     require 'selenium-webdriver'
     options = Selenium::WebDriver::Chrome::Options.new
-    #options.headless!
-    #options.add_option(:binary, "/usr/bin/google-chrome")
-    #options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
-    #options.add_emulation(device_name: 'iPhone 8')
+    options.headless!
+    options.add_option(:binary, "/usr/bin/google-chrome")
+    options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+    options.add_emulation(device_name: 'iPhone 8')
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-setuid-sandbox")
