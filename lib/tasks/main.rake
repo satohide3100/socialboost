@@ -20,9 +20,9 @@ namespace :main do
     driver.get("https://www.instagram.com/accounts/login")
     puts body = driver.find_element(tag_name: "body").text
     wait.until {driver.find_element(name: 'username').displayed?}
-    driver.find_element(name: 'username').send_keys(username)
+    driver.find_element(name: 'username').send_keys("selecity_sale")
     wait.until {driver.find_element(name: 'password').displayed?}
-    driver.find_element(name: 'password').send_keys(pass)
+    driver.find_element(name: 'password').send_keys("oneokrock")
     #wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
     #driver.find_elements(tag_name: "button")[2].click
     wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[3]/button').displayed?}
