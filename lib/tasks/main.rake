@@ -31,6 +31,7 @@ namespace :main do
     driver.find_elements(tag_name: "button")[2].click
     sleep(3)
     puts "------------"
+    puts driver.current_url
     sleep(60)
     driver.find_elements(tag_name: "button")[1].click
     sleep(5)
