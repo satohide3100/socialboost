@@ -29,12 +29,12 @@ class FavController < ApplicationController
     word = params[:word]
     count = params[:count].to_i
     user_id = current_user.id
-    if option == "1" && word = ""
+    if option == "1" && word == ""
       flash[:alert] = "キーワードを入力してください。"
       redirect_to("/fav/list")
       return
     end
-    if (option == "2" || option == "3") && user = ""
+    if (option == "2" || option == "3") && user == ""
       flash[:alert] = "ユーザー名を入力してください。"
       redirect_to("/fav/list")
       return
