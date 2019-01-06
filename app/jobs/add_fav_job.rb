@@ -18,6 +18,9 @@ class AddFavJob < ApplicationJob
         options.add_option(:binary, "/usr/bin/google-chrome")
         options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
         options.add_argument('--start-maximized')
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-setuid-sandbox")
         driver = Selenium::WebDriver.for :chrome, options: options
         wait = Selenium::WebDriver::Wait.new(:timeout => 3)
         case option
@@ -164,6 +167,9 @@ class AddFavJob < ApplicationJob
           options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_argument('--start-maximized')
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-setuid-sandbox")
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/explore/tags/#{word}/")
@@ -192,6 +198,9 @@ class AddFavJob < ApplicationJob
           options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-setuid-sandbox")
           options.add_argument("--disable-dev-shm-usage")
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
@@ -268,6 +277,9 @@ class AddFavJob < ApplicationJob
           options.add_argument("--disable-dev-shm-usage")
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-setuid-sandbox")
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/accounts/login/?hl=ja")
@@ -328,14 +340,18 @@ class AddFavJob < ApplicationJob
         end
       end
 
+      saveCount = 0
       target_usernameList.first(count).count.times.each do |i|
-        Fav.create(
+        fav = Fav.new(
           target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
           target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
         )
+        if fav.save?
+          saveCount += 1
+        end
       end
       Notification.create(
-        notification_type:3,content:"#{target_usernameList.count}人のいいねリストへの追加が完了しました。",isRead:0, user_id:user_id
+        notification_type:3,content:"#{saveCount}人のいいねリストへの追加が完了しました。",isRead:0, user_id:user_id
       )
     rescue => e
       Notification.create(
