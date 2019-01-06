@@ -57,7 +57,7 @@ class FollowController < ApplicationController
     word = params[:word]
     count = params[:count].to_i
     user_id = current_user.id
-    if (option == "1" || option = "2") && user == ""
+    if (option == "1" || option == "2") && user == ""
       flash[:alert] = "ユーザー名を入力してください。"
       redirect_to("/follow/list")
       return
