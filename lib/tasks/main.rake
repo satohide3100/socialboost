@@ -21,7 +21,7 @@ namespace :main do
     driver.get("https://www.instagram.com/accounts/login")
     puts body = driver.find_element(tag_name: "body").text
     wait.until {driver.find_element(name: 'username').displayed?}
-    driver.find_element(name: 'username').send_keys("sato__hideki")
+    driver.find_element(name: 'username').send_keys("career_event")
     wait.until {driver.find_element(name: 'password').displayed?}
     driver.find_element(name: 'password').send_keys("oneokrock")
     wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
@@ -32,7 +32,7 @@ namespace :main do
     sleep(3)
     puts "------------"
     puts driver.current_url
-    sleep(60)
+    sleep(30)
     driver.find_elements(tag_name: "button")[1].click
     sleep(5)
     puts body = driver.find_element(tag_name: "body").text
