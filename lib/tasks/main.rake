@@ -31,6 +31,9 @@ namespace :main do
     driver.find_elements(tag_name: "button")[2].click
     sleep(3)
     puts "------------"
+    sleep(30)
+    driver.find_elements(tag_name: "button")[1].click
+    sleep(2)
     puts body = driver.find_element(tag_name: "body").text
 
   end
