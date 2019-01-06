@@ -58,6 +58,19 @@ class AddFavJob < ApplicationJob
           target_postLinks.each do |e|
             target_postLinkList << "https://twitter.com#{e.attribute('data-permalink-path')}"
           end
+          saveCount = 0
+          target_usernameList.first(count).count.times.each do |i|
+            @fav = Fav.new(
+              target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
+              target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
+            )
+            if @fav.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:3,content:"「#{word}」の投稿をしている#{saveCount}投稿をいいねリストへ追加しました。",isRead:0, user_id:user_id
+          )
           driver.quit
         when "2" #あるユーザーのフォロワー〇〇人の最新投稿を追加
           driver.get("https://twitter.com/login")
@@ -106,6 +119,19 @@ class AddFavJob < ApplicationJob
             target_postLinkList << "https://twitter.com#{driver.find_element(class: 'js-stream-tweet').attribute('data-permalink-path')}"
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.first(count).count.times.each do |i|
+            @fav = Fav.new(
+              target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
+              target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
+            )
+            if @fav.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:3,content:"@#{user}のフォロワー#{count}人の最新投稿を#{saveCount}件いいねリストへ追加しました。",isRead:0, user_id:user_id
+          )
         when "3"
           driver.get("https://twitter.com/login")
           wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
@@ -153,6 +179,19 @@ class AddFavJob < ApplicationJob
             target_postLinkList << "https://twitter.com#{driver.find_element(class: 'js-stream-tweet').attribute('data-permalink-path')}"
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.first(count).count.times.each do |i|
+            @fav = Fav.new(
+              target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
+              target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
+            )
+            if @fav.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:3,content:"@#{user}のフォロー#{count}人の最新投稿を#{saveCount}件いいねリストへ追加しました。",isRead:0, user_id:user_id
+          )
         end
       elsif sns_type == "2"
         require 'selenium-webdriver'
@@ -192,6 +231,18 @@ class AddFavJob < ApplicationJob
             driver.find_element(class: "HBoOv").click
           end
           driver.quit
+          target_usernameList.first(count).count.times.each do |i|
+            @fav = Fav.new(
+              target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
+              target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
+            )
+            if @fav.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:3,content:"「##{word}」の投稿#{saveCount}件いいねリストへ追加しました。",isRead:0, user_id:user_id
+          )
         when "2" #
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
@@ -268,6 +319,18 @@ class AddFavJob < ApplicationJob
             target_postLinkList << driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a').attribute(:href)
           end
           driver.quit
+          target_usernameList.first(count).count.times.each do |i|
+            @fav = Fav.new(
+              target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
+              target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
+            )
+            if @fav.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:3,content:"@#{user}のフォロワー#{count}人の最新投稿を#{saveCount}件いいねリストへ追加しました。",isRead:0, user_id:user_id
+          )
         when "3"
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
@@ -337,22 +400,20 @@ class AddFavJob < ApplicationJob
             target_postLinkList << driver.find_element(xpath: '//*[@class="FyNDV"]/div[1]/div/div[1]/div[1]/a').attribute(:href)
           end
           driver.quit
+          target_usernameList.first(count).count.times.each do |i|
+            @fav = Fav.new(
+              target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
+              target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
+            )
+            if @fav.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:3,content:"@#{user}のフォロー#{count}人の最新投稿を#{saveCount}件いいねリストへ追加しました。",isRead:0, user_id:user_id
+          )
         end
       end
-
-      saveCount = 0
-      target_usernameList.first(count).count.times.each do |i|
-        fav = Fav.new(
-          target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
-          target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
-        )
-        if fav.save?
-          saveCount += 1
-        end
-      end
-      Notification.create(
-        notification_type:3,content:"#{saveCount}人のいいねリストへの追加が完了しました。",isRead:0, user_id:user_id
-      )
     rescue => e
       Notification.create(
         notification_type:0,content:"いいねリストへの追加に失敗しました。#{e.message}",isRead:0, user_id:user_id

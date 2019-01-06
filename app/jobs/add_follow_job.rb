@@ -14,7 +14,7 @@ class AddFollowJob < ApplicationJob
         require 'selenium-webdriver'
         options = Selenium::WebDriver::Chrome::Options.new
         options.headless!
-        options.add_option(:binary, "/usr/bin/google-chrome")
+        #options.add_option(:binary, "/usr/bin/google-chrome")
         options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
         options.add_argument('--start-maximized')
         options.add_argument("--disable-dev-shm-usage")
@@ -61,6 +61,18 @@ class AddFollowJob < ApplicationJob
             target_imageList << e.attribute(:src)
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.count.times.each do |i|
+            @follow = Follow.new(
+              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+            )
+            if @follow.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:2,content:"@#{user}のフォロワーを#{saveCount}人フォローリストへ追加しました。",isRead:0, user_id:user_id
+          )
         when "2" #指定したユーザーのフォローを追加
           driver.get("https://twitter.com/login")
           wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
@@ -99,6 +111,18 @@ class AddFollowJob < ApplicationJob
             target_imageList << e.attribute(:src)
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.count.times.each do |i|
+            @follow = Follow.new(
+              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+            )
+            if @follow.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:2,content:"@#{user}のフォローを#{saveCount}人フォローリストへ追加しました。",isRead:0, user_id:user_id
+          )
         when "3" #特定のキーワードを投稿しているユーザーを追加
           driver.get("https://twitter.com/search?f=tweets&vertical=news&q=#{word}&src=typd")
           gridCount = 0
@@ -130,6 +154,18 @@ class AddFollowJob < ApplicationJob
             target_imageList << e.attribute(:src)
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.count.times.each do |i|
+            @follow = Follow.new(
+              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+            )
+            if @follow.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:2,content:"「#{word}」を投稿しているアカウント#{saveCount}人をフォローリストへ追加しました。",isRead:0, user_id:user_id
+          )
         end
       elsif sns_type == "2"
         require 'selenium-webdriver'
@@ -194,6 +230,18 @@ class AddFollowJob < ApplicationJob
             target_imageList << e.attribute(:src)
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.count.times.each do |i|
+            @follow = Follow.new(
+              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+            )
+            if @follow.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:2,content:"@#{user}のフォロワーを#{saveCount}人フォローリストへ追加しました。",isRead:0, user_id:user_id
+          )
         when "2"
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
@@ -243,6 +291,18 @@ class AddFollowJob < ApplicationJob
             target_imageList << e.attribute(:src)
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.count.times.each do |i|
+            @follow = Follow.new(
+              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+            )
+            if @follow.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:2,content:"@#{user}のフォローを#{saveCount}人フォローリストへ追加しました。",isRead:0, user_id:user_id
+          )
         when "3"
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
@@ -274,6 +334,18 @@ class AddFollowJob < ApplicationJob
             driver.find_element(class: "HBoOv").click
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.count.times.each do |i|
+            @follow = Follow.new(
+              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+            )
+            if @follow.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:2,content:"「##{word}」を投稿しているアカウント#{saveCount}人をフォローリストへ追加しました。",isRead:0, user_id:user_id
+          )
         when "4"
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
@@ -319,16 +391,20 @@ class AddFollowJob < ApplicationJob
             target_imageList << e.attribute(:src)
           end
           driver.quit
+          saveCount = 0
+          target_usernameList.count.times.each do |i|
+            @follow = Follow.new(
+              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+            )
+            if @follow.save
+              saveCount += 1
+            end
+          end
+          Notification.create(
+            notification_type:2,content:"「#{post}」にいいねしている#{saveCount}人をフォローリストへ追加しました。",isRead:0, user_id:user_id
+          )
         end
       end
-      target_usernameList.count.times.each do |i|
-        Follow.create(
-          target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
-        )
-      end
-      Notification.create(
-        notification_type:2,content:"#{target_usernameList.count}人のフォローリストへの追加が完了しました。",isRead:0, user_id:user_id
-      )
     rescue => e
       puts e
       Notification.create(
