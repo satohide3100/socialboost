@@ -16,7 +16,7 @@
     <% if @twitterActive %>
     <div class="media">
       <a href="#" class="align-self-center mr-3">
-        <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
+        <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
       </a>
       <div class="media-body">
         <br><p class="mb-0"><%= @twitterActive.profile_name %></p>
@@ -90,8 +90,9 @@
             <div class="col-6">
               <select name="option" class="custom-select addoption1" id="addoption1">
                 <option selected>いいねリスト追加方法</option>
-                <option value="1">特定のキーワードの投稿を追加</option>
-                <option value="2">特定のユーザーの投稿を追加</option>
+                <option value="1">あるキーワードの投稿を追加</option>
+                <option value="2">あるユーザーのフォロワー〇〇人の最新投稿を追加</option>
+                <option value="3">あるユーザーのフォロー〇〇人の最新投稿を追加</option>
               </select>
             </div>
             <div class="col-6">
@@ -111,7 +112,12 @@
           <div class="row">
             <div class="col-6">
               <div class="form-group">
-                <input type="number" name="count" class="form-control" id="count" placeholder="追加ユーザー数" min="0" max="10000" step="100">
+                <select name="count" id="count" class="custom-select">
+                  <option selected>リスト追加数を選択</option>
+                  <option value=50>50</option>
+                  <option value=100>100</option>
+                  <option value=150>150</option>
+                </select>
               </div>
             </div>
           </div>
@@ -136,16 +142,23 @@
             </tr>
           </thead>
           <tbody>
+            <% count = 1 %>
             <% @fav1.each do |fav| %>
-            <tr onclick="window.open().location.href='<%= fav.target_postLink %>'">
-              <td class="align-middle"><%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle") %></td>
+            <% if count > 50 %>
+            <tr class="more1" style="cursor:pointer;" onclick="window.open().location.href='<%= fav.target_postLink %>'">
+            <% else %>
+            <tr style="cursor:pointer;" onclick="window.open().location.href='<%= fav.target_postLink %>'">
+            <% end %>
+              <td class="align-middle"><%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle shadow") %></td>
               <td class="align-middle"><%= fav.target_name.truncate(20) %></td>
               <td class="align-middle"><%= link_to("投稿リンク",fav.target_postLink) %></td>
               <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
             </tr>
+            <% count += 1%>
             <% end %>
           </tbody>
         </table>
+        <button class="btn btn-outline-primary btn-block morebtn1">全て表示する</button>
         <% else %>
         現在、いいね予定の投稿はありません。
         <% end %>
@@ -157,7 +170,7 @@
     <% if @instagramActive %>
     <div class="media">
       <a href="#" class="align-self-center mr-3">
-        <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
+        <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
       </a>
       <div class="media-body">
         <br><p class="mb-0"><%= @instagramActive.profile_name %></p>
@@ -231,7 +244,9 @@
             <div class="col-6">
               <select name="option" class="custom-select addoption2" id="addoption2">
                 <option selected>いいねリスト追加方法</option>
-                <option value="1">特定のハッシュタグの投稿を追加</option>
+                <option value="1">あるハッシュタグの投稿を追加</option>
+                <option value="2">あるユーザーのフォロワー〇〇人の最新投稿を追加</option>
+                <option value="3">あるユーザーのフォロー〇〇人の最新投稿を追加</option>
               </select>
             </div>
             <div class="col-6">
@@ -251,7 +266,12 @@
           <div class="row">
             <div class="col-6">
               <div class="form-group">
-                <input type="number" name="count" class="form-control" id="count" placeholder="追加ユーザー数" min="0" max="10000" step="100">
+                <select name="count" id="count" class="custom-select">
+                  <option selected>リスト追加数を選択</option>
+                  <option value=50>50</option>
+                  <option value=100>100</option>
+                  <option value=150>150</option>
+                </select>
               </div>
             </div>
           </div>
@@ -276,16 +296,23 @@
             </tr>
           </thead>
           <tbody>
+            <% count = 1 %>
             <% @fav2.each do |fav| %>
-            <tr onclick="window.open().location.href='<%= fav.target_postLink %>'">
-              <td class="align-middle"><%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle") %></td>
+            <% if count > 50 %>
+            <tr class="more2" style="cursor:pointer;" onclick="window.open().location.href='<%= fav.target_postLink %>'">
+            <% else %>
+            <tr style="cursor:pointer;" onclick="window.open().location.href='<%= fav.target_postLink %>'">
+            <% end %>
+              <td class="align-middle"><%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle shadow") %></td>
               <td class="align-middle"><%= fav.target_username.truncate(20) %></td>
               <td class="align-middle"><%= link_to("投稿リンク",fav.target_postLink) %></td>
               <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
             </tr>
+            <% count += 1 %>
             <% end %>
           </tbody>
         </table>
+        <button class="btn btn-outline-primary morebtn2">すべて表示する</button>
         <% else %>
         現在、いいね予定の投稿はありません。
         <% end %>
@@ -298,6 +325,14 @@
 </div>
 
 <script>
+$('.more1').hide();
+$('.morebtn1').click(function () {
+  $('.more1').fadeIn();
+})
+$('.more2').hide();
+$('.morebtn2').click(function () {
+  $('.more2').fadeIn();
+})
 $('#addoption1').change(function () {
   var text = $('.addoption1>option:selected').val();
   if (text == "2") {
@@ -306,6 +341,9 @@ $('#addoption1').change(function () {
   } else if (text == "1") {
     $('.showform1').hide();
     $('.word1').fadeIn();
+  } else if (text == "3") {
+    $('.showform1').hide();
+    $('.user1').fadeIn();
   }
 })
 $('#addoption2').change(function () {
@@ -316,6 +354,9 @@ $('#addoption2').change(function () {
   } else if (text == "1") {
     $('.showform2').hide();
     $('.word2').fadeIn();
+  } else if (text == "3") {
+    $('.showform1').hide();
+    $('.user2').fadeIn();
   }
 })
 </script>

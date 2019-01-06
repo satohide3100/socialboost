@@ -31,9 +31,8 @@ namespace :main do
     require 'selenium-webdriver'
     caps = Selenium::WebDriver::Remote::Capabilities.chrome(
       "chromeOptions" => {
-      binary: "/app/.apt/usr/bin/google-chrome",
-      args: [
-        "--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox'
+      binary: "/usr/bin/google-chrome",
+      args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
       ]
       }
     )
@@ -71,7 +70,7 @@ namespace :main do
         puts follow.target_username
         #follow.update(follow_flg:1)
       end
-      driver.close
+      driver.quit
     end
 
     @instagramAccounts.each do |account|
@@ -100,7 +99,7 @@ namespace :main do
         puts follow.target_username
         #follow.update(follow_flg:1)
       end
-      driver.close
+      driver.quit
     end
   end
 

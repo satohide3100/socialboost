@@ -12,14 +12,12 @@ class AddFollowJob < ApplicationJob
         username = @account.username
         pass = @account.pass
         require 'selenium-webdriver'
-        caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-          "chromeOptions" => {
-          binary: "/usr/bin/google-chrome",
-          args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
-          ]
-          }
-        )
-        driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+        options = Selenium::WebDriver::Chrome::Options.new
+        options.headless!
+        options.add_option(:binary, "/usr/bin/google-chrome")
+        options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+        options.add_argument('--start-maximized')
+        driver = Selenium::WebDriver.for :chrome, options: options
         wait = Selenium::WebDriver::Wait.new(:timeout => 5)
         case option
         when "1" #指定したユーザーのフォロワーを追加
@@ -31,10 +29,20 @@ class AddFollowJob < ApplicationJob
           driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
           driver.navigate.to("https://twitter.com/#{user}/followers")
           gridCount = 0
-          while gridCount < count
-            wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
-            gridCount = driver.find_elements(class: 'u-size1of2').count
-            driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+          wait.until {driver.find_elements(class: "ProfileNav-value")[1].displayed?}
+          follower = driver.find_elements(class: "ProfileNav-value")[1].text.gsub(/[^\d]/, "").to_i
+          if follower < count
+            while gridCount != follower
+              wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
+              gridCount = driver.find_elements(class: 'u-size1of2').count
+              driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+            end
+          else
+            while gridCount < count
+              wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
+              gridCount = driver.find_elements(class: 'u-size1of2').count
+              driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+            end
           end
           target_usernames = driver.find_elements(xpath: '//*[@class="ProfileCard-screenname"]/a/span/b')
           target_usernames.each do |e|
@@ -49,7 +57,7 @@ class AddFollowJob < ApplicationJob
           target_images.each do |e|
             target_imageList << e.attribute(:src)
           end
-          driver.close
+          driver.quit
         when "2" #指定したユーザーのフォローを追加
           driver.get("https://twitter.com/login")
           wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
@@ -59,10 +67,20 @@ class AddFollowJob < ApplicationJob
           driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
           driver.navigate.to("https://twitter.com/#{user}/following")
           gridCount = 0
-          while gridCount < count
-            wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
-            gridCount = driver.find_elements(class: 'u-size1of2').count
-            driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+          wait.until {driver.find_elements(class: "ProfileNav-value")[0].displayed?}
+          follow = driver.find_elements(class: "ProfileNav-value")[0].text.gsub(/[^\d]/, "").to_i
+          if follow < count
+            while gridCount != follow
+              wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
+              gridCount = driver.find_elements(class: 'u-size1of2').count
+              driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+            end
+          else
+            while gridCount < count
+              wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
+              gridCount = driver.find_elements(class: 'u-size1of2').count
+              driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+            end
           end
           target_usernames = driver.find_elements(xpath: '//*[@class="ProfileCard-screenname"]/a/span/b')
           target_usernames.each do |e|
@@ -77,14 +95,23 @@ class AddFollowJob < ApplicationJob
           target_images.each do |e|
             target_imageList << e.attribute(:src)
           end
-          driver.close
+          driver.quit
         when "3" #特定のキーワードを投稿しているユーザーを追加
           driver.get("https://twitter.com/search?f=tweets&vertical=news&q=#{word}&src=typd")
           gridCount = 0
+          scrollCount = 0
+          unscrollCount = 0
           while gridCount < count
             wait.until {driver.find_elements(class: 'js-stream-item').last.displayed?}
+            if gridCount == driver.find_elements(class: 'js-stream-item').count
+              unscrollCount += 1
+            end
             gridCount = driver.find_elements(class: 'js-stream-item').count
             driver.find_element(class: "stream-footer").location_once_scrolled_into_view
+            scrollCount += 1
+            if unscrollCount == 10
+              break
+            end
           end
           target_usernames = driver.find_elements(xpath: '//*[@class="stream-item-header"]/a/span[2]/b')
           target_usernames.each do |e|
@@ -99,10 +126,7 @@ class AddFollowJob < ApplicationJob
           target_images.each do |e|
             target_imageList << e.attribute(:src)
           end
-          puts target_usernameList.count
-          puts target_nameList.count
-          puts target_imageList.count
-          driver.close
+          driver.quit
         end
       elsif sns_type == "2"
         require 'selenium-webdriver'
@@ -112,13 +136,15 @@ class AddFollowJob < ApplicationJob
         pass = @account.pass
         case option
         when "1"
-          caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-            "chromeOptions" => {
-            binary: "/usr/bin/google-chrome",
-            args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage']
-            }
-          )
-          driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+          options = Selenium::WebDriver::Chrome::Options.new
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
+          options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+          options.add_emulation(device_name: 'iPhone 8')
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-setuid-sandbox")
+          driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/accounts/login/?hl=ja")
           wait.until {driver.find_element(name: 'username').displayed?}
@@ -129,21 +155,31 @@ class AddFollowJob < ApplicationJob
           #ßdriver.find_elements(class: 'sqdOP')[1].click
           sleep(2)
           driver.navigate.to("https://www.instagram.com/#{user}/")
-          wait.until {driver.find_element(tag_name: 'a').displayed?}
-          driver.find_element(tag_name: 'a').click
+          if driver.current_url != "https://www.instagram.com/#{user}/"
+            Notification.create(
+              notification_type:0,content:"ログインできませんでした。再度実行するか、アカウントを確認してください。",isRead:0, user_id:user_id
+            )
+            driver.quit
+            return
+          end
+          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
+          follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').text.gsub(/[^\d]/, "").to_i
+          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').displayed?}
+          driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').click
           gridCount = 0
-          c = 0
-          while gridCount < count
-            sleep(2)
-            puts gridCount = driver.find_elements(tag_name: "li").count
-            c += 1
-            if c > 10
-              break
+          if follower < count
+            while gridCount != follower
+              sleep(1)
+              gridCount = driver.find_elements(tag_name: "li").count
+            end
+          else
+            while gridCount < count
+              sleep(1)
+              gridCount = driver.find_elements(tag_name: "li").count
             end
           end
           target_usernames = driver.find_elements(class: 'FPmhX')
           target_usernames.each do |e|
-            puts e.text
             target_usernameList << e.text
           end
           target_names = driver.find_elements(class: 'wFPL8 ')
@@ -154,15 +190,17 @@ class AddFollowJob < ApplicationJob
           target_images.each do |e|
             target_imageList << e.attribute(:src)
           end
-          driver.close
+          driver.quit
         when "2"
-          caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-            "chromeOptions" => {
-            binary: "/usr/bin/google-chrome",
-            args: ["--window-size=375,667","--user-agent=#{USER_AGENT}","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage']
-            }
-          )
-          driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+          options = Selenium::WebDriver::Chrome::Options.new
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
+          options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+          options.add_emulation(device_name: 'iPhone 8')
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-setuid-sandbox")
+          driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/accounts/login/?hl=ja")
           wait.until {driver.find_element(name: 'username').displayed?}
@@ -172,16 +210,20 @@ class AddFollowJob < ApplicationJob
           driver.find_elements(tag_name: "button")[2].click
           sleep(2)
           driver.get("https://www.instagram.com/#{user}/")
-          wait.until {driver.find_elements(tag_name: 'a')[1].displayed?}
-          driver.find_elements(tag_name: 'a')[1].click
+          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').displayed?}
+          follow = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').text.gsub(/[^\d]/, "").to_i
+          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a').displayed?}
+          driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a').click
           gridCount = 0
-          c = 0
-          while gridCount < count
-            sleep(3)
-            puts gridCount = driver.find_elements(tag_name: "li").count
-            c += 1
-            if c > 10
-              break
+          if follow < count
+            while gridCount != follow
+              sleep(1)
+              gridCount = driver.find_elements(tag_name: "li").count
+            end
+          else
+            while gridCount < count
+              sleep(1)
+              gridCount = driver.find_elements(tag_name: "li").count
             end
           end
           target_usernames = driver.find_elements(class: 'FPmhX')
@@ -197,17 +239,14 @@ class AddFollowJob < ApplicationJob
           target_images.each do |e|
             target_imageList << e.attribute(:src)
           end
-          driver.close
+          driver.quit
         when "3"
-          caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-            "chromeOptions" => {
-            binary: "/usr/bin/google-chrome",
-            args: [
-              "--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
-            ]
-            }
-          )
-          driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+          options = Selenium::WebDriver::Chrome::Options.new
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
+          options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+          options.add_argument('--start-maximized')
+          driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/explore/tags/#{word}/")
           i = 0
@@ -219,36 +258,44 @@ class AddFollowJob < ApplicationJob
             target_usernameList << driver.find_element(class: 'nJAzx').text
             wait.until {driver.find_element(class: '_6q-tv').displayed?}
             target_imageList << driver.find_element(class: '_6q-tv').attribute(:src)
-            wait.until {driver.find_element(class: 'HBoOv').displayed?}
+            begin
+              wait.until {driver.find_element(class: 'HBoOv').displayed?}
+            rescue
+              break
+            end
             i += 1
-            puts "----------------------"
             puts i
             driver.find_element(class: "HBoOv").click
           end
-          puts target_usernameList.count
-          puts target_imageList.count
-          driver.close
+          driver.quit
         when "4"
-          caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-            "chromeOptions" => {
-            binary: "/usr/bin/google-chrome",
-            args: [
-              "--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
-            ]
-            }
-          )
-          driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+          options = Selenium::WebDriver::Chrome::Options.new
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
+          options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+          options.add_argument('--start-maximized')
+          driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get(post)
           wait.until {driver.find_element(class: 'zV_Nj').displayed?}
           driver.find_elements(tag_name: "footer").last.location_once_scrolled_into_view
+          wait.until {driver.find_element(xpath: '//*[@class="zV_Nj"]/span').displayed?}
+          favCount = driver.find_element(xpath: '//*[@class="zV_Nj"]/span').text.gsub(/[^\d]/, "").to_i
           driver.find_element(class: 'zV_Nj').click
           gridCount = 0
-          while gridCount < count
-            sleep(1)
-            puts gridCount = driver.find_elements(class: "wo9IH").count
-            driver.find_elements(class: "wo9IH").last.location_once_scrolled_into_view
+          if favCount < count
+            while gridCount != favCount
+              sleep(1)
+              gridCount = driver.find_elements(class: "wo9IH").count
+            end
+          else
+            while gridCount < count
+              sleep(1)
+              gridCount = driver.find_elements(class: "wo9IH").count
+              driver.find_elements(class: "wo9IH").last.location_once_scrolled_into_view
+            end
           end
+
           target_usernames = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div[2]/ul/div/li/div/div[1]/div[2]/div[1]/a')
           target_usernames.each do |e|
             puts e.text
@@ -262,19 +309,23 @@ class AddFollowJob < ApplicationJob
           target_images.each do |e|
             target_imageList << e.attribute(:src)
           end
-          driver.close
+          driver.quit
         end
       end
-      target_usernameList.first(count).count.times.each do |i|
+      target_usernameList.count.times.each do |i|
         Follow.create(
           target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
         )
       end
       Notification.create(
-        notification_type:2,content:"フォローリストへの追加が完了しました。",isRead:0, user_id:user_id
+        notification_type:2,content:"#{target_usernameList.count}人のフォローリストへの追加が完了しました。",isRead:0, user_id:user_id
       )
     rescue => e
       puts e
+      Notification.create(
+        notification_type:0,content:"フォローリストへの追加に失敗しました。#{e.message}",isRead:0, user_id:user_id
+      )
+      driver.quit
     end
   end
 end

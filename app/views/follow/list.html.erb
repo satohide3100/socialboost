@@ -16,7 +16,7 @@
     <% if @twitterActive %>
     <div class="media">
       <a href="#" class="align-self-center mr-3">
-        <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
+        <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
       </a>
       <div class="media-body">
         <br><p class="mb-0"><%= @twitterActive.profile_name %></p>
@@ -115,7 +115,19 @@
           <div class="row">
             <div class="col-6">
               <div class="form-group">
-                <input type="number" name="count" class="form-control" id="count" placeholder="追加ユーザー数" min="100" max="10000" step="100">
+                <select name="count" id="count" class="custom-select">
+                  <option selected>リスト追加数を選択</option>
+                  <option value=50>50</option>
+                  <option value=100>100</option>
+                  <option value=250>150</option>
+                  <option value=200>200</option>
+                  <option value=250>250</option>
+                  <option value=300>300</option>
+                  <option value=350>350</option>
+                  <option value=400>400</option>
+                  <option value=450>450</option>
+                  <option value=500>500</option>
+                </select>
               </div>
             </div>
           </div>
@@ -144,16 +156,23 @@
             </tr>
           </thead>
           <tbody>
+            <% count = 1 %>
             <% @follows1.each do |follow| %>
-            <tr onclick="window.open().location.href='https://twitter.com/<%= follow.target_username %>'">
-              <td class="align-middle"><%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle") %></td>
+            <% if count > 50 %>
+            <tr class="more1" style="cursor:pointer;" onclick="window.open().location.href='https://twitter.com/<%= follow.target_username %>'">
+            <% else %>
+            <tr style="cursor:pointer;" onclick="window.open().location.href='https://twitter.com/<%= follow.target_username %>'">
+            <% end %>
+            <td class="align-middle"><%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %></td>
               <td class="align-middle"><%= follow.target_name %></td>
               <td class="align-middle"><%= follow.target_username %></td>
               <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
             </tr>
+            <% count += 1 %>
             <% end %>
           </tbody>
         </table>
+        <button class="btn btn-outline-primary morebtn1 btn-block">すべて表示する</button>
         <% else %>
         現在、フォロー予定のアカウントはありません。
         <% end %>
@@ -164,7 +183,7 @@
     <% if @instagramActive %>
     <div class="media">
       <a href="#" class="align-self-center mr-3">
-        <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle" width="100" height="100">
+        <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
       </a>
       <div class="media-body">
         <br><p class="mb-0"><%= @instagramActive.profile_name %></p>
@@ -264,7 +283,19 @@
           <div class="row">
             <div class="col-6">
               <div class="form-group">
-                <input type="number" name="count" class="form-control" id="count" placeholder="追加ユーザー数" min="100" max="10000" step="100">
+                <select name="count" id="count" class="custom-select">
+                  <option selected>リスト追加数を選択</option>
+                  <option value=50>50</option>
+                  <option value=100>100</option>
+                  <option value=250>150</option>
+                  <option value=200>200</option>
+                  <option value=250>250</option>
+                  <option value=300>300</option>
+                  <option value=350>350</option>
+                  <option value=400>400</option>
+                  <option value=450>450</option>
+                  <option value=500>500</option>
+                </select>
               </div>
             </div>
           </div>
@@ -289,16 +320,23 @@
             </tr>
           </thead>
           <tbody>
+            <% count = 1 %>
             <% @follows2.each do |follow| %>
-            <tr onclick="window.open().location.href='https://www.instagram.com/<%= follow.target_username %>/'">
-              <td class="align-middle"><%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle") %></td>
+            <% if count > 50 %>
+            <tr class="more2" style="cursor:pointer;" onclick="window.open().location.href='https://www.instagram.com/<%= follow.target_username %>/'">
+            <% else %>
+            <tr style="cursor:pointer;" onclick="window.open().location.href='https://www.instagram.com/<%= follow.target_username %>/'">
+            <% end %>
+              <td class="align-middle"><%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %></td>
               <td class="align-middle"><%= follow.target_name %></td>
               <td class="align-middle"><%= follow.target_username %></td>
               <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
             </tr>
+            <% count += 1 %>
             <% end %>
           </tbody>
         </table>
+        <button class="btn btn-outline-primary morebtn2 btn-block">全て表示する</button>
         <% else %>
         現在、フォロー予定のアカウントはありません。
         <% end %>
@@ -313,6 +351,14 @@
 
 <script>
   $('.loading').hide();
+  $('.more1').hide();
+  $('.morebtn1').click(function () {
+    $('.more1').fadeIn();
+  })
+  $('.more2').hide();
+  $('.morebtn2').click(function () {
+    $('.more2').fadeIn();
+  })
   $('.addLoading').click(function () {
     $(this).hide();
     $('.loading').show();

@@ -13,23 +13,30 @@ class AddFavJob < ApplicationJob
         username = @account.username
         pass = @account.pass
         require 'selenium-webdriver'
-        caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-          "chromeOptions" => {
-          binary: "/usr/bin/google-chrome",
-          args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
-          ]
-          }
-        )
-        driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
-        wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+        options = Selenium::WebDriver::Chrome::Options.new
+        options.headless!
+        options.add_option(:binary, "/usr/bin/google-chrome")
+        options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+        options.add_argument('--start-maximized')
+        driver = Selenium::WebDriver.for :chrome, options: options
+        wait = Selenium::WebDriver::Wait.new(:timeout => 3)
         case option
         when "1" #特定のキーワードを投稿
           driver.get("https://twitter.com/search?f=tweets&vertical=news&q=#{word}&src=typd")
           gridCount = 0
+          scrollCount = 0
+          unscrollCount = 0
           while gridCount < count
             wait.until {driver.find_elements(class: 'js-stream-item').last.displayed?}
+            if gridCount == driver.find_elements(class: 'js-stream-item').count
+              unscrollCount += 1
+            end
             gridCount = driver.find_elements(class: 'js-stream-item').count
             driver.find_element(class: "stream-footer").location_once_scrolled_into_view
+            scrollCount += 1
+            if unscrollCount == 20
+              break
+            end
           end
           target_usernames = driver.find_elements(xpath: '//*[@class="stream-item-header"]/a/span[2]/b')
           target_usernames.each do |e|
@@ -48,9 +55,101 @@ class AddFavJob < ApplicationJob
           target_postLinks.each do |e|
             target_postLinkList << "https://twitter.com#{e.attribute('data-permalink-path')}"
           end
-          driver.close
-        when "2" #
-
+          driver.quit
+        when "2" #あるユーザーのフォロワー〇〇人の最新投稿を追加
+          driver.get("https://twitter.com/login")
+          wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
+          driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys(username)
+          wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
+          driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys(pass)
+          driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
+          driver.navigate.to("https://twitter.com/#{user}/followers")
+          gridCount = 0
+          wait.until {driver.find_elements(class: "ProfileNav-value")[1].displayed?}
+          follower = driver.find_elements(class: "ProfileNav-value")[1].text.gsub(/[^\d]/, "").to_i
+          if follower < count
+            while gridCount != follower
+              wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
+              gridCount = driver.find_elements(class: 'u-size1of2').count
+              driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+            end
+          else
+            while gridCount < count
+              wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
+              gridCount = driver.find_elements(class: 'u-size1of2').count
+              driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+            end
+          end
+          target_usernames = driver.find_elements(xpath: '//*[@class="ProfileCard-screenname"]/a/span/b')
+          target_usernames.each do |e|
+            target_usernameList << e.text
+          end
+          target_names = driver.find_elements(class: 'ProfileNameTruncated-link')
+          target_names.delete_at(0)
+          target_names.each do |e|
+            target_nameList << e.text
+          end
+          target_images = driver.find_elements(class: "ProfileCard-avatarImage")
+          target_images.each do |e|
+            target_imageList << e.attribute(:src)
+          end
+          target_usernameList.each do |e|
+            driver.navigate.to("https://twitter.com/#{e}")
+            begin
+              wait.until {driver.find_element(class: 'js-stream-tweet').displayed?}
+            rescue
+              next
+            end
+            target_postLinkList << "https://twitter.com#{driver.find_element(class: 'js-stream-tweet').attribute('data-permalink-path')}"
+          end
+          driver.quit
+        when "3"
+          driver.get("https://twitter.com/login")
+          wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
+          driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys(username)
+          wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
+          driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys(pass)
+          driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
+          driver.navigate.to("https://twitter.com/#{user}/following")
+          gridCount = 0
+          wait.until {driver.find_elements(class: "ProfileNav-value")[0].displayed?}
+          follow = driver.find_elements(class: "ProfileNav-value")[0].text.gsub(/[^\d]/, "").to_i
+          if follow < count
+            while gridCount != follow
+              wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
+              gridCount = driver.find_elements(class: 'u-size1of2').count
+              driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+            end
+          else
+            while gridCount < count
+              wait.until {driver.find_elements(class: 'u-size1of2').last.displayed?}
+              gridCount = driver.find_elements(class: 'u-size1of2').count
+              driver.find_element(class: "GridTimeline-end").location_once_scrolled_into_view
+            end
+          end
+          target_usernames = driver.find_elements(xpath: '//*[@class="ProfileCard-screenname"]/a/span/b')
+          target_usernames.each do |e|
+            target_usernameList << e.text
+          end
+          target_names = driver.find_elements(class: 'ProfileNameTruncated-link')
+          target_names.delete_at(0)
+          target_names.each do |e|
+            target_nameList << e.text
+          end
+          target_images = driver.find_elements(class: "ProfileCard-avatarImage")
+          target_images.each do |e|
+            target_imageList << e.attribute(:src)
+          end
+          target_usernameList.each do |e|
+            driver.navigate.to("https://twitter.com/#{e}")
+            begin
+              wait.until {driver.find_element(class: 'js-stream-tweet').displayed?}
+            rescue
+              next
+            end
+            target_postLinkList << "https://twitter.com#{driver.find_element(class: 'js-stream-tweet').attribute('data-permalink-path')}"
+          end
+          driver.quit
         end
       elsif sns_type == "2"
         require 'selenium-webdriver'
@@ -60,14 +159,12 @@ class AddFavJob < ApplicationJob
         pass = @account.pass
         case option
         when "1"
-          caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-            "chromeOptions" => {
-            binary: "/usr/bin/google-chrome",
-            args: ["--window-size=1920,1080","--start-maximized","--headless",'--no-sandbox','--disable-dev-shm-usage'
-            ]
-            }
-          )
-          driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+          options = Selenium::WebDriver::Chrome::Options.new
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
+          options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+          options.add_argument('--start-maximized')
+          driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/explore/tags/#{word}/")
           i = 0
@@ -75,25 +172,159 @@ class AddFavJob < ApplicationJob
           driver.find_element(class: 'v1Nh3').click
           current_url = ""
           while count > i
-            begin
-              wait.until {driver.find_element(class: 'nJAzx').displayed?}
-            rescue
-              next
-            end
+            wait.until {driver.find_element(class: 'nJAzx').displayed?}
             target_usernameList << driver.find_element(class: 'nJAzx').text
             wait.until {driver.find_element(class: '_6q-tv').displayed?}
             target_imageList << driver.find_element(class: '_6q-tv').attribute(:src)
-            target_postLinkList << driver.current_url
-            wait.until {driver.find_element(class: 'HBoOv').displayed?}
+            begin
+              wait.until {driver.find_element(class: 'HBoOv').displayed?}
+            rescue
+              break
+            end
             i += 1
-            puts "----------------------"
             puts i
             driver.find_element(class: "HBoOv").click
           end
-          puts target_usernameList.count
-          puts target_imageList.count
-          driver.close
+          driver.quit
         when "2" #
+          options = Selenium::WebDriver::Chrome::Options.new
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
+          options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+          options.add_emulation(device_name: 'iPhone 8')
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-setuid-sandbox")
+          driver = Selenium::WebDriver.for :chrome, options: options
+          wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+          driver.get("https://www.instagram.com/accounts/login/?hl=ja")
+          wait.until {driver.find_element(name: 'username').displayed?}
+          driver.find_element(name: 'username').send_keys(username)
+          wait.until {driver.find_element(name: 'password').displayed?}
+          driver.find_element(name: 'password').send_keys(pass)
+          driver.find_elements(tag_name: "button")[2].click
+          #ßdriver.find_elements(class: 'sqdOP')[1].click
+          sleep(2)
+          driver.navigate.to("https://www.instagram.com/#{user}/")
+          begin
+            wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
+          rescue => e
+            Notification.create(
+              notification_type:0,content:"いいねリストへの追加に失敗しました。#{e.message}",isRead:0, user_id:user_id
+            )
+            driver.quit
+          end
+          follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').attribute(:title).gsub(/[^\d]/, "").to_i
+          if follower == 0
+            follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').text
+            if follower.include?("百")
+              follower = follower.split('百')[0] * 100
+            elsif follower.include?("千")
+              follower = follower.split('千')[0] * 1000
+            end
+          end
+          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').displayed?}
+          driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').click
+          gridCount = 0
+          if follower < count
+            while gridCount != follower
+              sleep(1)
+              gridCount = driver.find_elements(tag_name: "li").count
+            end
+          else
+            while gridCount < count
+              sleep(1)
+              gridCount = driver.find_elements(tag_name: "li").count
+            end
+          end
+          target_usernames = driver.find_elements(class: 'FPmhX')
+          target_usernames.each do |e|
+            target_usernameList << e.text
+          end
+          target_names = driver.find_elements(class: 'wFPL8 ')
+          target_names.each do |e|
+            target_nameList << e.text
+          end
+          target_images = driver.find_elements(class: '_6q-tv')
+          target_images.each do |e|
+            target_imageList << e.attribute(:src)
+          end
+          target_usernameList.each do |e|
+            driver.navigate.to("https://www.instagram.com/#{e}/")
+            begin
+              wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a').displayed?}
+            rescue
+              next
+            end
+            target_postLinkList << driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a').attribute(:href)
+          end
+          driver.quit
+        when "3"
+          options = Selenium::WebDriver::Chrome::Options.new
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
+          options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+          options.add_emulation(device_name: 'iPhone 8')
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-setuid-sandbox")
+          driver = Selenium::WebDriver.for :chrome, options: options
+          wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+          driver.get("https://www.instagram.com/accounts/login/?hl=ja")
+          wait.until {driver.find_element(name: 'username').displayed?}
+          driver.find_element(name: 'username').send_keys(username)
+          wait.until {driver.find_element(name: 'password').displayed?}
+          driver.find_element(name: 'password').send_keys(pass)
+          driver.find_elements(tag_name: "button")[2].click
+          sleep(2)
+          driver.get("https://www.instagram.com/#{user}/")
+          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').displayed?}
+          follow = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').text.gsub(/[^\d]/, "").to_i
+          if follow == 0
+            follow = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').text
+            if follow.include?("百")
+              follow = follow.split('百')[0] * 100
+            elsif follow.include?("千")
+              follow = follow.split('千')[0] * 1000
+            end
+          end
+          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a').displayed?}
+          driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a').click
+          gridCount = 0
+          if follow < count
+            while gridCount != follow
+              sleep(1)
+              gridCount = driver.find_elements(tag_name: "li").count
+            end
+          else
+            while gridCount < count
+              sleep(1)
+              gridCount = driver.find_elements(tag_name: "li").count
+            end
+          end
+          target_usernames = driver.find_elements(class: 'FPmhX')
+          target_usernames.each do |e|
+            puts e.text
+            target_usernameList << e.text
+          end
+          target_names = driver.find_elements(class: 'wFPL8 ')
+          target_names.each do |e|
+            target_nameList << e.text
+          end
+          target_images = driver.find_elements(class: '_6q-tv')
+          target_images.each do |e|
+            target_imageList << e.attribute(:src)
+          end
+          target_usernameList.each do |e|
+            driver.navigate.to("https://www.instagram.com/#{e}/")
+            begin
+              wait.until {driver.find_element(xpath: '//*[@class="FyNDV"]/div[1]/div/div[1]/div[1]/a').displayed?}
+            rescue
+              next
+            end
+            target_postLinkList << driver.find_element(xpath: '//*[@class="FyNDV"]/div[1]/div/div[1]/div[1]/a').attribute(:href)
+          end
+          driver.quit
         end
       end
 
@@ -104,10 +335,13 @@ class AddFavJob < ApplicationJob
         )
       end
       Notification.create(
-        notification_type:3,content:"いいねリストへの追加が完了しました。",isRead:0, user_id:user_id
+        notification_type:3,content:"#{target_usernameList.count}人のいいねリストへの追加が完了しました。",isRead:0, user_id:user_id
       )
     rescue => e
-      puts e
+      Notification.create(
+        notification_type:0,content:"いいねリストへの追加に失敗しました。#{e.message}",isRead:0, user_id:user_id
+      )
+      driver.quit
     end
   end
 end

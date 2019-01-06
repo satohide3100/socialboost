@@ -5,7 +5,7 @@ class FavController < ApplicationController
     if @twitterActive
       @twitterActiveImage = Analyze.find_by(account_id:@twitterActive.id)
       @twitterSetting = FavSetting.find_by(account_id:@twitterActive.id)
-      @fav1 = Fav.where(account_id:@twitterActive.id)
+      @fav1 = Fav.where(account_id:@twitterActive.id).order("id desc")
     else
       @fav1 = []
     end
@@ -14,7 +14,7 @@ class FavController < ApplicationController
     if @instagramActive
       @instagramActiveImage = Analyze.find_by(account_id:@instagramActive.id)
       @instagramSetting = FavSetting.find_by(account_id:@instagramActive.id)
-      @fav2 = Fav.where(account_id:@instagramActive.id)
+      @fav2 = Fav.where(account_id:@instagramActive.id).order("id desc")
     else
       @fav2 = []
     end
@@ -29,8 +29,8 @@ class FavController < ApplicationController
     word = params[:word]
     count = params[:count].to_i
     user_id = current_user.id
-    AddFavJob.perform_later(sns_type,option,user,post,word,count,user_id)
     flash[:notice] = "いいねリストの追加処理を開始しました。"
+    AddFavJob.perform_later(sns_type,option,user,post,word,count,user_id)
     redirect_to("/fav/list")
   end
 

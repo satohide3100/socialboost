@@ -45,21 +45,21 @@
         <% analyze = @analyzes.where(account_id:account.id).limit(1) %>
         <% if account.active_flg == 1 %>
         <tr class="table-primary">
-          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle") %></td>
+          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle shadow") %></td>
           <td class="align-middle"><%= account.profile_name %></td>
           <td class="align-middle"><%= number_with_delimiter(analyze[0].follow_count) %></td>
           <td class="align-middle"><%= number_with_delimiter(analyze[0].follower_count) %></td>
           <td class="align-middle"></td>
-          <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+          <td class="align-middle"> <%= button_to "削除", "/account/#{account.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %> </td>
         </tr>
         <% else %>
         <tr>
-          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle") %></td>
+          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle shadow") %></td>
           <td class="align-middle"><%= account.profile_name %></td>
           <td class="align-middle"><%= number_with_delimiter(analyze[0].follow_count) %></td>
           <td class="align-middle"><%= number_with_delimiter(analyze[0].follower_count) %></td>
           <td class="align-middle"> <a href="/account/active?id=<%= account.id %>" class="btn btn-sm btn-primary">アクティブにする</a> </td>
-          <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+          <td class="align-middle"> <%= button_to "削除", "/account/#{account.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %> </td>
         </tr>
         <% end %>
         <% end %>
@@ -113,21 +113,21 @@
         <% analyze = @analyzes.where(account_id:account.id).limit(1) %>
         <% if account.active_flg == 1 %>
         <tr class="table-primary">
-          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle") %></td>
+          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle shadow") %></td>
           <td class="align-middle"><%= account.profile_name %></td>
           <td class="align-middle"><%= number_with_delimiter(analyze[0].follow_count) %></td>
           <td class="align-middle"><%= number_with_delimiter(analyze[0].follower_count) %></td>
           <td class="align-middle"></td>
-          <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+          <td class="align-middle"> <%= button_to "削除", "/account/#{account.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %> </td>
         </tr>
         <% else %>
         <tr>
-          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle") %></td>
+          <td class="align-middle"><%= image_tag(analyze[0].profile_image, :size => "100x100", :class => "rounded-circle shadow") %></td>
           <td class="align-middle"><%= account.profile_name %></td>
           <td class="align-middle"><%= number_with_delimiter(analyze[0].follow_count) %></td>
           <td class="align-middle"><%= number_with_delimiter(analyze[0].follower_count) %></td>
           <td class="align-middle"> <a href="/account/active?id=<%= account.id %>" class="btn btn-sm btn-primary">アクティブにする</a> </td>
-          <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
+          <td class="align-middle"> <%= button_to "削除", "/account/#{account.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %> </td>
         </tr>
         <% end %>
         <% end %>

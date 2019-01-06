@@ -25,4 +25,12 @@ class AccountController < ApplicationController
     flash[:notice] = "アカウントリストの追加処理を開始しました。"
     redirect_to("/account/list")
   end
+
+  def destroy
+    @account = Account.find(params[:id])
+    @account.destroy
+    flash[:notice] = "#{@account.profile_name}のデータを削除しました。"
+    redirect_to("/account/list")
+  end
+
 end
