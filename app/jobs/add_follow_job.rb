@@ -401,8 +401,6 @@ class AddFollowJob < ApplicationJob
       end
     rescue => e
       puts e
-      sleep(60)
-      driver.find_elements(tag_name: "button")[1].click
       sleep(2)
       Notification.create(
         notification_type:0,content:"フォローリストへの追加に失敗しました。#{e.message}#{driver.current_url}",isRead:0, user_id:user_id
