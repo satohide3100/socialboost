@@ -186,6 +186,7 @@ class AddFollowJob < ApplicationJob
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/accounts/login/?hl=ja")
+          body = driver.find_element(tag_name: "body").text
           wait.until {driver.find_element(name: 'username').displayed?}
           driver.find_element(name: 'username').send_keys(username)
           wait.until {driver.find_element(name: 'password').displayed?}
@@ -403,7 +404,7 @@ class AddFollowJob < ApplicationJob
       puts e
       sleep(2)
       Notification.create(
-        notification_type:0,content:"フォローリストへの追加に失敗しました。#{e.message}#{driver.current_url}",isRead:0, user_id:user_id
+        notification_type:0,content:"フォローリストへの追加に失敗しました。#{e.message}#{driver.current_url}#{body}",isRead:0, user_id:user_id
       )
       driver.quit
     end
