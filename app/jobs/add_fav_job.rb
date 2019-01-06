@@ -213,8 +213,8 @@ class AddFavJob < ApplicationJob
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/explore/tags/#{word}/")
           i = 0
-          wait.until {driver.find_element(class: 'v1Nh3').displayed?}
-          driver.find_element(class: 'v1Nh3').click
+          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/article/div[1]/div/div/div[1]/div[1]/a').displayed?}
+          driver.find_element(xpath: '//*[@id="react-root"]/section/main/article/div[1]/div/div/div[1]/div[1]/a').click
           current_url = ""
           while count > i
             wait.until {driver.find_element(class: 'nJAzx').displayed?}
@@ -231,6 +231,7 @@ class AddFavJob < ApplicationJob
             driver.find_element(class: "HBoOv").click
           end
           driver.quit
+          saveCount = 0
           target_usernameList.first(count).count.times.each do |i|
             @fav = Fav.new(
               target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
@@ -319,6 +320,7 @@ class AddFavJob < ApplicationJob
             target_postLinkList << driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a').attribute(:href)
           end
           driver.quit
+          saveCount = 0
           target_usernameList.first(count).count.times.each do |i|
             @fav = Fav.new(
               target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
@@ -400,6 +402,7 @@ class AddFavJob < ApplicationJob
             target_postLinkList << driver.find_element(xpath: '//*[@class="FyNDV"]/div[1]/div/div[1]/div[1]/a').attribute(:href)
           end
           driver.quit
+          saveCount = 0
           target_usernameList.first(count).count.times.each do |i|
             @fav = Fav.new(
               target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
