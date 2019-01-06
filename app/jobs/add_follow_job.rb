@@ -178,8 +178,8 @@ class AddFollowJob < ApplicationJob
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
           options.add_option(:binary, "/usr/bin/google-chrome")
-          #options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
-          #options.add_emulation(device_name: 'iPhone 8')
+          options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+          options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
@@ -191,10 +191,8 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'username').send_keys(username)
           wait.until {driver.find_element(name: 'password').displayed?}
           driver.find_element(name: 'password').send_keys(pass)
-          #wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
-          #driver.find_elements(tag_name: "button")[2].click
-          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[3]/button').displayed?}
-          driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[3]/button').click
+          wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
+          driver.find_elements(tag_name: "button")[2].click
           sleep(3)
           driver.navigate.to("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
