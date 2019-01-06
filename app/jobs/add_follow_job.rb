@@ -192,16 +192,10 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'password').send_keys(pass)
           wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
           driver.find_elements(tag_name: "button")[2].click
-          #ßdriver.find_elements(class: 'sqdOP')[1].click
-          sleep(2)
+          wait.until {
+            driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
+          }
           driver.navigate.to("https://www.instagram.com/#{user}/")
-          if driver.current_url != "https://www.instagram.com/#{user}/"
-            Notification.create(
-              notification_type:0,content:"ログインできませんでした。再度実行するか、アカウントを確認してください。",isRead:0, user_id:user_id
-            )
-            driver.quit
-            return
-          end
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
           follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').text.gsub(/[^\d]/, "").to_i
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').displayed?}
@@ -261,8 +255,10 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'password').send_keys(pass)
           wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
           driver.find_elements(tag_name: "button")[2].click
-          sleep(2)
-          driver.get("https://www.instagram.com/#{user}/")
+          wait.until {
+            driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
+          }
+          driver.navigate.to("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').displayed?}
           follow = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').text.gsub(/[^\d]/, "").to_i
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a').displayed?}
@@ -410,7 +406,7 @@ class AddFollowJob < ApplicationJob
     rescue => e
       puts e
       Notification.create(
-        notification_type:0,content:"フォローリストへの追加に失敗しました。#{e.message}",isRead:0, user_id:user_id
+        notification_type:0,content:"フォローリストへの追加に失敗しました。#{e.message}#{driver.current_url}",isRead:0, user_id:user_id
       )
       driver.quit
     end
