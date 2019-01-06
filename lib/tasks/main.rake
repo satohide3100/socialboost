@@ -31,10 +31,11 @@ namespace :main do
     driver.find_elements(tag_name: "button")[2].click
     sleep(3)
     puts "------------"
-    sleep(30)
-    puts driver.find_elements(tag_name: "button")[0]
-    puts driver.find_elements(tag_name: "button")[1]
-    driver.find_elements(tag_name: "button")[0].click
+    sleep(10)
+    puts driver.find_elements(tag_name: "button")[0].text
+    puts driver.find_elements(tag_name: "button")[1].text
+    puts driver.find_elements(tag_name: "button")[2].text
+    driver.find_elements(tag_name: "button")[2].click
     sleep(2)
     puts body = driver.find_element(tag_name: "body").text
 
