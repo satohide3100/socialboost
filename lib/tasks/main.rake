@@ -7,24 +7,30 @@ namespace :main do
 
   task :test => :environment do
     require 'selenium-webdriver'
-    caps = Selenium::WebDriver::Remote::Capabilities.chrome(
-      "chromeOptions" => {
-      binary: "/app/.apt/usr/bin/google-chrome",
-      args: ["--window-size=1920,1080",
-        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
-        "--start-maximized","--headless"]
-      }
-    )
-    driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+    options = Selenium::WebDriver::Chrome::Options.new
+    options.headless!
+    options.add_option(:binary, "/usr/bin/google-chrome")
+    #options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+    #options.add_emulation(device_name: 'iPhone 8')
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-setuid-sandbox")
+    driver = Selenium::WebDriver.for :chrome, options: options
     wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-    driver.get("https://twitter.com/login?lang=ja")
-    wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').displayed?}
-    driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys("Satohide1994")
-    wait.until {driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').displayed?}
-    driver.find_element(xpath: '//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys("oneokrock")
-    driver.find_element(:xpath, '//*[@id="page-container"]/div/div[1]/form/div[2]/button').click
-    sleep(2)
-    puts driver.find_element(tag_name:"body").text
+    driver.get("https://www.instagram.com/accounts/login")
+    puts body = driver.find_element(tag_name: "body").text
+    wait.until {driver.find_element(name: 'username').displayed?}
+    driver.find_element(name: 'username').send_keys(username)
+    wait.until {driver.find_element(name: 'password').displayed?}
+    driver.find_element(name: 'password').send_keys(pass)
+    #wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
+    #driver.find_elements(tag_name: "button")[2].click
+    wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[3]/button').displayed?}
+    driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[3]/button').click
+    sleep(3)
+    puts "------------"
+    puts body = driver.find_element(tag_name: "body").text
+
   end
 
   task :seleniumfix => :environment do
