@@ -190,6 +190,7 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'username').send_keys(username)
           wait.until {driver.find_element(name: 'password').displayed?}
           driver.find_element(name: 'password').send_keys(pass)
+          wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
           driver.find_elements(tag_name: "button")[2].click
           #ßdriver.find_elements(class: 'sqdOP')[1].click
           sleep(2)
@@ -258,6 +259,7 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'username').send_keys(username)
           wait.until {driver.find_element(name: 'password').displayed?}
           driver.find_element(name: 'password').send_keys(pass)
+          wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
           driver.find_elements(tag_name: "button")[2].click
           sleep(2)
           driver.get("https://www.instagram.com/#{user}/")
