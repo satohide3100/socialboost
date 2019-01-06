@@ -183,6 +183,7 @@ class AddFollowJob < ApplicationJob
           options.add_argument("--disable-dev-shm-usage")
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
+          options.add_argument("--lang=ja")
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/accounts/login")
