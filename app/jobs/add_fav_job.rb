@@ -265,7 +265,9 @@ class AddFavJob < ApplicationJob
           driver.find_element(name: 'password').send_keys(pass)
           driver.find_elements(tag_name: "button")[2].click
           #ßdriver.find_elements(class: 'sqdOP')[1].click
-          sleep(2)
+          wait.until {
+            driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
+          }
           driver.navigate.to("https://www.instagram.com/#{user}/")
           begin
             wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
@@ -353,7 +355,9 @@ class AddFavJob < ApplicationJob
           wait.until {driver.find_element(name: 'password').displayed?}
           driver.find_element(name: 'password').send_keys(pass)
           driver.find_elements(tag_name: "button")[2].click
-          sleep(2)
+          wait.until {
+            driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
+          }
           driver.get("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').displayed?}
           follow = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').text.gsub(/[^\d]/, "").to_i

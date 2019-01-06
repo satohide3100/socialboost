@@ -192,9 +192,21 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'password').send_keys(pass)
           wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
           driver.find_elements(tag_name: "button")[2].click
-          wait.until {
-            driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
-          }
+          begin
+            wait.until {
+              driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
+            }
+          rescue
+            sleep(60)
+            if driver.current_url == "https://www.instagram.com/challenge/8288794565/WVDg4SPudA/"
+              driver.find_elements(tag_name: "button")[1].click
+              sleep(2)
+              Notification.create(
+                notification_type:0,content:"フォローリストへの追加に失敗しました。#{e.message}#{driver.current_url}",isRead:0, user_id:user_id
+              )
+              driver.quit
+            end
+          end
           driver.navigate.to("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
           follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').text.gsub(/[^\d]/, "").to_i
