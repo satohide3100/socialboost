@@ -105,8 +105,8 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
       result = Benchmark.realtime do
         Account.where(user_id:3).where(id:account_ids).each do |account|
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.add_option(:binary, "/usr/bin/google-chrome")
-          #options.add_argument("--headless")
+          options.add_option(:binary, "/usr/bin/google-chrome")
+          options.add_argument("--headless")
           options.add_argument("--disable-gpu")
           options.add_argument("--windo-size=1929,2160")
           options.add_argument("--user-agent=#{USER_AGENT}")
@@ -216,7 +216,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     Account.where(sns_type:2).each do |account|
       options = Selenium::WebDriver::Chrome::Options.new
       options.add_argument("--user-data-dir=./profile#{account.id}")
-      #options.add_argument("--headless")
+      options.add_argument("--headless")
       options.add_option(:binary, "/usr/bin/google-chrome")
       options.add_argument("--user-agent=#{USER_AGENT}")
       options.add_argument('--start-maximized')
