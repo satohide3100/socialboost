@@ -19,7 +19,9 @@
         <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
       </a>
       <div class="media-body">
-        <br><p class="mb-0"><%= @twitterActive.profile_name %></p>
+        <br>
+        <h6 class="mt-0"><%= @twitterActive.profile_name %></h6>
+        <small class="text-muted">@<%= @twitterActive.username %></small>
       </div>
     </div><br>
     <% else %>
@@ -51,13 +53,37 @@
             </div>
           </div>
           <div class="form-group row">
-            <div class="col-6">
+            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
+            <div class="col-2">
               <div class="input-group mb-3">
                 <% if @twitterSetting %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" max="12" value="<%= @twitterSetting.interval %>" required>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @twitterSetting.intervalsec %>" required>
                 <% else %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" max="12" required>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
                 <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">秒</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-6">
+              <div class="input-group mb-3">
+                <select name="interval" class="custom-select" id="interval1" value=1>
+                  <option>停止中</option>
+                  <% @intervalHour.each do |i| %>
+                    <% if @twitterSetting %>
+                      <% if i == @twitterSetting.interval %>
+                       <option value="<%= i %>" selected><%= i %></option>
+                      <% else %>
+                        <option value="<%= i %>"><%= i %></option>
+                      <% end %>
+                    <% else %>
+                      <option value="<%= i %>"><%= i %></option>
+                    <% end %>
+                  <% end %>
+                </select>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
@@ -130,35 +156,46 @@
       <div class="card-header">
         <strong>いいねリスト一覧 （<%= @fav1.count %>投稿）</strong>
       </div>
-      <div class="card-body text-center">
+      <div class="card-body">
         <% if @fav1.count > 0 %>
-        <table class="table table-hover">
-          <thead class="thead-light">
-            <tr>
-              <th>アイコン</th>
-              <th>アカウント名</th>
-              <th>投稿URL</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% count = 1 %>
-            <% @fav1.each do |fav| %>
-            <% if count > 50 %>
-            <tr class="more1" style="cursor:pointer;" onclick="window.open().location.href='<%= fav.target_postLink %>'">
-            <% else %>
-            <tr style="cursor:pointer;" onclick="window.open().location.href='<%= fav.target_postLink %>'">
-            <% end %>
-              <td class="align-middle"><%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle shadow") %></td>
-              <td class="align-middle"><%= fav.target_name.truncate(20) %></td>
-              <td class="align-middle"><%= link_to("投稿リンク",fav.target_postLink) %></td>
-              <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
-            </tr>
-            <% count += 1%>
-            <% end %>
-          </tbody>
-        </table>
-        <button class="btn btn-outline-primary btn-block morebtn1">全て表示する</button>
+        <ul class="list-unstyled">
+        <div class="row">
+          <% count = 1 %>
+          <% @fav1.each do |fav| %>
+          <% if count > 50 %>
+          <div class="col-6 more1">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= fav.target_name %></strong>
+                <small class="text-muted">@<%= fav.target_username %></small><br><br>
+                <a href="<%= fav.target_postLink %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+                <%= link_to "削除する", "/fav/#{fav.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+              </div>
+            </li><hr>
+          </div>
+          <% else %>
+          <div class="col-6">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= fav.target_name %></strong>
+                <small class="text-muted">@<%= fav.target_username %></small><br><br>
+                <a href="<%= fav.target_postLink %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+                <%= link_to "削除する", "/fav/#{fav.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+              </div>
+            </li><hr>
+          </div>
+          <% end %>
+          <% count += 1 %>
+          <% end %>
+        </div>
+        </ul>
+        <button class="btn btn-outline-primary morebtn1 btn-block">すべて表示する</button>
         <% else %>
         現在、いいね予定の投稿はありません。
         <% end %>
@@ -173,7 +210,9 @@
         <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
       </a>
       <div class="media-body">
-        <br><p class="mb-0"><%= @instagramActive.profile_name %></p>
+        <br>
+        <h6 class="mt-0"><%= @instagramActive.profile_name %></h6>
+        <small class="text-muted">@<%= @instagramActive.username %></small>
       </div>
     </div><br>
     <% else %>
@@ -205,13 +244,37 @@
             </div>
           </div>
           <div class="form-group row">
-            <div class="col-6">
+            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
+            <div class="col-2">
               <div class="input-group mb-3">
                 <% if @instagramSetting %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" value="<%= @instagramSetting.interval %>" required>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @instagramSetting.intervalsec %>" required>
                 <% else %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" required>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
                 <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">秒</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-6">
+              <div class="input-group mb-3">
+                <select name="interval" class="custom-select" id="interval1" value=1>
+                  <option>停止中</option>
+                  <% @intervalHour.each do |i| %>
+                    <% if @instagramSetting %>
+                      <% if i == @instagramSetting.interval %>
+                       <option value="<%= i %>" selected><%= i %></option>
+                      <% else %>
+                        <option value="<%= i %>"><%= i %></option>
+                      <% end %>
+                    <% else %>
+                      <option value="<%= i %>"><%= i %></option>
+                    <% end %>
+                  <% end %>
+                </select>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
@@ -271,6 +334,12 @@
                   <option value=50>50</option>
                   <option value=100>100</option>
                   <option value=150>150</option>
+                  <option value=200>200</option>
+                  <option value=250>250</option>
+                  <option value=300>300</option>
+                  <option value=350>350</option>
+                  <option value=400>400</option>
+                  <option value=450>450</option>
                 </select>
               </div>
             </div>
@@ -284,35 +353,46 @@
       <div class="card-header">
         <strong>いいねリスト一覧 （<%= @fav2.count %>投稿）</strong>
       </div>
-      <div class="card-body text-center">
+      <div class="card-body">
         <% if @fav2.count > 0 %>
-        <table class="table table-hover">
-          <thead class="thead-light">
-            <tr>
-              <th>アイコン</th>
-              <th>アカウント名</th>
-              <th>投稿URL</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% count = 1 %>
-            <% @fav2.each do |fav| %>
-            <% if count > 50 %>
-            <tr class="more2" style="cursor:pointer;" onclick="window.open().location.href='<%= fav.target_postLink %>'">
-            <% else %>
-            <tr style="cursor:pointer;" onclick="window.open().location.href='<%= fav.target_postLink %>'">
-            <% end %>
-              <td class="align-middle"><%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle shadow") %></td>
-              <td class="align-middle"><%= fav.target_username.truncate(20) %></td>
-              <td class="align-middle"><%= link_to("投稿リンク",fav.target_postLink) %></td>
-              <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
-            </tr>
-            <% count += 1 %>
-            <% end %>
-          </tbody>
-        </table>
-        <button class="btn btn-outline-primary morebtn2">すべて表示する</button>
+        <ul class="list-unstyled">
+        <div class="row">
+          <% count = 1 %>
+          <% @fav2.each do |fav| %>
+          <% if count > 50 %>
+          <div class="col-6 more2">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= fav.target_name %></strong>
+                <small class="text-muted">@<%= fav.target_username %></small><br><br>
+                <a href="<%= fav.target_postLink %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+                <%= link_to "削除する", "/fav/#{fav.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+              </div>
+            </li><hr>
+          </div>
+          <% else %>
+          <div class="col-6">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(fav.target_postImage, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= fav.target_name %></strong>
+                <small class="text-muted">@<%= fav.target_username %></small><br><br>
+                <a href="<%= fav.target_postLink %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+                <%= link_to "削除する", "/fav/#{fav.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+              </div>
+            </li><hr>
+          </div>
+          <% end %>
+          <% count += 1 %>
+          <% end %>
+        </div>
+        </ul>
+        <button class="btn btn-outline-primary btn-block morebtn2">すべて表示する</button>
         <% else %>
         現在、いいね予定の投稿はありません。
         <% end %>

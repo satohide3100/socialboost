@@ -4,8 +4,6 @@
     <title>SNS Management Application</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -71,7 +69,7 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item bg-dark post"><i class="fas fa-pen-square"></i>&nbsp&nbspタイムライン投稿</li>
             <li class="list-group-item text-body postsub d-flex justify-content-between align-items-center" onclick="location.href='/post/bulk'">
-              <small>&nbsp&nbsp&nbsp一括投稿</small>
+              <small>&nbsp&nbsp&nbsp予約投稿</small>
               <span><i class="fas fa-chevron-circle-right"></i></span>
             </li>
             <li class="list-group-item text-body postsub d-flex justify-content-between align-items-center" onclick="location.href='/post/auto'">

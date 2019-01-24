@@ -84,3 +84,5 @@ gem 'selenium-webdriver'
 gem 'devise'
 gem 'daemons'
 gem 'delayed_job_active_record'
+gem "parallel"
+gem 'line_notify'

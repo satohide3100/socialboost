@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_03_212549) do
+ActiveRecord::Schema.define(version: 2019_01_16_155909) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer "sns_type"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 2019_01_03_212549) do
     t.integer "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "intervalsec"
     t.index ["account_id"], name: "index_fav_settings_on_account_id"
   end
 
@@ -80,6 +81,7 @@ ActiveRecord::Schema.define(version: 2019_01_03_212549) do
     t.integer "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "intervalsec"
     t.index ["account_id"], name: "index_follow_settings_on_account_id"
   end
 
@@ -113,6 +115,7 @@ ActiveRecord::Schema.define(version: 2019_01_03_212549) do
     t.integer "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "intervalsec"
     t.index ["account_id"], name: "index_un_follow_settings_on_account_id"
   end
 

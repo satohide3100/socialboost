@@ -176,8 +176,8 @@ class AddFollowJob < ApplicationJob
         case option
         when "1"
           options = Selenium::WebDriver::Chrome::Options.new
-          options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.headless!
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -194,7 +194,10 @@ class AddFollowJob < ApplicationJob
           driver.find_element(name: 'password').send_keys(pass)
           wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
           driver.find_elements(tag_name: "button")[2].click
-          sleep(3)
+          wait.until {
+            driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F"
+          }
+          puts driver.current_url
           driver.navigate.to("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
           follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').text.gsub(/[^\d]/, "").to_i

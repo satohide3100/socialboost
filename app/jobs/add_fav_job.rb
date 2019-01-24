@@ -14,8 +14,8 @@ class AddFavJob < ApplicationJob
         pass = @account.pass
         require 'selenium-webdriver'
         options = Selenium::WebDriver::Chrome::Options.new
-        options.headless!
-        options.add_option(:binary, "/usr/bin/google-chrome")
+        #options.headless!
+        #options.add_option(:binary, "/usr/bin/google-chrome")
         options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
         options.add_argument('--start-maximized')
         options.add_argument("--disable-dev-shm-usage")
@@ -210,32 +210,26 @@ class AddFavJob < ApplicationJob
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
           driver = Selenium::WebDriver.for :chrome, options: options
-          wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+          wait = Selenium::WebDriver::Wait.new(:timeout => 3)
           driver.get("https://www.instagram.com/explore/tags/#{word}/")
-          i = 0
-          wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/article/div[1]/div/div/div[1]/div[1]/a').displayed?}
-          driver.find_element(xpath: '//*[@id="react-root"]/section/main/article/div[1]/div/div/div[1]/div[1]/a').click
-          current_url = ""
-          while count > i
-            wait.until {driver.find_element(class: 'nJAzx').displayed?}
-            target_usernameList << driver.find_element(class: 'nJAzx').text
-            wait.until {driver.find_element(class: '_6q-tv').displayed?}
-            target_imageList << driver.find_element(class: '_6q-tv').attribute(:src)
-            begin
-              wait.until {driver.find_element(class: 'HBoOv').displayed?}
-            rescue
-              break
+          links = []
+          wait.until {driver.find_element(css: '.v1Nh3 a').displayed?}
+          while count > links.count
+            driver.find_elements(css: '.v1Nh3 a').last.location_once_scrolled_into_view
+            wait.until {driver.find_element(css: '.v1Nh3 a').displayed?}
+            driver.find_elements(css: '.v1Nh3 a').each do |e|
+              links << e.attribute(:href)
             end
-            i += 1
-            puts i
-            driver.find_element(class: "HBoOv").click
+            links.uniq!
+            puts links.count
           end
           driver.quit
           saveCount = 0
-          target_usernameList.first(count).count.times.each do |i|
+          links.first(count).each do |link|
             @fav = Fav.new(
-              target_postLink:target_postLinkList[i],target_postImage:target_imageList[i],
-              target_username:target_usernameList[i],target_name:target_nameList[i],fav_flg:0,account_id:account_id
+              target_postLink:link,fav_flg:0,
+              target_postImage:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8IuiPY9HdN5uOHJxs7km_KxNfivPT2biYs3zCRC9y_LlOBpMbw",
+              account_id:account_id
             )
             if @fav.save
               saveCount += 1
@@ -246,8 +240,8 @@ class AddFavJob < ApplicationJob
           )
         when "2" #
           options = Selenium::WebDriver::Chrome::Options.new
-          options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.headless!
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -257,14 +251,13 @@ class AddFavJob < ApplicationJob
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
           driver = Selenium::WebDriver.for :chrome, options: options
-          wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+          wait = Selenium::WebDriver::Wait.new(:timeout => 3)
           driver.get("https://www.instagram.com/accounts/login/?hl=ja")
           wait.until {driver.find_element(name: 'username').displayed?}
           driver.find_element(name: 'username').send_keys(username)
           wait.until {driver.find_element(name: 'password').displayed?}
           driver.find_element(name: 'password').send_keys(pass)
-          driver.find_elements(tag_name: "button")[2].click
-          #ßdriver.find_elements(class: 'sqdOP')[1].click
+          driver.find_element(name: 'password').send_keys(:return)
           wait.until {
             driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F&hl=ja"
           }
@@ -337,18 +330,15 @@ class AddFavJob < ApplicationJob
           )
         when "3"
           options = Selenium::WebDriver::Chrome::Options.new
-          options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.headless!
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
-          options.add_argument("--disable-dev-shm-usage")
-          options.add_argument("--no-sandbox")
-          options.add_argument("--disable-setuid-sandbox")
           driver = Selenium::WebDriver.for :chrome, options: options
-          wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+          wait = Selenium::WebDriver::Wait.new(:timeout => 3)
           driver.get("https://www.instagram.com/accounts/login/?hl=ja")
           wait.until {driver.find_element(name: 'username').displayed?}
           driver.find_element(name: 'username').send_keys(username)

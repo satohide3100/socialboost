@@ -32,6 +32,7 @@ class UnfollowController < ApplicationController
     sns_type = params[:sns_type]
     dayLimit = params[:dayLimit]
     interval = params[:interval]
+    intervalsec = params[:intervalsec]
     if sns_type == "1"
       @account = Account.find_by(user_id:current_user.id,sns_type:1,active_flg:1)
       account_id = @account.id
@@ -42,12 +43,12 @@ class UnfollowController < ApplicationController
     unfollowSetting = UnFollowSetting.find_by(account_id:account_id)
     if unfollowSetting == nil
       UnFollowSetting.create(
-        dayLimit:dayLimit,intervalDay:interval,account_id:account_id
+        dayLimit:dayLimit,intervalDay:interval,intervalsec:intervalsec,account_id:account_id
       )
       flash[:notice] = "アンフォロー設定を新規追加しました。"
     else
       UnFollowSetting.where(account_id:account_id).update(
-        dayLimit:dayLimit,intervalDay:interval
+        dayLimit:dayLimit,intervalDay:interval,intervalsec:intervalsec
       )
       flash[:notice] = "アンフォロー設定を更新しました。"
     end

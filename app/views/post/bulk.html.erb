@@ -1,50 +1,76 @@
-<h3><strong>一括投稿</strong></h3>
-<p class="text-muted">複数のSNSにテキストと画像を一括投稿します。</p><br>
-<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="ボタングループを含むツールバー">
-  <div class="btn-group" role="group" aria-label="基本のボタングループ">
-    <button type="button" class="btn btn-info border">プレビュー</button>
-    <button type="button" class="btn btn-info border">下書き保存</button>
-  </div>
-</div>
-<br>
+<h3><strong>予約投稿</strong></h3>
+<p class="text-muted">複数SNSへの投稿の予約を行います。</p><br>
 <form>
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-    <label class="form-check-label" for="exampleRadios1">
-      今すぐ送信
-    </label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-    <label class="form-check-label" for="exampleRadios2">
-      予約投稿
-    </label>
-  </div><br>
   <div class="form-group">
-    <label for="text">投稿文</label>
-    <textarea class="form-control" id="text" rows="10"></textarea>
+    <label for="date"><strong><i class="fas fa-clock"></i>&nbsp投稿日時</strong></label>
+    <div class="row">
+      <div class="col-7">
+        <div class="input-group">
+          <div class="input-group-preppend">
+            <span class="input-group-text">2019 年</span>
+          </div>
+          <select name="month" class="custom-select">
+            <% @monthOptions.each do |i| %>
+            <option value="<%= i %>"><%= i %></option>
+            <% end %>
+          </select>
+          <div class="input-group-append">
+            <span class="input-group-text">月</span>
+          </div>
+          <select name="day" class="custom-select">
+            <% @dayOptions.each do |i| %>
+            <option value="<%= i %>"><%= i %></option>
+            <% end %>
+          </select>
+          <div class="input-group-append">
+            <span class="input-group-text">日</span>
+          </div>
+          <select name="hour" class="custom-select">
+            <% @hourOptions.each do |i| %>
+            <option value="<%= i %>"><%= i %></option>
+            <% end %>
+          </select>
+          <div class="input-group-append">
+            <span class="input-group-text">時</span>
+          </div>
+          <select name="min" class="custom-select">
+            <% @minOptions.each do |i| %>
+            <option value="<%= i %>"><%= i %></option>
+            <% end %>
+          </select>
+          <div class="input-group-append">
+            <span class="input-group-text">分</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="form-group">
-    <label for="File">画像</label>
-    <input type="file" class="form-control-file" id="File">
+    <label for="text"><strong><i class="fas fa-pen-square"></i>&nbsp投稿文</strong></label>
+    <textarea class="form-control" id="memo_text" rows="10"></textarea>
+    <small>文字数：<span class="count">0</span></small>
   </div>
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
-    <label class="form-check-label">
-      Twitter
+  <div class="form-group">
+    <label for="file"><strong><i class="fas fa-images"></i>&nbsp画像</strong></label><br>
+    <input type="file" id="file"></input>
+  </div>
+  <div class="custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input" id="twitterswitch">
+    <label class="custom-control-label" for="twitterswitch">
+      <strong><i class="fab fa-twitter-square"></i>&nbspTwitter</strong>
       <small class="text-muted">
         <% if @twitterActive %>
-        (<%= @twitterActive.profile_name %>)
+        <%= @twitterActive.profile_name %>
         <% else %>
         (未設定)
         <% end %>
       </small>
     </label>
   </div>
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked>
-    <label class="form-check-label">
-      Instagram
+  <div class="custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input" id="instagramswitch">
+    <label class="custom-control-label" for="instagramswitch">
+      <strong><i class="fab fa-instagram"></i>&nbspInstagram</strong>
       <small class="text-muted">
         <% if @instagramActive %>
         (<%= @instagramActive.profile_name %>)
@@ -54,10 +80,10 @@
       </small>
     </label>
   </div>
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" checked>
-    <label class="form-check-label">
-      Facebook
+  <div class="custom-control custom-switch">
+    <input type="checkbox" class="custom-control-input" id="instagramswitch">
+    <label class="custom-control-label" for="instagramswitch">
+      <strong><i class="fab fa-facebook-square"></i>&nbspFacebook</strong>
       <small class="text-muted">
         <% if @facebookActive %>
         (<%= @facebookActive.profile_name %>)
@@ -66,9 +92,14 @@
         <% end %>
       </small>
     </label>
-  </div><br><br>
+  </div><br>
   <button type="submit" class="btn btn-primary">送信する</button>
-</form>
+</form><br>
 <script>
-  $('#datepicker').datepicker();
+$(".count").text($("#memo_text").val().length);
+
+$("#memo_text").on("keydown keyup keypress change",function(){
+    var text_length = $(this).val().length;
+    $(".count").text(text_length);
+});
 </script>

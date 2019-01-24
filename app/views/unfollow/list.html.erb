@@ -65,6 +65,21 @@
               </div>
             </div>
           </div>
+          <div class="form-group row">
+            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <% if @twitterSetting %>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @twitterSetting.intervalsec %>" required>
+                <% else %>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">秒</span>
+                </div>
+              </div>
+            </div>
+          </div>
           <button type="submit" class="btn btn-primary">保存</button>
         </form>
       </div>
@@ -127,6 +142,21 @@
                 <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">件</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
+            <div class="col-2">
+              <div class="input-group mb-3">
+                <% if @instagramSetting %>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @instagramSetting.intervalsec %>" required>
+                <% else %>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
+                <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">秒</span>
                 </div>
               </div>
             </div>

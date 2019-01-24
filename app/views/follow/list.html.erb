@@ -19,7 +19,9 @@
         <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
       </a>
       <div class="media-body">
-        <br><p class="mb-0"><%= @twitterActive.profile_name %></p>
+        <br>
+        <h6 class="mt-0"><%= @twitterActive.profile_name %></h6>
+        <small class="text-muted">@<%= @twitterActive.username %></small>
       </div>
     </div><br>
     <% else %>
@@ -51,13 +53,37 @@
             </div>
           </div>
           <div class="form-group row">
-            <div class="col-6">
+            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
+            <div class="col-2">
               <div class="input-group mb-3">
                 <% if @twitterSetting %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" max="24" value="<%= @twitterSetting.interval %>" required>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @twitterSetting.intervalsec %>" required>
                 <% else %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" max="24" required>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
                 <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">秒</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-6">
+              <div class="input-group mb-3">
+                <select name="interval" class="custom-select" id="interval1" value=1>
+                  <option>停止中</option>
+                  <% @intervalHour.each do |i| %>
+                    <% if @twitterSetting %>
+                      <% if i == @twitterSetting.interval %>
+                       <option value="<%= i %>" selected><%= i %></option>
+                      <% else %>
+                        <option value="<%= i %>"><%= i %></option>
+                      <% end %>
+                    <% else %>
+                      <option value="<%= i %>"><%= i %></option>
+                    <% end %>
+                  <% end %>
+                </select>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
@@ -144,34 +170,45 @@
       <div class="card-header">
         <strong>フォローリスト一覧 （<%= @follows1.count %>人）</strong>
       </div>
-      <div class="card-body text-center">
+      <div class="card-body">
         <% if @follows1.count > 0 %>
-        <table class="table table-hover">
-          <thead class="thead-light">
-            <tr>
-              <th>アイコン画像</th>
-              <th>アカウント名</th>
-              <th>ユーザーネーム</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% count = 1 %>
-            <% @follows1.each do |follow| %>
-            <% if count > 50 %>
-            <tr class="more1" style="cursor:pointer;" onclick="window.open().location.href='https://twitter.com/<%= follow.target_username %>'">
-            <% else %>
-            <tr style="cursor:pointer;" onclick="window.open().location.href='https://twitter.com/<%= follow.target_username %>'">
-            <% end %>
-            <td class="align-middle"><%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %></td>
-              <td class="align-middle"><%= follow.target_name %></td>
-              <td class="align-middle"><%= follow.target_username %></td>
-              <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
-            </tr>
-            <% count += 1 %>
-            <% end %>
-          </tbody>
-        </table>
+        <ul class="list-unstyled">
+        <div class="row">
+          <% count = 1 %>
+          <% @follows1.each do |follow| %>
+          <% if count > 50 %>
+          <div class="col-6 more1">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= follow.target_name %></strong>
+                <small class="text-muted">@<%= follow.target_username %></small><br><br>
+                <a href="https://twitter.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+                <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+              </div>
+            </li><hr>
+          </div>
+          <% else %>
+          <div class="col-6">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= follow.target_name %></strong>
+                <small class="text-muted">@<%= follow.target_username %></small><br><br>
+                <a href="https://twitter.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+                <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+              </div>
+            </li><hr>
+          </div>
+          <% end %>
+          <% count += 1 %>
+          <% end %>
+        </div>
+        </ul>
         <button class="btn btn-outline-primary morebtn1 btn-block">すべて表示する</button>
         <% else %>
         現在、フォロー予定のアカウントはありません。
@@ -186,7 +223,9 @@
         <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
       </a>
       <div class="media-body">
-        <br><p class="mb-0"><%= @instagramActive.profile_name %></p>
+        <br>
+        <h6 class="mt-0"><%= @instagramActive.profile_name %></h6>
+        <small class="text-muted">@<%= @instagramActive.username %></small>
       </div>
     </div><br>
     <% else %>
@@ -218,13 +257,37 @@
             </div>
           </div>
           <div class="form-group row">
-            <div class="col-6">
+            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
+            <div class="col-2">
               <div class="input-group mb-3">
                 <% if @instagramSetting %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" max="24" value="<%= @instagramSetting.interval %>" required>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @instagramSetting.intervalsec %>" required>
                 <% else %>
-                <input name="interval" type="number" class="form-control" id="interval" min="1" max="24" required>
+                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
                 <% end %>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">秒</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-6">
+              <div class="input-group mb-3">
+                <select name="interval" class="custom-select" id="interval2">
+                  <option selected>停止中</option>
+                  <% @intervalHour.each do |i| %>
+                    <% if @instagramSetting %>
+                      <% if i == @instagramSetting.interval %>
+                       <option value="<%= i %>" selected><%= i %></option>
+                      <% else %>
+                        <option value="<%= i %>"><%= i %></option>
+                      <% end %>
+                    <% else %>
+                      <option value="<%= i %>"><%= i %></option>
+                    <% end %>
+                  <% end %>
+                </select>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">時間おきに</span>
                 </div>
@@ -308,35 +371,46 @@
       <div class="card-header">
         <strong>フォローリスト一覧 （<%= @follows2.count %>人）</strong>
       </div>
-      <div class="card-body text-center">
+      <div class="card-body">
         <% if @follows2.count > 0 %>
-        <table class="table table-hover">
-          <thead class="thead-light">
-            <tr>
-              <th>アイコン画像</th>
-              <th>アカウント名</th>
-              <th>ユーザーネーム</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% count = 1 %>
-            <% @follows2.each do |follow| %>
-            <% if count > 50 %>
-            <tr class="more2" style="cursor:pointer;" onclick="window.open().location.href='https://www.instagram.com/<%= follow.target_username %>/'">
-            <% else %>
-            <tr style="cursor:pointer;" onclick="window.open().location.href='https://www.instagram.com/<%= follow.target_username %>/'">
-            <% end %>
-              <td class="align-middle"><%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %></td>
-              <td class="align-middle"><%= follow.target_name %></td>
-              <td class="align-middle"><%= follow.target_username %></td>
-              <td class="align-middle"> <a href="#" class="btn btn-sm btn-danger">削除</a> </td>
-            </tr>
-            <% count += 1 %>
-            <% end %>
-          </tbody>
-        </table>
-        <button class="btn btn-outline-primary morebtn2 btn-block">全て表示する</button>
+        <ul class="list-unstyled">
+        <div class="row">
+          <% count = 1 %>
+          <% @follows2.each do |follow| %>
+          <% if count > 50 %>
+          <div class="col-6 more2">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= follow.target_name %></strong>
+                <small class="text-muted">@<%= follow.target_username %></small><br><br>
+                <a href="https://instagram.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+                <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+              </div>
+            </li><hr>
+          </div>
+          <% else %>
+          <div class="col-6">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= follow.target_name %></strong>
+                <small class="text-muted">@<%= follow.target_username %></small><br><br>
+                <a href="https://instagram.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+                <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+              </div>
+            </li><hr>
+          </div>
+          <% end %>
+          <% count += 1 %>
+          <% end %>
+        </div>
+        </ul>
+        <button class="btn btn-outline-primary morebtn2 btn-block">すべて表示する</button>
         <% else %>
         現在、フォロー予定のアカウントはありません。
         <% end %>

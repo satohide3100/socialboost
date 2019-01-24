@@ -1,0 +1,8 @@
+[20234:775:0124/044701.541775:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
+[20234:775:0124/044701.585935:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
+[20234:775:0124/044701.587960:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
+[20234:775:0124/044703.010929:ERROR:CONSOLE(277)] "Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('https://www.instagram.com') does not match the recipient window's origin ('https://www.google.com').", source: chrome-search://most-visited/single.js (277)
+[20239:775:0124/044703.349484:WARNING:ipc_message_attachment_set.cc(49)] MessageAttachmentSet destroyed with unconsumed attachments: 0/1
+[20234:775:0124/044704.754878:INFO:CONSOLE(0)] "[DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o", source: https://www.instagram.com/accounts/login/?hl=ja (0)
+[20234:775:0124/044710.282581:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[20234:775:0124/044710.282624:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
