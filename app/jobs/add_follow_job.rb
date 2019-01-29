@@ -176,8 +176,8 @@ class AddFollowJob < ApplicationJob
         case option
         when "1"
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.headless!
-          #options.add_option(:binary, "/usr/bin/google-chrome")
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -247,8 +247,8 @@ class AddFollowJob < ApplicationJob
           )
         when "2"
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.headless!
-          #options.add_option(:binary, "/usr/bin/google-chrome")
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -258,11 +258,10 @@ class AddFollowJob < ApplicationJob
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/accounts/login/?hl=ja")
           wait.until {driver.find_element(name: 'username').displayed?}
-          driver.find_element(name: 'username').send_keys(username)
+          driver.find_element(name: 'username').send_keys("sato__hideki")
           wait.until {driver.find_element(name: 'password').displayed?}
-          driver.find_element(name: 'password').send_keys(pass)
-          wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
-          driver.find_elements(tag_name: "button")[2].click
+          driver.find_element(name: 'password').send_keys("oneokrock")
+          driver.find_element(name: 'password').send_keys(:return)
           sleep(3)
           driver.navigate.to("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').displayed?}
@@ -315,8 +314,8 @@ class AddFollowJob < ApplicationJob
           )
         when "3"
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.headless!
-          #options.add_option(:binary, "/usr/bin/google-chrome")
+          options.headless!
+          options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_argument('--start-maximized')
           options.add_argument("--disable-dev-shm-usage")
@@ -325,29 +324,22 @@ class AddFollowJob < ApplicationJob
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/explore/tags/#{word}/")
-          i = 0
-          wait.until {driver.find_element(class: 'v1Nh3').displayed?}
-          driver.find_element(class: 'v1Nh3').click
-          current_url = ""
-          while count > i
-            wait.until {driver.find_element(class: 'nJAzx').displayed?}
-            target_usernameList << driver.find_element(class: 'nJAzx').text
-            wait.until {driver.find_element(class: '_6q-tv').displayed?}
-            target_imageList << driver.find_element(class: '_6q-tv').attribute(:src)
-            begin
-              wait.until {driver.find_element(class: 'HBoOv').displayed?}
-            rescue
-              break
+          links = []
+          wait.until {driver.find_element(css: '.v1Nh3 a').displayed?}
+          while count > links.count
+            driver.find_elements(css: '.v1Nh3 a').last.location_once_scrolled_into_view
+            wait.until {driver.find_element(css: '.v1Nh3 a').displayed?}
+            driver.find_elements(css: '.v1Nh3 a').each do |e|
+              links << e.attribute(:href)
             end
-            i += 1
-            puts i
-            driver.find_element(class: "HBoOv").click
+            links.uniq!
+            puts links.count
           end
           driver.quit
           saveCount = 0
-          target_usernameList.count.times.each do |i|
+          links.each do |link|
             @follow = Follow.new(
-              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+              target_image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8IuiPY9HdN5uOHJxs7km_KxNfivPT2biYs3zCRC9y_LlOBpMbw",target_postLink:"link",follow_flg:0,account_id:account_id
             )
             if @follow.save
               saveCount += 1
@@ -375,36 +367,30 @@ class AddFollowJob < ApplicationJob
           driver.find_element(class: 'zV_Nj').click
           gridCount = 0
           if favCount < count
-            while gridCount != favCount
+            while target_usernameList.count != favCount
               sleep(1)
-              gridCount = driver.find_elements(class: "wo9IH").count
+              gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div').count
+              driver.find_element(xpath: "/html/body/div[3]/div/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
+              driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
+                target_usernameList << e.text
+              end
             end
           else
-            while gridCount < count
+            while target_usernameList.count < count
               sleep(1)
-              gridCount = driver.find_elements(class: "wo9IH").count
-              driver.find_elements(class: "wo9IH").last.location_once_scrolled_into_view
+              gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div').count
+              driver.find_element(xpath: "/html/body/div[3]/div/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
+              driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
+                target_usernameList << e.text
+              end
+              puts target_usernameList.count
             end
-          end
-
-          target_usernames = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div[2]/ul/div/li/div/div[1]/div[2]/div[1]/a')
-          target_usernames.each do |e|
-            puts e.text
-            target_usernameList << e.text
-          end
-          target_names = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div[2]/ul/div/li/div/div[1]/div[2]/div[2]')
-          target_names.each do |e|
-            target_nameList << e.text
-          end
-          target_images = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div[2]/ul/div/li/div/div[1]/div[1]/a/img')
-          target_images.each do |e|
-            target_imageList << e.attribute(:src)
           end
           driver.quit
           saveCount = 0
           target_usernameList.count.times.each do |i|
             @follow = Follow.new(
-              target_username:target_usernameList[i],target_name:target_nameList[i],target_image:target_imageList[i],follow_flg:0,account_id:account_id
+              target_username:target_usernameList[i],target_image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8IuiPY9HdN5uOHJxs7km_KxNfivPT2biYs3zCRC9y_LlOBpMbw",follow_flg:0,account_id:account_id
             )
             if @follow.save
               saveCount += 1
