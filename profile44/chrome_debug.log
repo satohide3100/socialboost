@@ -1,7 +1,7 @@
-[47805:775:0129/190014.981951:ERROR:gpu_process_transport_factory.cc(967)] Lost UI shared context.
-[47805:775:0129/190015.454138:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
-[47805:775:0129/190015.545960:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
-[47805:775:0129/190015.550866:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
-[47805:775:0129/190018.191377:INFO:CONSOLE(8)] "SW registered", source: https://www.google.com/_/chrome/newtab?ie=UTF-8 (8)
-[47805:775:0129/190027.706627:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
-[47805:775:0129/190027.706706:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[55882:775:0130/084550.738200:ERROR:gpu_process_transport_factory.cc(967)] Lost UI shared context.
+[55882:775:0130/084550.880975:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
+[55882:775:0130/084550.922260:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
+[55882:775:0130/084550.924157:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
+[55882:775:0130/084552.049238:INFO:CONSOLE(8)] "SW registered", source: https://www.google.com/_/chrome/newtab?ie=UTF-8 (8)
+[55882:775:0130/084555.940858:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[55882:775:0130/084555.940903:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
