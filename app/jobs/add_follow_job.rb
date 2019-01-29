@@ -187,16 +187,13 @@ class AddFollowJob < ApplicationJob
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           driver.get("https://www.instagram.com/accounts/login")
-          puts body = driver.find_element(tag_name: "body").text
+          current = driver.current_url
           wait.until {driver.find_element(name: 'username').displayed?}
           driver.find_element(name: 'username').send_keys("sato__hideki")
           wait.until {driver.find_element(name: 'password').displayed?}
           driver.find_element(name: 'password').send_keys("oneokrock")
           driver.find_element(name: 'password').send_keys(:return)
-          wait.until {
-            driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F"
-          }
-          puts driver.current_url
+          wait.until {driver.current_url != current}
           driver.navigate.to("https://www.instagram.com/#{user}/")
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
           follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').text.gsub(/[^\d]/, "").to_i
