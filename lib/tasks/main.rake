@@ -1,35 +1,67 @@
 namespace :main do
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"
   task :test => :environment do
-    caps = Selenium::WebDriver::Chrome::Options.new(args: ["--headless", "--user-data-dir=./profile44"])
-    driver = Selenium::WebDriver.for :chrome, options: caps
+    count = 200
+    user = "selecity_sale"
+    options = Selenium::WebDriver::Chrome::Options.new
+    #options.headless!
+    #options.add_option(:binary, "/usr/bin/google-chrome")
+    options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+    options.add_emulation(device_name: 'iPhone 8')
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-setuid-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-setuid-sandbox")
+    driver = Selenium::WebDriver.for :chrome, options: options
     wait = Selenium::WebDriver::Wait.new(:timeout => 3)
-    fav = Fav.find_by('account_id = ? and fav_flg = ? and target_postLink != ?',44,0,"")
-    unless fav
-      driver.quit
-      next
-    end
+    driver.get("https://www.instagram.com/accounts/login/?hl=ja")
+    current = driver.current_url
+    wait.until {driver.find_element(name: 'username').displayed?}
+    driver.find_element(name: 'username').send_keys("sato__hideki")
+    wait.until {driver.find_element(name: 'password').displayed?}
+    driver.find_element(name: 'password').send_keys("oneokrock")
+    driver.find_element(name: 'password').send_keys(:return)
+    wait.until {driver.current_url != current}
+    driver.navigate.to("https://www.instagram.com/#{user}/")
     begin
-      puts fav.target_postLink
-      driver.get(fav.target_postLink)
-      wait.until {driver.find_element(class: "glyphsSpriteHeart__outline__24__grey_9").displayed?}
-      puts fav_text = driver.find_element(class: "glyphsSpriteHeart__outline__24__grey_9").attribute("aria-label")
-      if fav_text.include?("取り消す")
-        fav.destroy
-        driver.quit
-        next
-      end
-      puts driver.find_element(tag_name:"body").text
-      driver.execute_script('document.getElementsByClassName("glyphsSpriteHeart__outline__24__grey_9")[0].click();')
-    rescue
-      fav.destroy
+      wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').displayed?}
+    rescue => e
+      puts e
+      Notification.create(
+        notification_type:0,content:"いいねリストへの追加に失敗しました。#{e.message}",isRead:0, user_id:user_id
+      )
       driver.quit
-      next
     end
-    fav.update(fav_flg:1)
-    line_notify = LineNotify.new("Sq7cScOUtjJ0Cqbl3C1QX7Z6aLlFDoX20qRJUBI12tS")
-    options = {message: "\n#{fav.target_postLink}\nをいいねしました。"}
-    line_notify.send(options)
+    puts follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a/span').attribute(:title).gsub(/[^\d]/, "").to_i
+    if follower == 0
+      follower = driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a/span').text
+      if follower.include?("百")
+        follower = follower.split('百')[0] * 100
+      elsif follower.include?("千")
+        follower = follower.split('千')[0] * 1000
+      end
+    end
+    wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').displayed?}
+    driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').click
+    gridCount = 0
+    if follower < count
+      while gridCount != follower
+        wait.until {driver.find_elements(tag_name: "li")[gridCount].displayed?}
+        driver.find_elements(tag_name: "li")[gridCount].location_once_scrolled_into_view
+        wait.until {driver.find_elements(tag_name: "li").first.displayed?}
+        puts gridCount = driver.find_elements(tag_name: "li").count
+      end
+    else
+      while gridCount < count
+        sleep 1
+        wait.until {driver.find_element(tag_name: "li").displayed?}
+        driver.find_elements(tag_name: "li")[gridCount - 1].location_once_scrolled_into_view
+        wait.until {driver.find_element(tag_name: "li").displayed?}
+        puts gridCount = driver.find_elements(tag_name: "li").count.to_i
+      end
+    end
     driver.quit
   end
 
@@ -99,14 +131,13 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     require 'line_notify'
     require 'selenium-webdriver'
     require 'benchmark'
-
-    account_ids = Fav.select(:account_id).distinct
-    500.times.each do |i|
+    account_ids = Fav.select(:account_id).where(fav_flg:0).distinct
+    loop do
       result = Benchmark.realtime do
         Account.where(user_id:3).where(id:account_ids).each do |account|
           options = Selenium::WebDriver::Chrome::Options.new
-          options.add_option(:binary, "/usr/bin/google-chrome")
-          options.add_argument("--headless")
+          #options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.add_argument("--headless")
           options.add_argument("--disable-gpu")
           options.add_argument("--windo-size=1929,2160")
           options.add_argument("--user-agent=#{USER_AGENT}")
@@ -118,7 +149,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
           options.add_argument("--user-data-dir=./profile#{account.id}")
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-          fav = Fav.find_by('account_id = ? and fav_flg = ? and target_postLink != ?',account.id,0,"")
+          fav = Fav.find_by('account_id = ? and fav_flg = ?',account.id,0)
           unless fav
             driver.quit
             next
@@ -144,19 +175,35 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
               driver.find_element(class: 'js-actionFavorite').location_once_scrolled_into_view
               driver.find_element(class: 'js-actionFavorite').click
             when 2
-              puts fav.target_postLink
-              driver.get(fav.target_postLink)
-              wait.until {driver.find_element(class: "glyphsSpriteHeart__outline__24__grey_9").displayed?}
-              puts fav_text = driver.find_element(class: "glyphsSpriteHeart__outline__24__grey_9").attribute("aria-label")
-              if fav_text.include?("取り消す")
-                fav.destroy
-                driver.quit
-                next
+              if fav.target_postLink == nil
+                driver.get("https://www.instagram.com/#{fav.target_username}/")
+                wait.until {driver.find_element(tag_name: 'article').displayed?}
+                if driver.find_element(tag_name: 'article').text.include?("このアカウントは非公開です")
+                  fav.destroy
+                  driver.quit
+                  next
+                end
+                wait.until {driver.find_element(css: 'article div:nth-child(1) div div:nth-child(1) div:nth-child(1) a').displayed?}
+                driver.find_element(css: 'article div:nth-child(1) div div:nth-child(1) div:nth-child(1) a').location_once_scrolled_into_view
+                driver.find_element(css: 'article div:nth-child(1) div div:nth-child(1) div:nth-child(1) a').click
+                sleep 1
+                driver.execute_script('document.getElementsByClassName("glyphsSpriteHeart__outline__24__grey_9")[1].click();')
+              else
+                puts fav.target_postLink
+                driver.get(fav.target_postLink)
+                wait.until {driver.find_element(class: "glyphsSpriteHeart__outline__24__grey_9").displayed?}
+                puts fav_text = driver.find_element(class: "glyphsSpriteHeart__outline__24__grey_9").attribute("aria-label")
+                if fav_text.include?("取り消す")
+                  fav.destroy
+                  driver.quit
+                  next
+                end
+                puts driver.find_element(tag_name:"body").text
+                driver.execute_script('document.getElementsByClassName("glyphsSpriteHeart__outline__24__grey_9")[0].click();')
               end
-              puts driver.find_element(tag_name:"body").text
-              driver.execute_script('document.getElementsByClassName("glyphsSpriteHeart__outline__24__grey_9")[0].click();')
             end
-          rescue
+          rescue => e
+            puts e
             fav.destroy
             driver.quit
             next
@@ -168,8 +215,8 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
           driver.quit
         end
       end
-      if result < 173
-        sleep(173 - result)
+      if result < 87
+        sleep(87 - result)
       end
     end
   end

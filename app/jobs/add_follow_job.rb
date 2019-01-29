@@ -189,11 +189,10 @@ class AddFollowJob < ApplicationJob
           driver.get("https://www.instagram.com/accounts/login")
           puts body = driver.find_element(tag_name: "body").text
           wait.until {driver.find_element(name: 'username').displayed?}
-          driver.find_element(name: 'username').send_keys(username)
+          driver.find_element(name: 'username').send_keys("sato__hideki")
           wait.until {driver.find_element(name: 'password').displayed?}
-          driver.find_element(name: 'password').send_keys(pass)
-          wait.until {driver.find_elements(tag_name: "button")[2].displayed?}
-          driver.find_elements(tag_name: "button")[2].click
+          driver.find_element(name: 'password').send_keys("oneokrock")
+          driver.find_element(name: 'password').send_keys(:return)
           wait.until {
             driver.current_url == "https://www.instagram.com/accounts/onetap/?next=%2F"
           }
@@ -206,13 +205,19 @@ class AddFollowJob < ApplicationJob
           gridCount = 0
           if follower < count
             while gridCount != follower
-              sleep(1)
-              gridCount = driver.find_elements(tag_name: "li").count
+              sleep 1
+              wait.until {driver.find_element(tag_name: "li").displayed?}
+              driver.find_elements(tag_name: "li")[gridCount - 1].location_once_scrolled_into_view
+              wait.until {driver.find_element(tag_name: "li").displayed?}
+              puts gridCount = driver.find_elements(tag_name: "li").count.to_i
             end
           else
             while gridCount < count
-              sleep(1)
-              gridCount = driver.find_elements(tag_name: "li").count
+              sleep 1
+              wait.until {driver.find_element(tag_name: "li").displayed?}
+              driver.find_elements(tag_name: "li")[gridCount - 1].location_once_scrolled_into_view
+              wait.until {driver.find_element(tag_name: "li").displayed?}
+              puts gridCount = driver.find_elements(tag_name: "li").count.to_i
             end
           end
           target_usernames = driver.find_elements(class: 'FPmhX')
@@ -242,8 +247,8 @@ class AddFollowJob < ApplicationJob
           )
         when "2"
           options = Selenium::WebDriver::Chrome::Options.new
-          options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.headless!
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -267,13 +272,19 @@ class AddFollowJob < ApplicationJob
           gridCount = 0
           if follow < count
             while gridCount != follow
-              sleep(1)
-              gridCount = driver.find_elements(tag_name: "li").count
+              sleep 1
+              wait.until {driver.find_element(tag_name: "li").displayed?}
+              driver.find_elements(tag_name: "li")[gridCount - 1].location_once_scrolled_into_view
+              wait.until {driver.find_element(tag_name: "li").displayed?}
+              puts gridCount = driver.find_elements(tag_name: "li").count.to_i
             end
           else
             while gridCount < count
-              sleep(1)
-              gridCount = driver.find_elements(tag_name: "li").count
+              sleep 1
+              wait.until {driver.find_element(tag_name: "li").displayed?}
+              driver.find_elements(tag_name: "li")[gridCount - 1].location_once_scrolled_into_view
+              wait.until {driver.find_element(tag_name: "li").displayed?}
+              puts gridCount = driver.find_elements(tag_name: "li").count.to_i
             end
           end
           target_usernames = driver.find_elements(class: 'FPmhX')
@@ -304,8 +315,8 @@ class AddFollowJob < ApplicationJob
           )
         when "3"
           options = Selenium::WebDriver::Chrome::Options.new
-          options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.headless!
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_argument('--start-maximized')
           options.add_argument("--disable-dev-shm-usage")

@@ -1,7 +1,7 @@
-[30064:775:0124/092909.224881:ERROR:gpu_process_transport_factory.cc(967)] Lost UI shared context.
-[30064:775:0124/092909.355693:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
-[30064:775:0124/092909.393446:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
-[30064:775:0124/092909.395329:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
-[30064:32771:0124/092910.523640:WARNING:sqlite_persistent_cookie_store.cc(1628)] Failed to post task from FinishedLoadingCookies@../../net/extras/sqlite/sqlite_persistent_cookie_store.cc:1636 to client_task_runner_.
-[30064:775:0124/092910.716237:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
-[30064:775:0124/092910.716273:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[48168:775:0126/015306.170149:ERROR:gpu_process_transport_factory.cc(967)] Lost UI shared context.
+[48168:775:0126/015306.314293:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
+[48168:775:0126/015306.358081:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
+[48168:775:0126/015306.360019:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
+[48168:12291:0126/015309.377025:WARNING:spdy_session.cc(3144)] Received HEADERS for invalid stream 5
+[48168:775:0126/015309.443199:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[48168:775:0126/015309.443240:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
