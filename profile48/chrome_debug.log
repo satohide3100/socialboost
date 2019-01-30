@@ -1,7 +1,8 @@
-[48168:775:0126/015306.170149:ERROR:gpu_process_transport_factory.cc(967)] Lost UI shared context.
-[48168:775:0126/015306.314293:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
-[48168:775:0126/015306.358081:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
-[48168:775:0126/015306.360019:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
-[48168:12291:0126/015309.377025:WARNING:spdy_session.cc(3144)] Received HEADERS for invalid stream 5
-[48168:775:0126/015309.443199:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
-[48168:775:0126/015309.443240:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[16936:775:0130/165607.109572:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
+[16936:775:0130/165607.147481:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
+[16936:775:0130/165607.149688:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
+[16936:775:0130/165610.975789:INFO:CONSOLE(0)] "[DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o", source: https://www.instagram.com/accounts/login/?hl=ja (0)
+[16936:20739:0130/165613.833825:WARNING:spdy_session.cc(3144)] Received HEADERS for invalid stream 25
+[16936:20739:0130/165613.833966:WARNING:spdy_session.cc(3144)] Received HEADERS for invalid stream 27
+[16936:775:0130/165618.277888:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[16936:775:0130/165618.277934:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.

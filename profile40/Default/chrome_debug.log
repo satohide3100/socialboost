@@ -1,0 +1,3 @@
+[0130/103916.835517:ERROR:file_io.cc(89)] ReadExactly: expected 8, observed 0
+[0130/103916.837435:ERROR:xattr.cc(64)] setxattr org.chromium.crashpad.database.initialized on file /var/folders/g4/dw60bk6n0pj4btsvwp6z75gm0000gn/T/: Operation not permitted (1)
+[0130/103916.881556:ERROR:gpu_process_transport_factory.cc(967)] Lost UI shared context.

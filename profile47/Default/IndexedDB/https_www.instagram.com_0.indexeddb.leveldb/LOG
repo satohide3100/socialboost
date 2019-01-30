@@ -1,3 +1,3 @@
-2019/01/24-04:26:27.377 9e03 Reusing MANIFEST ./profile47/Default/IndexedDB/https_www.instagram.com_0.indexeddb.leveldb/MANIFEST-000001
-2019/01/24-04:26:27.377 9e03 Recovering log #3
-2019/01/24-04:26:27.377 9e03 Reusing old log ./profile47/Default/IndexedDB/https_www.instagram.com_0.indexeddb.leveldb/000003.log 
+2019/01/30-16:54:48.790 7503 Reusing MANIFEST ./profile47/Default/IndexedDB/https_www.instagram.com_0.indexeddb.leveldb/MANIFEST-000001
+2019/01/30-16:54:48.790 7503 Recovering log #3
+2019/01/30-16:54:48.791 7503 Reusing old log ./profile47/Default/IndexedDB/https_www.instagram.com_0.indexeddb.leveldb/000003.log 

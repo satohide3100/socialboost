@@ -10,21 +10,21 @@
    },
    "+qhoK6j2UfNOLnaMwFMI0zI+vNJD83l4RlzjZRKrCCA=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1548276394.793081,
+      "expiry": 1549439730.847761,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548272794.793083
+      "sts_observed": 1548834930.847765
    },
    "2UN2N1OLqplS2UBnmwZr+cJlXEd9FQTxiZbyajOL33U=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1563815093.333521,
+      "expiry": 1564386931.069485,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548263093.333523
+      "sts_observed": 1548834931.069488
    },
    "2dQZAIXCPYNIoCREhzZEqDcldaiTMEFISOOe2d39jjA=": {
       "dynamic_spki_hashes_expiry": 0.0,
@@ -37,35 +37,35 @@
    },
    "5EdUoB7YUY9zZV+2DkgVXgho8WUvp+D+6KpeUOhNQIM=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1579808791.951456,
+      "expiry": 1580370926.227872,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548272791.951459
+      "sts_observed": 1548834926.227876
    },
    "8/RrMmQlCD2Gsp14wUCE1P8r7B2C5+yE0+g79IPyRsc=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1579808791.616842,
+      "expiry": 1580370925.99838,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548272791.616848
+      "sts_observed": 1548834925.998386
    },
    "TZmujbl93Yt3JI8wZ4X/zjkA0WFNGNW44A+o7h4YyHw=": {
       "dynamic_spki_hashes_expiry": 0.0,
       "expect_ct": {
          "expect_ct_enforce": false,
-         "expect_ct_expiry": 1548359193.867218,
-         "expect_ct_observed": 1548272793.867218,
-         "expect_ct_report_uri": "http://reports.fb.com/expectct/"
+         "expect_ct_expiry": 1548921328.758329,
+         "expect_ct_observed": 1548834928.758329,
+         "expect_ct_report_uri": "https://reports.fb.com/expectct/"
       },
-      "expiry": 1563824793.867207,
+      "expiry": 1564386928.758319,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548272793.867209
+      "sts_observed": 1548834928.758321
    }
 }
