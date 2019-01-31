@@ -409,7 +409,7 @@ class AddFavJob < ApplicationJob
           Notification.create(
             notification_type:3,content:"@#{user}のフォロー#{count}人の最新投稿を#{saveCount}件いいねリストへ追加しました。",isRead:0, user_id:user_id
           )
-        when 4 #ある投稿にいいねしているユーザーの最新投稿を取得
+        when "4" #ある投稿にいいねしているユーザーの最新投稿を取得
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
           options.add_option(:binary, "/usr/bin/google-chrome")
