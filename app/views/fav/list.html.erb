@@ -310,6 +310,7 @@
                 <option value="1">あるハッシュタグの投稿を追加</option>
                 <option value="2">あるユーザーのフォロワー〇〇人の最新投稿を追加</option>
                 <option value="3">あるユーザーのフォロー〇〇人の最新投稿を追加</option>
+                <option value="4">ある投稿をいいねしているユーザー〇〇人の最新投稿を追加</option>
               </select>
             </div>
             <div class="col-6">
@@ -323,6 +324,9 @@
               </div>
               <div class="form-group word2 showform2" style="display:none;">
                 <input name="word" type="text" class="form-control" id="exampleInputEmail1" placeholder="特定のハッシュタグ">
+              </div>
+              <div class="form-group post2 showform2" style="display:none;">
+                <input name="post" type="text" class="form-control" id="exampleInputEmail1" placeholder="投稿のURL">
               </div>
             </div>
           </div>
@@ -437,6 +441,9 @@ $('#addoption2').change(function () {
   } else if (text == "3") {
     $('.showform1').hide();
     $('.user2').fadeIn();
+  } else if (text == "4") {
+    $('.showform1').hide();
+    $('.post2').fadeIn();
   }
 })
 </script>
