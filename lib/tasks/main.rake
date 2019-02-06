@@ -50,9 +50,9 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     require 'benchmark'
 
     account_ids = Follow.select(:account_id).distinct
-    500.times.each do |i|
+    loop do
       result = Benchmark.realtime do
-        Account.where(user_id:3).where(id:account_ids).each do |account|
+        Account.where(user_id:3).where(sns_type:2).where(id:account_ids).each do |account|
           options = Selenium::WebDriver::Chrome::Options.new
           #options.headless!
           #options.add_option(:binary, "/usr/bin/google-chrome")
@@ -69,29 +69,41 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
             driver.quit
             next
           end
+          begin
           case account.sns_type
-          when 1
-            driver.get("https://twitter.com/#{follow.target_username}")
-            wait.until {driver.find_element(class: 'user-actions-follow-button').displayed?}
-            follow_text = driver.find_element(class: 'user-actions-follow-button').text
-            puts follow_text
-            if follow_text.include?("フォロー中")
-              follow.destroy
-              driver.quit
-              next
+            when 1
+              driver.get("https://twitter.com/#{follow.target_username}")
+              wait.until {driver.find_element(class: 'user-actions-follow-button').displayed?}
+              follow_text = driver.find_element(class: 'user-actions-follow-button').text
+              puts follow_text
+              if follow_text.include?("フォロー中")
+                follow.destroy
+                driver.quit
+                next
+              end
+              wait.until {driver.find_element(class: "follow-text").displayed?}
+              driver.find_element(class: "follow-text").click
+            when 2
+              if follow.target_postLink != nil
+                driver.get(follow.target_postLink)
+                wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/div/article/header/div[2]/div[1]/div[2]/a').displayed?}
+                driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/div/article/header/div[2]/div[1]/div[2]/a').click
+              else
+                driver.get("https://www.instagram.com/#{follow.target_username}")
+                wait.until {driver.find_element(tag_name: "button").displayed?}
+                puts follow_text = driver.find_element(tag_name: "button").text
+                if follow_text.include?("フォロー中")
+                  follow.destroy
+                  driver.quit
+                  next
+                end
+                driver.find_element(tag_name: "button").click
+              end
             end
-            wait.until {driver.find_element(class: "follow-text").displayed?}
-            driver.find_element(class: "follow-text").click
-          when 2
-            driver.get("https://www.instagram.com/#{follow.target_username}")
-            wait.until {driver.find_element(tag_name: "button").displayed?}
-            puts follow_text = driver.find_element(tag_name: "button").text
-            if follow_text.include?("フォロー中")
-              follow.destroy
-              driver.quit
-              next
-            end
-            driver.find_element(tag_name: "button").click
+          rescue
+            follow.destroy
+            driver.quit
+            next
           end
           line_notify = LineNotify.new("Sq7cScOUtjJ0Cqbl3C1QX7Z6aLlFDoX20qRJUBI12tS")
           options = {message: "\n#{account.profile_name}\n@#{follow.target_username}をフォローしました。"}
@@ -202,51 +214,14 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     end
   end
 
-  task :analyze => :environment do
-    require "mechanize"
-    Account.all.each do |account|
-      follower_count = 0
-      follow_count = 0
-      post_count = 0
-      profile_image = ""
-      case account.sns_type
-      when 1
-        agent = Mechanize.new
-        page = agent.get("https://twitter.com/#{account.username}")
-        puts profile_image = page.at(".ProfileAvatar-image").get_attribute(:src)
-        puts follower_count = page.search(".ProfileNav-value")[2].get_attribute("data-count")
-        puts follow_count = page.search(".ProfileNav-value")[1].get_attribute("data-count")
-        puts post_count = page.search(".ProfileNav-value")[0].get_attribute("data-count")
-      when 2
-        agent = Mechanize.new
-        page = agent.get("https://www.instagram.com/#{account.username}/")
-        page.search("meta").each do |e|
-          if e.get_attribute(:property) == "og:image"
-            puts profile_image = e.get_attribute(:content)
-          end
-          if e.get_attribute(:property) == "og:description"
-            data = e.get_attribute(:content).split(" ")
-            puts follower_count = data[0].gsub(/[^\d]/, "").to_i
-            puts follow_count = data[2].gsub(/[^\d]/, "").to_i
-            puts post_count = data[4].gsub(/[^\d]/, "").to_i
-          end
-        end
-      end
-      Analyze.create(
-        follow_count:follow_count,follower_count:follower_count,post_count:post_count,
-        profile_image:profile_image,account_id:account.id
-      )
-    end
-  end
-
   task :profile => :environment do
     require 'selenium-webdriver'
     Account.where(sns_type:2).each do |account|
       options = Selenium::WebDriver::Chrome::Options.new
       options.add_argument("--user-data-dir=./profile#{account.id}")
-      options.add_argument("--headless")
+      #options.add_argument("--headless")
       options.add_argument("--disable-application-cache")
-      options.add_option(:binary, "/usr/bin/google-chrome")
+      #options.add_option(:binary, "/usr/bin/google-chrome")
       options.add_argument("--user-agent=#{USER_AGENT}")
       options.add_argument('--start-maximized')
       options.add_argument("--disable-dev-shm-usage")
@@ -289,6 +264,45 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
       driver.quit
     end
   end
+
+  task :analyze => :environment do
+    require "mechanize"
+    Account.all.each do |account|
+      follower_count = 0
+      follow_count = 0
+      post_count = 0
+      profile_image = ""
+      case account.sns_type
+      when 1
+        agent = Mechanize.new
+        page = agent.get("https://twitter.com/#{account.username}")
+        puts profile_image = page.at(".ProfileAvatar-image").get_attribute(:src)
+        puts follower_count = page.search(".ProfileNav-value")[2].get_attribute("data-count")
+        puts follow_count = page.search(".ProfileNav-value")[1].get_attribute("data-count")
+        puts post_count = page.search(".ProfileNav-value")[0].get_attribute("data-count")
+      when 2
+        agent = Mechanize.new
+        page = agent.get("https://www.instagram.com/#{account.username}/")
+        page.search("meta").each do |e|
+          if e.get_attribute(:property) == "og:image"
+            puts profile_image = e.get_attribute(:content)
+          end
+          if e.get_attribute(:property) == "og:description"
+            data = e.get_attribute(:content).split(" ")
+            puts follower_count = data[0].gsub(/[^\d]/, "").to_i
+            puts follow_count = data[2].gsub(/[^\d]/, "").to_i
+            puts post_count = data[4].gsub(/[^\d]/, "").to_i
+          end
+        end
+      end
+      Analyze.create(
+        follow_count:follow_count,follower_count:follower_count,post_count:post_count,
+        profile_image:profile_image,account_id:account.id
+      )
+    end
+  end
+
+
 
 
 

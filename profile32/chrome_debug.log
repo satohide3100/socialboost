@@ -1,7 +1,9 @@
-[25414:775:0131/114315.290463:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
-[25414:775:0131/114315.345052:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
-[25414:775:0131/114315.347695:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
-[25414:775:0131/114319.228633:INFO:CONSOLE(14)] "Refused to load the script 'https://cm.g.doubleclick.net/pixel?google_nid=twitter_dbm&google_cm&tpm_cb=partnerIdSyncComplete&_=1548902598496' because it violates the following Content Security Policy directive: "script-src https://ssl.google-analytics.com https://twitter.com 'unsafe-eval' https://*.twimg.com https://api.twitter.com https://analytics.twitter.com https://publish.twitter.com https://ton.twitter.com https://syndication.twitter.com https://www.google.com https://platform.twitter.com https://www.google-analytics.com blob: 'self' 'nonce-r9hn/2vckdPH6KQv1LJfdQ=='". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+[28091:775:0131/170042.647365:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
+[28091:775:0131/170042.685789:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
+[28091:775:0131/170042.687663:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
+[28091:20995:0131/170044.526051:WARNING:spdy_session.cc(3144)] Received HEADERS for invalid stream 3
+[28091:775:0131/170046.235379:INFO:CONSOLE(14)] "Refused to load the script 'https://cm.g.doubleclick.net/pixel?google_nid=twitter_dbm&google_cm&tpm_cb=partnerIdSyncComplete&_=1548921645185' because it violates the following Content Security Policy directive: "script-src https://ssl.google-analytics.com https://twitter.com 'unsafe-eval' https://*.twimg.com https://api.twitter.com 'nonce-YY2FqklYbf0ZRf/ebPGZbQ==' https://analytics.twitter.com https://publish.twitter.com https://ton.twitter.com https://syndication.twitter.com https://www.google.com https://platform.twitter.com https://www.google-analytics.com blob: 'self'". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
 ", source: https://abs.twimg.com/k/ja/init.ja.e97dd90bb6e410195ac4.js (14)
-[25414:775:0131/114320.286582:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
-[25414:775:0131/114320.286617:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[28091:775:0131/170046.860874:INFO:CONSOLE(14)] "Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience. For more help, check https://xhr.spec.whatwg.org/.", source: https://abs.twimg.com/k/ja/init.ja.e97dd90bb6e410195ac4.js (14)
+[28091:775:0131/170047.211336:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[28091:775:0131/170047.211387:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.

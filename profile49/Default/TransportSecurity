@@ -1,30 +1,30 @@
 {
    "+loO+DGmT6DTr59JZFAnGSlBAwPkO5M/R9ec1Sw/9KA=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1580370980.821859,
+      "expiry": 1580455315.699119,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": true,
-      "sts_observed": 1548834980.821863
+      "sts_observed": 1548919315.699123
    },
    "+qhoK6j2UfNOLnaMwFMI0zI+vNJD83l4RlzjZRKrCCA=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1549439782.001526,
+      "expiry": 1549524117.26383,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548834982.00153
+      "sts_observed": 1548919317.263832
    },
    "2UN2N1OLqplS2UBnmwZr+cJlXEd9FQTxiZbyajOL33U=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1564386982.077763,
+      "expiry": 1564471317.262919,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548834982.077765
+      "sts_observed": 1548919317.26292
    },
    "2dQZAIXCPYNIoCREhzZEqDcldaiTMEFISOOe2d39jjA=": {
       "dynamic_spki_hashes_expiry": 0.0,
@@ -34,44 +34,44 @@
          "expect_ct_observed": 1548834981.000606,
          "expect_ct_report_uri": "https://reports.fb.com/expectct/"
       },
-      "expiry": 1564386981.000595,
+      "expiry": 1564471316.080268,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548834981.000598
+      "sts_observed": 1548919316.080278
    },
    "5EdUoB7YUY9zZV+2DkgVXgho8WUvp+D+6KpeUOhNQIM=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1580370981.664435,
+      "expiry": 1580455314.421563,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548834981.664439
+      "sts_observed": 1548919314.421566
    },
    "8/RrMmQlCD2Gsp14wUCE1P8r7B2C5+yE0+g79IPyRsc=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1580370979.936621,
+      "expiry": 1580455313.701949,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548834979.936627
+      "sts_observed": 1548919313.701954
    },
    "TZmujbl93Yt3JI8wZ4X/zjkA0WFNGNW44A+o7h4YyHw=": {
       "dynamic_spki_hashes_expiry": 0.0,
       "expect_ct": {
          "expect_ct_enforce": false,
-         "expect_ct_expiry": 1548921381.217376,
-         "expect_ct_observed": 1548834981.217376,
+         "expect_ct_expiry": 1549005716.284934,
+         "expect_ct_observed": 1548919316.284934,
          "expect_ct_report_uri": "https://reports.fb.com/expectct/"
       },
-      "expiry": 1564386981.217363,
+      "expiry": 1564471316.284869,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1548834981.217368
+      "sts_observed": 1548919316.284872
    }
 }

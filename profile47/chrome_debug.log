@@ -1,6 +1,4 @@
-[23428:775:0131/011203.208901:ERROR:gpu_process_transport_factory.cc(967)] Lost UI shared context.
-[23428:775:0131/011203.332628:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
-[23428:775:0131/011203.371263:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
-[23428:775:0131/011203.373747:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
-[23428:775:0131/011206.686581:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
-[23428:775:0131/011206.686623:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[50468:775:0206/022611.323422:ERROR:gpu_process_transport_factory.cc(967)] Lost UI shared context.
+[50468:775:0206/022611.504017:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
+[50468:775:0206/022616.348143:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[50468:775:0206/022616.348197:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.

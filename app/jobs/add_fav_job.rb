@@ -15,7 +15,7 @@ class AddFavJob < ApplicationJob
         require 'selenium-webdriver'
         options = Selenium::WebDriver::Chrome::Options.new
         options.headless!
-        options.add_option(:binary, "/usr/bin/google-chrome")
+        #options.add_option(:binary, "/usr/bin/google-chrome")
         options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
         options.add_argument('--start-maximized')
         options.add_argument("--disable-dev-shm-usage")
@@ -203,7 +203,7 @@ class AddFavJob < ApplicationJob
         when "1"
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_argument('--start-maximized')
           options.add_argument("--disable-dev-shm-usage")
@@ -241,7 +241,7 @@ class AddFavJob < ApplicationJob
         when "2" #
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -281,7 +281,7 @@ class AddFavJob < ApplicationJob
           end
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').displayed?}
           driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[2]/a').click
-          gridCount = 0
+          gridCount = 1
           if follower < count
             while gridCount != follower
               sleep 1
@@ -330,7 +330,7 @@ class AddFavJob < ApplicationJob
         when "3"
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -363,7 +363,7 @@ class AddFavJob < ApplicationJob
           wait.until {driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a').displayed?}
           driver.find_element(xpath: '//*[@id="react-root"]/section/main/div/ul/li[3]/a').click
           sleep 1
-          gridCount = 0
+          gridCount = 1
           if follow < count
             while gridCount != follow
               sleep 1
@@ -412,7 +412,7 @@ class AddFavJob < ApplicationJob
         when "4" #ある投稿にいいねしているユーザーの最新投稿を取得
           options = Selenium::WebDriver::Chrome::Options.new
           options.headless!
-          options.add_option(:binary, "/usr/bin/google-chrome")
+          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_argument('--start-maximized')
           options.add_argument("--disable-dev-shm-usage")
@@ -426,22 +426,22 @@ class AddFavJob < ApplicationJob
           wait.until {driver.find_element(xpath: '//*[@class="zV_Nj"]/span').displayed?}
           favCount = driver.find_element(xpath: '//*[@class="zV_Nj"]/span').text.gsub(/[^\d]/, "").to_i
           driver.find_element(class: 'zV_Nj').click
-          gridCount = 0
+          gridCount = 1
           if favCount < count
             while target_usernameList.count != favCount
               sleep(1)
-              gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div').count
-              driver.find_element(xpath: "/html/body/div[3]/div/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
-              driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
+              gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div').count
+              driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
+              driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
                 target_usernameList << e.text
               end
             end
           else
             while target_usernameList.count < count
               sleep(1)
-              gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div').count
-              driver.find_element(xpath: "/html/body/div[3]/div/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
-              driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
+              gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div').count
+              driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
+              driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
                 target_usernameList << e.text
               end
               puts target_usernameList.count

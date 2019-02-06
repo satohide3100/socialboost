@@ -13,8 +13,8 @@ class AddFollowJob < ApplicationJob
         pass = @account.pass
         require 'selenium-webdriver'
         options = Selenium::WebDriver::Chrome::Options.new
-        #options.headless!
-        #options.add_option(:binary, "/usr/bin/google-chrome")
+        options.headless!
+        ##options.add_option(:binary, "/usr/bin/google-chrome")
         options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
         options.add_argument('--start-maximized')
         options.add_argument("--disable-dev-shm-usage")
@@ -176,8 +176,8 @@ class AddFollowJob < ApplicationJob
         case option
         when "1"
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.headless!
-          #options.add_option(:binary, "/usr/bin/google-chrome")
+          options.headless!
+          ##options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -243,8 +243,8 @@ class AddFollowJob < ApplicationJob
           )
         when "2"
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.headless!
-          #options.add_option(:binary, "/usr/bin/google-chrome")
+          options.headless!
+          ##options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_emulation(device_name: 'iPhone 8')
           options.add_argument("--disable-dev-shm-usage")
@@ -310,8 +310,8 @@ class AddFollowJob < ApplicationJob
           )
         when "3"
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.headless!
-          #options.add_option(:binary, "/usr/bin/google-chrome")
+          options.headless!
+          ##options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_argument('--start-maximized')
           options.add_argument("--disable-dev-shm-usage")
@@ -346,8 +346,8 @@ class AddFollowJob < ApplicationJob
           )
         when "4"
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.headless!
-          #options.add_option(:binary, "/usr/bin/google-chrome")
+          options.headless!
+          ##options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_argument('--start-maximized')
           options.add_argument("--disable-dev-shm-usage")

@@ -1,5 +1,5 @@
-[16809:775:0130/165524.592514:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
-[16809:775:0130/165524.630427:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
-[16809:775:0130/165524.632334:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
-[16809:775:0130/165534.963102:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
-[16809:775:0130/165534.963163:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[27068:775:0131/162052.739811:ERROR:native_widget_mac.mm(445)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
+[27068:775:0131/162052.801021:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
+[27068:775:0131/162052.805582:ERROR:native_widget_mac.mm(384)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
+[27068:775:0131/162104.045133:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[27068:775:0131/162104.045175:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
