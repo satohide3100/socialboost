@@ -48,7 +48,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     require 'line_notify'
     require 'selenium-webdriver'
     account_ids = Follow.select(:account_id).distinct
-    Account.where(user_id:3).where(sns_type:2).where(id:account_ids).each do |account|
+    Account.where(sns_type:2).where(id:account_ids).each do |account|
       options = Selenium::WebDriver::Chrome::Options.new
       options.headless!
       options.add_option(:binary, "/usr/bin/google-chrome")
@@ -127,7 +127,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     require 'selenium-webdriver'
     require 'benchmark'
     account_ids = Fav.select(:account_id).where(fav_flg:0).distinct
-    Account.where(user_id:3).where(id:account_ids).each do |account|
+    Account.where(id:account_ids).each do |account|
       options = Selenium::WebDriver::Chrome::Options.new
       options.add_option(:binary, "/usr/bin/google-chrome")
       options.add_argument("--headless")
