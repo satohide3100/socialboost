@@ -335,7 +335,7 @@ class AddFollowJob < ApplicationJob
           saveCount = 0
           links.each do |link|
             @follow = Follow.new(
-              target_image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8IuiPY9HdN5uOHJxs7km_KxNfivPT2biYs3zCRC9y_LlOBpMbw",target_postLink:"link",follow_flg:0,account_id:account_id
+              target_image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8IuiPY9HdN5uOHJxs7km_KxNfivPT2biYs3zCRC9y_LlOBpMbw",target_postLink:link,follow_flg:0,account_id:account_id
             )
             if @follow.save
               saveCount += 1
