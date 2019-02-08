@@ -51,7 +51,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     Account.where(user_id:3).where(sns_type:2).where(id:account_ids).each do |account|
       options = Selenium::WebDriver::Chrome::Options.new
       options.headless!
-      #options.add_option(:binary, "/usr/bin/google-chrome")
+      options.add_option(:binary, "/usr/bin/google-chrome")
       options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
       options.add_argument('--start-maximized')
       options.add_argument("--disable-dev-shm-usage")
@@ -129,7 +129,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     account_ids = Fav.select(:account_id).where(fav_flg:0).distinct
     Account.where(user_id:3).where(id:account_ids).each do |account|
       options = Selenium::WebDriver::Chrome::Options.new
-      #options.add_option(:binary, "/usr/bin/google-chrome")
+      options.add_option(:binary, "/usr/bin/google-chrome")
       options.add_argument("--headless")
       options.add_argument("--disable-application-cache")
       options.add_argument("--disable-gpu")
