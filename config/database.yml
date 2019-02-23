@@ -22,6 +22,4 @@ test:
 
 production:
   <<: *default
-  database: socialboost,
-  username: root,
-  password: satohide1994
+  database: db/production.sqlite3
