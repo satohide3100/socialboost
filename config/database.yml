@@ -24,6 +24,6 @@ production:
   encoding: utf8
   database: socialboost
   username: root
-  password: @Satohide1994
+  password:
   host: localhost
   socket: /tmp/mysql.sock
