@@ -1,9 +1,4 @@
-[82696:775:1231/045539.884250:ERROR:web_contents_view_mac.mm(487)] Failed to look up NSViewBridgeFactoryHost!
-[82696:775:1231/045541.226383:WARNING:CONSOLE(0)] "HTML Imports is deprecated and will be removed in M73, around March 2019. Please use ES modules instead. See https://www.chromestatus.com/features/5144752345317376 for more details.", source:  (0)
-[82696:775:1231/045541.233499:WARNING:CONSOLE(77)] "document.registerElement is deprecated and will be removed in M73, around March 2019. Please use window.customElements.define instead. See https://www.chromestatus.com/features/4642138092470272 for more details.", source: https://ssl.gstatic.com/chrome/components/doodle-notifier-02.html (77)
-[82696:775:1231/045542.199418:ERROR:CONSOLE(277)] "Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('https://twitter.com') does not match the recipient window's origin ('https://www.google.com').", source: chrome-search://most-visited/single.js (277)
-[82696:775:1231/045546.172766:INFO:CONSOLE(14)] "Refused to load the script 'https://cm.g.doubleclick.net/pixel?google_nid=twitter_dbm&google_cm&tpm_cb=partnerIdSyncComplete&_=1546199744483' because it violates the following Content Security Policy directive: "script-src https://ssl.google-analytics.com https://twitter.com 'unsafe-eval' https://*.twimg.com https://api.twitter.com https://analytics.twitter.com https://publish.twitter.com https://ton.twitter.com https://syndication.twitter.com 'nonce-6YxQPF5YdT1yG2ZrgAoRTg==' https://www.google.com https://platform.twitter.com https://www.google-analytics.com blob: 'self'". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
-", source: https://abs.twimg.com/k/ja/init.ja.8e88484b73053ecbec56.js (14)
-[82696:775:1231/045554.949331:INFO:CONSOLE(14)] "Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience. For more help, check https://xhr.spec.whatwg.org/.", source: https://abs.twimg.com/k/ja/init.ja.8e88484b73053ecbec56.js (14)
-[82696:775:1231/045555.705797:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
-[82696:775:1231/045555.705838:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[95485:25859:0311/111335.066997:WARNING:spdy_session.cc(3127)] Received WINDOW_UPDATE for invalid stream 9
+[95485:25859:0311/111335.079590:WARNING:spdy_session.cc(3127)] Received WINDOW_UPDATE for invalid stream 7
+[95485:775:0311/111335.100641:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[95485:775:0311/111335.100682:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.

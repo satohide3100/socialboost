@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'log/index'
   get 'notification/destroy'
+  get 'notification/index'
   get 'analyze/twitter'
   devise_for :users
   root 'account#list'

@@ -1,0 +1,6 @@
+[90043:775:0311/081608.138894:ERROR:native_widget_mac.mm(457)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
+[90043:775:0311/081608.192362:ERROR:native_widget_mac.mm(395)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
+[90043:775:0311/081609.716039:INFO:CONSOLE(8)] "SW registered", source: https://www.google.com/_/chrome/newtab?ie=UTF-8 (8)
+[90043:775:0311/081611.408879:INFO:CONSOLE(0)] "[DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o", source: https://www.instagram.com/accounts/login/?hl=ja (0)
+[90043:775:0311/081619.359697:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[90043:775:0311/081619.359736:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.

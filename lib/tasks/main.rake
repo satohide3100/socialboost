@@ -138,11 +138,10 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     account_ids = Fav.select(:account_id).where(fav_flg:0).distinct
     loop do
       result = Benchmark.realtime do
-        Account.where(user_id:3).where(id:account_ids).each do |account|
+        Account.where(id:account_ids).each do |account|
           options = Selenium::WebDriver::Chrome::Options.new
-          #options.add_option(:binary, "/usr/bin/google-chrome")
-          #options.add_argument("--headless")
-          options.add_argument("--disable-application-cache")
+          options.add_argument("--user-data-dir=./profile#{account.id}")
+          #options.add_argument("--disable-application-cache")
           options.add_argument("--disable-gpu")
           options.add_argument("--window-size=1929,2160")
           options.add_argument("--user-agent=#{USER_AGENT}")
@@ -151,7 +150,6 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
           options.add_argument("--lang=ja")
-          options.add_argument("--user-data-dir=./profile#{account.id}")
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 5)
           fav = Fav.find_by('account_id = ? and fav_flg = ?',account.id,0)
@@ -183,7 +181,6 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
               if fav.target_postLink == nil
                 driver.get("https://www.instagram.com/#{fav.target_username}/")
                 wait.until {driver.find_element(tag_name: 'article').displayed?}
-                puts driver.find_element(tag_name:"body").text
                 if driver.find_element(tag_name: 'article').text.include?("このアカウントは非公開です")
                   fav.destroy
                   driver.quit
@@ -217,8 +214,16 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
           line_notify = LineNotify.new("Sq7cScOUtjJ0Cqbl3C1QX7Z6aLlFDoX20qRJUBI12tS")
           if fav.target_postLink == nil
             options = {message: "\n#{account.profile_name}(ID:#{account.id})\n@#{fav.target_username}の最新投稿をいいねしました。"}
+            Notification.create(
+              title:"いいね",content:"\n#{account.profile_name}(ID:#{account.id})\n@#{fav.target_username}の最新投稿をいいねしました。",
+              notification_type:11,isRead:1,account_id:account.id,user_id:account.user_id
+            )
           else
             options = {message: "\n#{account.profile_name}(ID:#{account.id})\n#{fav.target_postLink}\nをいいねしました。"}
+            Notification.create(
+              title:"いいね",content:"\n#{account.profile_name}(ID:#{account.id})\n@#{fav.target_username}の最新投稿をいいねしました。",
+              notification_type:11,isRead:1,account_id:account.id,user_id:account.user_id
+            )
           end
 
           line_notify.send(options)
@@ -234,7 +239,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
 
   task :profile => :environment do
     require 'selenium-webdriver'
-    Account.where(user_id:3).where(sns_type:2).each do |account|
+    Account.where(sns_type:2).each do |account|
       options = Selenium::WebDriver::Chrome::Options.new
       options.add_argument("--user-data-dir=./profile#{account.id}")
       #options.add_argument("--headless")

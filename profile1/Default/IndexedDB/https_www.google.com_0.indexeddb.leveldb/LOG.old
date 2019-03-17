@@ -1,3 +1,3 @@
-2018/12/31-01:20:02.569 c303 Reusing MANIFEST /Users/satouhideakira/sma/profile1/Default/IndexedDB/https_www.google.com_0.indexeddb.leveldb/MANIFEST-000001
-2018/12/31-01:20:02.569 c303 Recovering log #3
-2018/12/31-01:20:02.570 c303 Reusing old log /Users/satouhideakira/sma/profile1/Default/IndexedDB/https_www.google.com_0.indexeddb.leveldb/000003.log 
+2019/03/11-11:12:05.681 11d03 Reusing MANIFEST /Users/satouhideakira/sma/profile1/Default/IndexedDB/https_www.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2019/03/11-11:12:05.681 11d03 Recovering log #3
+2019/03/11-11:12:05.681 11d03 Reusing old log /Users/satouhideakira/sma/profile1/Default/IndexedDB/https_www.google.com_0.indexeddb.leveldb/000003.log 
