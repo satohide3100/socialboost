@@ -6,6 +6,6 @@ class NotificationController < ApplicationController
   end
 
   def index
-    @notifications = Notification.where(user_id:current_user.id).where("notification_type = 10 OR notification_type = 11")
+    @notifications = Notification.where(user_id:current_user.id).where(notification_type:11)
   end
 end
