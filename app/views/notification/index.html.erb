@@ -18,7 +18,7 @@
           <td>いいね</td>
           <% end %>
           <td><%= n.content %></td>
-          <td><%= (n.created_at + Rational(9, 24)).strftime('%m月%d日 %H:%M:%S') %></td>
+          <td><%= (n.created_at >> 9).strftime('%m月%d日 %H:%M:%S') %></td>
         </tr>
         <% end %>
       </tbody>
