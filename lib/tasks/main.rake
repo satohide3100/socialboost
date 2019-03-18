@@ -221,7 +221,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
           else
             options = {message: "\n#{account.profile_name}(ID:#{account.id})\n#{fav.target_postLink}\nをいいねしました。"}
             Notification.create(
-              title:"いいね",content:"\n#{account.profile_name}(ID:#{account.id})\n@#{fav.target_username}の最新投稿をいいねしました。",
+              title:"いいね",content:"\n#{account.profile_name}(ID:#{account.id})\n#{fav.target_postLink}\nをいいねしました。",
               notification_type:11,isRead:1,account_id:account.id,user_id:account.user_id
             )
           end

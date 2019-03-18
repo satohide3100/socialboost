@@ -6,6 +6,7 @@
         <tr>
           <th>Type</th>
           <th>Content</th>
+          <th>Time</th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +18,7 @@
           <td>いいね</td>
           <% end %>
           <td><%= n.content %></td>
+          <td><%= n.created_at.strftime('%m月%d日 %H:%M:%S') %></td>
         </tr>
         <% end %>
       </tbody>
