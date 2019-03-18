@@ -1,4 +1,3 @@
-<% require "date" %>
 <h3><strong>アクションログ</strong></h3>
 <div class="card shadow">
   <div class="card-body">
@@ -19,7 +18,7 @@
           <td>いいね</td>
           <% end %>
           <td><%= n.content %></td>
-          <td><%= (n.created_at >> 9).strftime('%m月%d日 %H:%M:%S') %></td>
+          <td><%= (n.created_at + 9.0/24).strftime('%m月%d日 %H:%M:%S') %></td>
         </tr>
         <% end %>
       </tbody>
