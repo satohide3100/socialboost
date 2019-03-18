@@ -5,7 +5,7 @@ class NotificationController < ApplicationController
     redirect_back(fallback_location: root_path)
   end
 
-  def show
+  def index
     @notifications = Notification.where(user_id:current_user.id).where(notification_type:10).where(notification_type:11)
   end
 end
