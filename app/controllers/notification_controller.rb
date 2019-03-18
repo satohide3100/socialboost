@@ -1,4 +1,5 @@
 class NotificationController < ApplicationController
+  require "date"
   def destroy
     id = params[:id]
     Notification.find(id).update(isRead:1)
