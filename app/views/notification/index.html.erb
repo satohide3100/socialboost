@@ -1,9 +1,11 @@
 <h3><strong>アクションログ</strong></h3>
-<div class="card shadow">
+<small><%= @target_account %> いいね: <%= @notifications.where(notification_type:11).count %>件 フォロー: <%= @notifications.where(notification_type:10).count %>件</small>
+<div class="card shadow" style="font-size:0.8rem;">
   <div class="card-body">
     <table class="table text-center">
       <thead class="thead-light">
         <tr>
+          <th>Account</th>
           <th>Type</th>
           <th>Content</th>
           <th>Time</th>
@@ -12,6 +14,7 @@
       <tbody>
         <% @notifications.each do |n| %>
         <tr>
+          <td><a href="/notification/index?id=<%= n.account_id %>"><%= Account.find(n.account_id).username %></a></td>
           <% if n.notification_type == 10 %>
           <td>フォロー</td>
           <% else %>
