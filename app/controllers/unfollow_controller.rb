@@ -13,10 +13,12 @@ class UnfollowController < ApplicationController
     @instagramActive = Account.find_by(user_id:current_user.id,sns_type:2,active_flg:1)
     if @instagramActive
       @instagramActiveImage = Analyze.find_by(account_id:@instagramActive.id)
-      #@follows2 = Follow.where(account_id:@instagramActive.id)
       @instagramSetting = UnFollowSetting.find_by(account_id:@instagramActive.id)
+      interval = @instagramSetting.intervalDay
+      intervalDate = Date.today - interval.days
+      @unfollows = Follow.where(account_id:@instagramActive.id).where(follow_flg:1).where("updated_at <= ?",intervalDate)
     else
-      #@follows2 = []
+      @unfollows = []
     end
 
     @facebookActive = Account.find_by(user_id:current_user.id,sns_type:3,active_flg:1)
@@ -33,6 +35,12 @@ class UnfollowController < ApplicationController
     dayLimit = params[:dayLimit]
     interval = params[:interval]
     intervalsec = params[:intervalsec]
+    if params[:check]
+      checkFlg = 1
+    else
+      checkFlg = 0
+    end
+    puts params
     if sns_type == "1"
       @account = Account.find_by(user_id:current_user.id,sns_type:1,active_flg:1)
       account_id = @account.id
@@ -43,12 +51,12 @@ class UnfollowController < ApplicationController
     unfollowSetting = UnFollowSetting.find_by(account_id:account_id)
     if unfollowSetting == nil
       UnFollowSetting.create(
-        dayLimit:dayLimit,intervalDay:interval,intervalsec:intervalsec,account_id:account_id
+        dayLimit:dayLimit,intervalDay:interval,intervalsec:intervalsec,checkFlg:checkFlg,account_id:account_id
       )
       flash[:notice] = "アンフォロー設定を新規追加しました。"
     else
       UnFollowSetting.where(account_id:account_id).update(
-        dayLimit:dayLimit,intervalDay:interval,intervalsec:intervalsec
+        dayLimit:dayLimit,intervalDay:interval,intervalsec:intervalsec,checkFlg:checkFlg
       )
       flash[:notice] = "アンフォロー設定を更新しました。"
     end

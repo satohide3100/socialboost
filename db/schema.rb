@@ -10,33 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_29_090108) do
+ActiveRecord::Schema.define(version: 2019_03_26_061607) do
 
-  create_table "accounts", force: :cascade do |t|
+  create_table "accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "sns_type"
     t.string "username"
     t.string "pass"
     t.integer "active_flg"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "profile_name"
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
-  create_table "analyzes", force: :cascade do |t|
+  create_table "analyzes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "follow_count"
     t.integer "follower_count"
     t.integer "post_count"
     t.integer "faved_count"
     t.string "profile_image"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_analyzes_on_account_id"
   end
 
-  create_table "delayed_jobs", force: :cascade do |t|
+  create_table "delayed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
@@ -51,86 +51,87 @@ ActiveRecord::Schema.define(version: 2019_01_29_090108) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "fav_settings", force: :cascade do |t|
+  create_table "fav_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "dayLimit"
     t.integer "interval"
     t.integer "count_by_interval"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "intervalsec"
     t.index ["account_id"], name: "index_fav_settings_on_account_id"
   end
 
-  create_table "favs", force: :cascade do |t|
+  create_table "favs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "target_postLink"
     t.string "target_postImage"
     t.string "target_username"
     t.string "target_name"
     t.integer "fav_flg"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_favs_on_account_id"
   end
 
-  create_table "follow_settings", force: :cascade do |t|
+  create_table "follow_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "dayLimit"
     t.integer "interval"
     t.integer "count_by_interval"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "intervalsec"
     t.index ["account_id"], name: "index_follow_settings_on_account_id"
   end
 
-  create_table "follows", force: :cascade do |t|
+  create_table "follows", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "target_username"
     t.string "target_name"
     t.string "target_image"
     t.integer "follow_flg"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "target_postLink"
     t.index ["account_id"], name: "index_follows_on_account_id"
   end
 
-  create_table "notifications", force: :cascade do |t|
+  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "title"
     t.text "content"
     t.integer "notification_type"
     t.integer "isRead"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["account_id"], name: "index_notifications_on_account_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "un_follow_settings", force: :cascade do |t|
+  create_table "un_follow_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "dayLimit"
     t.integer "intervalDay"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "intervalsec"
+    t.integer "checkFlg"
     t.index ["account_id"], name: "index_un_follow_settings_on_account_id"
   end
 
-  create_table "unfollows", force: :cascade do |t|
+  create_table "unfollows", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "target_username"
     t.string "target_name"
     t.string "target_image"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_unfollows_on_account_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -147,4 +148,14 @@ ActiveRecord::Schema.define(version: 2019_01_29_090108) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "accounts", "users"
+  add_foreign_key "analyzes", "accounts"
+  add_foreign_key "fav_settings", "accounts"
+  add_foreign_key "favs", "accounts"
+  add_foreign_key "follow_settings", "accounts"
+  add_foreign_key "follows", "accounts"
+  add_foreign_key "notifications", "accounts"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "un_follow_settings", "accounts"
+  add_foreign_key "unfollows", "accounts"
 end

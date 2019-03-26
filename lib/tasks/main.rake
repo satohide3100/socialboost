@@ -49,19 +49,18 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     require 'selenium-webdriver'
     require 'benchmark'
 
-    account_ids = Follow.select(:account_id).distinct
+    account_ids = Follow.select(:account_id).where(follow_flg:0).distinct
     loop do
       result = Benchmark.realtime do
-        Account.where(user_id:3).where(sns_type:2).where(id:account_ids).each do |account|
+        Account.where(sns_type:2).where(id:account_ids).each do |account|
           options = Selenium::WebDriver::Chrome::Options.new
           #options.headless!
-          #options.add_option(:binary, "/usr/bin/google-chrome")
           options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
           options.add_argument('--start-maximized')
           options.add_argument("--disable-dev-shm-usage")
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-setuid-sandbox")
-          #options.add_argument("--user-data-dir=./profile#{account.id}")
+          options.add_argument("--user-data-dir=./profile#{account.id}")
           driver = Selenium::WebDriver.for :chrome, options: options
           wait = Selenium::WebDriver::Wait.new(:timeout => 3)
           follow = Follow.find_by('account_id = ? and follow_flg = ?',account.id,0)
@@ -84,20 +83,12 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
               wait.until {driver.find_element(class: "follow-text").displayed?}
               driver.find_element(class: "follow-text").click
             when 2
-              driver.get("https://www.instagram.com/accounts/login/?hl=ja")
-              current = driver.current_url
-              wait.until {driver.find_element(name: 'username').displayed?}
-              driver.find_element(name: 'username').send_keys(account.username)
-              wait.until {driver.find_element(name: 'password').displayed?}
-              driver.find_element(name: 'password').send_keys(account.pass)
-              driver.find_element(name: 'password').send_keys(:return)
-              wait.until {driver.current_url != current}
               if follow.target_postLink != nil
-                driver.navigate.to(follow.target_postLink)
+                driver.get(follow.target_postLink)
                 wait.until {driver.find_element(tag_name: 'button').displayed?}
                 driver.find_element(tag_name: 'button').click
               else
-                driver.navigate.to("https://www.instagram.com/#{follow.target_username}")
+                driver.get("https://www.instagram.com/#{follow.target_username}")
                 wait.until {driver.find_element(tag_name: "button").displayed?}
                 puts follow_text = driver.find_element(tag_name: "button").text
                 if follow_text.include?("フォロー中")
@@ -233,6 +224,86 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
       end
       if result < 87
         sleep(87 - result)
+      end
+    end
+  end
+
+  task :unfollow => :environment do
+    require 'selenium-webdriver'
+    account_ids = Follow.select(:account_id).where(follow_flg:1).distinct
+    loop do
+      result = Benchmark.realtime do
+        Account.where(id:account_ids).each do |account|
+          interval = UnFollowSetting.find_by(account_id:account.id).intervalDay
+          checkFlg = UnFollowSetting.find_by(account_id:account.id).checkFlg
+          follow = Follow.find_by('account_id = ? and follow_flg = ?',account.id,1)
+          unless follow
+            driver.quit
+            next
+          end
+          if (Date.today - follow.updated_at.to_date).to_i < interval
+            next
+          end
+          options = Selenium::WebDriver::Chrome::Options.new
+          options.add_argument("--user-data-dir=./profile#{account.id}")
+          #options.add_argument("--disable-application-cache")
+          options.add_argument("--disable-gpu")
+          options.add_argument("--window-size=1929,2160")
+          options.add_argument("--user-agent=#{USER_AGENT}")
+          options.add_argument('--start-maximized')
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-setuid-sandbox")
+          options.add_argument("--lang=ja")
+          driver = Selenium::WebDriver.for :chrome, options: options
+          wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+          begin
+            case account.sns_type
+            when 1
+            when 2
+              if follow.target_postLink != nil
+                driver.get(follow.target_postLink)
+                wait.until {driver.find_element(tag_name: 'button').displayed?}
+                driver.find_element(tag_name: 'button').click
+              else
+                driver.get("https://www.instagram.com/#{follow.target_username}")
+                wait.until {driver.find_element(tag_name: "button").displayed?}
+                puts follow_text = driver.find_element(tag_name: "button").text
+                if follow_text.include?("フォロー中")
+                  follow.destroy
+                  driver.quit
+                  next
+                end
+                driver.find_element(tag_name: "button").click
+              end
+            end
+          rescue => e
+            puts e
+            follow.destroy
+            driver.quit
+            next
+          end
+          line_notify = LineNotify.new("Sq7cScOUtjJ0Cqbl3C1QX7Z6aLlFDoX20qRJUBI12tS")
+          if follow.target_username == nil
+            options = {message: "\n#{account.profile_name}(ID:#{account.id})\n#{follow.target_postLink}の投稿のアカウントをアンフォローしました。"}
+            Notification.create(
+              title:"アンフォロー",content:"#{follow.target_postLink}の投稿のアカウントをアンフォローしました。",
+              notification_type:12,isRead:1,account_id:account.id,user_id:account.user_id
+            )
+          else
+            options = {message: "\n#{account.profile_name}(ID:#{account.id})\n@#{follow.target_username}\nをアンフォローしました。"}
+            Notification.create(
+              title:"アンフォロー",content:"@#{follow.target_username}をアンフォローしました。",
+              notification_type:12,isRead:1,account_id:account.id,user_id:account.user_id
+            )
+          end
+          line_notify.send(options)
+          follow.destroy
+          driver.quit
+        end
+      end
+      if result < 173
+        sleep(173 - result)
       end
     end
   end

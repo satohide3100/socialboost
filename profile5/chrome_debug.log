@@ -1,7 +1,5 @@
-[90002:775:0311/081556.396915:ERROR:native_widget_mac.mm(457)] Not implemented reached in virtual void views::NativeWidgetMac::Maximize()
-[90002:775:0311/081556.436374:ERROR:native_widget_mac.mm(395)] Not implemented reached in virtual void views::NativeWidgetMac::Show(ui::WindowShowState, const gfx::Rect &)
-[90002:25603:0311/081558.210752:WARNING:spdy_session.cc(3178)] Received HEADERS for invalid stream 1
-[90002:775:0311/081559.547905:INFO:CONSOLE(0)] "[DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o", source: https://www.instagram.com/accounts/login/?hl=ja (0)
-[90002:25603:0311/081604.697598:WARNING:spdy_session.cc(3127)] Received WINDOW_UPDATE for invalid stream 59
-[90002:775:0311/081607.339614:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
-[90002:775:0311/081607.339672:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[46759:775:0326/164617.629625:INFO:CONSOLE(8)] "SW registered", source: https://www.google.com/_/chrome/newtab?ie=UTF-8 (8)
+[46759:775:0326/164617.644613:ERROR:CONSOLE(278)] "Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('https://www.instagram.com') does not match the recipient window's origin ('https://www.google.com').", source: chrome-search://most-visited/single.js (278)
+[46759:775:0326/164625.275328:INFO:CONSOLE(0)] "[DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o", source: https://www.instagram.com/accounts/login/?next=%2Fwear_haruto%2F&source=follow (0)
+[46759:775:0326/164632.149225:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.
+[46759:775:0326/164632.149297:WARNING:pref_notifier_impl.cc(23)] Pref observer found at shutdown.

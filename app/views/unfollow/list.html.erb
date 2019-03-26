@@ -27,7 +27,7 @@
     <% end %>
     <div class="card">
       <div class="card-header">
-        <strong>アンフォロー設定</strong>&nbsp&nbsp&nbsp<strong class="small">フォローバックされていないユーザーをアンフォローします。</strong>
+        <strong>アンフォロー設定</strong>
       </div>
       <div class="card-body">
         <form action="/unfollow/setting_create">
@@ -46,36 +46,6 @@
                 <% end %>
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">日</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="dayLimit" class="col-2 col-form-label">1日の上限</label>
-            <div class="col-2">
-              <div class="input-group mb-3">
-                <% if @twitterSetting %>
-                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @twitterSetting.dayLimit %>">
-                <% else %>
-                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1">
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">件</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
-            <div class="col-2">
-              <div class="input-group mb-3">
-                <% if @twitterSetting %>
-                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @twitterSetting.intervalsec %>" required>
-                <% else %>
-                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">秒</span>
                 </div>
               </div>
             </div>
@@ -108,7 +78,7 @@
     <% end %>
     <div class="card">
       <div class="card-header">
-        <strong>アンフォロー設定</strong>&nbsp&nbsp&nbsp<strong class="small">フォローバックされていないユーザーをアンフォローします。</strong>
+        <strong>アンフォロー設定</strong>
       </div>
       <div class="card-body">
         <form action="/unfollow/setting_create">
@@ -131,36 +101,6 @@
               </div>
             </div>
           </div>
-          <div class="form-group row">
-            <label for="dayLimit" class="col-2 col-form-label">1日の上限</label>
-            <div class="col-2">
-              <div class="input-group mb-3">
-                <% if @instagramSetting %>
-                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1" value="<%= @instagramSetting.dayLimit %>">
-                <% else %>
-                <input name="dayLimit" type="number" class="form-control" id="dayLimit" min="1">
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">件</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
-            <div class="col-2">
-              <div class="input-group mb-3">
-                <% if @instagramSetting %>
-                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @instagramSetting.intervalsec %>" required>
-                <% else %>
-                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">秒</span>
-                </div>
-              </div>
-            </div>
-          </div>
           <button type="submit" class="btn btn-primary">保存</button>
         </form>
       </div>
@@ -170,7 +110,46 @@
         <strong>アンフォローリスト一覧</strong>
       </div>
       <div class="card-body">
+        <% if @unfollows.count > 0 %>
+        <ul class="list-unstyled">
+        <div class="row">
+          <% count = 1 %>
+          <% @unfollows.each do |unfollow| %>
+          <% if count > 50 %>
+          <div class="col-6 more1">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(unfollow.target_image, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= unfollow.target_name %></strong>
+                <small class="text-muted">@<%= unfollow.target_username %></small><br><br>
+                <a href="https://instagram.com/<%= unfollow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+              </div>
+            </li><hr>
+          </div>
+          <% else %>
+          <div class="col-6">
+            <li class="media">
+              <a href="#" class="mr-3">
+                <%= image_tag(unfollow.target_image, size:"60x60", class:"rounded-circle shadow") %>
+              </a>
+              <div class="media-body">
+                <strong class="mt-0"><%= unfollow.target_name %></strong>
+                <small class="text-muted">@<%= unfollow.target_username %></small><br><br>
+                <a href="https://instagram.com/<%= unfollow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+              </div>
+            </li><hr>
+          </div>
+          <% end %>
+          <% count += 1 %>
+          <% end %>
+        </div>
+        </ul>
+        <button class="btn btn-outline-primary morebtn1 btn-block">すべて表示する</button>
+        <% else %>
         現在、アンフォロー予定のアカウントはありません。
+        <% end %>
       </div>
     </div>
   </div>
