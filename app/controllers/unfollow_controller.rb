@@ -14,9 +14,13 @@ class UnfollowController < ApplicationController
     if @instagramActive
       @instagramActiveImage = Analyze.find_by(account_id:@instagramActive.id)
       @instagramSetting = UnFollowSetting.find_by(account_id:@instagramActive.id)
-      interval = @instagramSetting.intervalDay
-      intervalDate = Date.today - interval.days
-      @unfollows = Follow.where(account_id:@instagramActive.id).where(follow_flg:1).where("updated_at <= ?",intervalDate)
+      if @instagramSetting
+        interval = @instagramSetting.intervalDay
+        intervalDate = Date.today - interval.days
+        @unfollows = Follow.where(account_id:@instagramActive.id).where(follow_flg:1).where("updated_at <= ?",intervalDate)
+      else
+        @unfollows = []
+      end
     else
       @unfollows = []
     end
