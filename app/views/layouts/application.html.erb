@@ -139,12 +139,12 @@
       </div>
       <div class="col-2">
         <br>
-        <% Notification.where(user_id:current_user.id).where(isRead:0).each do |n| %>
+        <% Notification.where(user_id:current_user.id).where(isRead:0).order("id desc").limit(10).each do |n| %>
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="toast-header">
             <img class="rounded mr-2" src="https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes/128/notification-circle-blue-512.png" alt="" width="20px" height="20px">
             <strong class="mr-auto">SocialBoost</strong>
-            <!--<small>11分前</small>-->
+            <small><%= n.created_at.strftime("%m月%d日 %H:%M") %></small>
             <a href="/notification/destroy?id=<%= n.id %>" class="btn ml-2 mb-1 close" data-dismiss="toast" aria-label="閉じる">
               <span aria-hidden="true">&times;</span>
             </a>
