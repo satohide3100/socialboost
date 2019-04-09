@@ -430,7 +430,7 @@ class AddFavJob < ApplicationJob
           if favCount < count
             while target_usernameList.count != favCount
               sleep(5)
-              puts driver.find_element(tag_name: "body").text
+              body = driver.find_element(tag_name: "body").text
               gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div').count
               driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
               driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
@@ -466,7 +466,7 @@ class AddFavJob < ApplicationJob
       end
     rescue => e
       Notification.create(
-        notification_type:0,content:"いいねリストへの追加に失敗しました。#{e.message}#{follow}",isRead:0, user_id:user_id
+        notification_type:0,content:"いいねリストへの追加に失敗しました。#{e.message}#{body}",isRead:0, user_id:user_id
       )
       driver.quit
     end
