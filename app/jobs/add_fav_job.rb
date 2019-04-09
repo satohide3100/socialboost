@@ -429,9 +429,11 @@ class AddFavJob < ApplicationJob
           gridCount = 1
           if favCount < count
             while target_usernameList.count != favCount
-              sleep(5)
-              body = driver.find_element(tag_name: "body").text
+              sleep(1)
               gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div').count
+              if gridCount == 0
+                next
+              end
               driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
               driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
                 target_usernameList << e.text
@@ -439,9 +441,11 @@ class AddFavJob < ApplicationJob
             end
           else
             while target_usernameList.count < count
-              sleep(5)
-              puts driver.find_element(tag_name: "body").text
+              sleep(1)
               gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div').count
+              if gridCount == 0
+                next
+              end
               driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
               driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
                 target_usernameList << e.text
