@@ -1,9 +1,7 @@
 namespace :main do
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"
   task :test => :environment do
-    count = 200
-    user = "selecity_sale"
-    options = Selenium::WebDriver::Firefox::Options.new
+    options = Selenium::WebDriver::Chrome::Options.new
     #options.headless!
     #options.add_option(:binary, "/usr/bin/google-chrome")
     options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
@@ -11,37 +9,45 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-setuid-sandbox")
-    driver = Selenium::WebDriver.for :firefox, options: options
+    driver = Selenium::WebDriver.for :chrome, options: options
     wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-    driver.get("https://www.instagram.com/p/BtLsPv8lZf6/")
+    driver.get(post)
     wait.until {driver.find_element(class: 'zV_Nj').displayed?}
     driver.find_elements(tag_name: "footer").last.location_once_scrolled_into_view
     wait.until {driver.find_element(xpath: '//*[@class="zV_Nj"]/span').displayed?}
     favCount = driver.find_element(xpath: '//*[@class="zV_Nj"]/span').text.gsub(/[^\d]/, "").to_i
     driver.find_element(class: 'zV_Nj').click
     gridCount = 1
-    target_usernameList = []
     if favCount < count
       while target_usernameList.count != favCount
-        sleep(1)
-        gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div').count
-        driver.find_element(xpath: "/html/body/div[3]/div/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
-        driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
+        sleep(2)
+        gridCount = driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div').count
+        driver.find_element(xpath: "/html/body/div[3]/div/div[5]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
+        driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div/div[2]/div[1]/div/a/div/div/div').each do |e|
           target_usernameList << e.text
         end
       end
     else
       while target_usernameList.count < count
-        sleep(1)
-        gridCount = driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div').count
-        driver.find_element(xpath: "/html/body/div[3]/div/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
-        driver.find_elements(xpath: '/html/body/div[3]/div/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
+        sleep(2)
+        gridCount = driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div').count
+        driver.find_element(xpath: "/html/body/div[3]/div/div[5]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
+        driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div/div[2]/div[1]/div/a/div/div/div').each do |e|
           target_usernameList << e.text
         end
         puts target_usernameList.count
       end
     end
     driver.quit
+    saveCount = 0
+    target_usernameList.count.times.each do |i|
+      @fav = Fav.new(
+        target_username:target_usernameList[i],target_postImage:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB8IuiPY9HdN5uOHJxs7km_KxNfivPT2biYs3zCRC9y_LlOBpMbw",fav_flg:0,account_id:account_id
+      )
+      if @fav.save
+        saveCount += 1
+      end
+    end
   end
 
   task :follow => :environment do
