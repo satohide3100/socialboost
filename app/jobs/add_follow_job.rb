@@ -361,23 +361,29 @@ class AddFollowJob < ApplicationJob
           wait.until {driver.find_element(xpath: '//*[@class="zV_Nj"]/span').displayed?}
           favCount = driver.find_element(xpath: '//*[@class="zV_Nj"]/span').text.gsub(/[^\d]/, "").to_i
           driver.find_element(class: 'zV_Nj').click
-          gridCount = 0
+          gridCount = 2
           if favCount < count
             while target_usernameList.count != favCount
               sleep(1)
-              gridCount = driver.find_elements(xpath: '/html/body/div[4]/div/div[2]/div/div/div').count
-              driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
-              driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
-                target_usernameList << e.text
+              puts gridCount = driver.find_elements(xpath: '/html/body/div[4]/div/div[2]/div/div/div').count
+              if gridCount == 0
+                gridCount = 2
+              end
+              driver.find_element(:xpath, "/html/body/div[4]/div/div[2]/div/div/div[#{gridCount - 1}]/div[1]/div/a").send_keys :tab
+              driver.find_elements(xpath: '/html/body/div[4]/div/div[2]/div/div/div/div[2]/div[1]/div/a/div/div/div').each do |e|
+                puts target_usernameList << e.text
               end
             end
           else
             while target_usernameList.count < count
               sleep(1)
-              gridCount = driver.find_elements(xpath: '/html/body/div[4]/div/div[2]/div/div/div').count
-              driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
-              driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
-                target_usernameList << e.text
+              puts gridCount = driver.find_elements(xpath: '/html/body/div[4]/div/div[2]/div/div/div').count
+              if gridCount == 0
+                gridCount = 2
+              end
+              driver.find_element(:xpath, "/html/body/div[4]/div/div[2]/div/div/div[#{gridCount - 1}]/div[1]/div/a").send_keys :tab
+              driver.find_elements(xpath: '/html/body/div[4]/div/div[2]/div/div/div/div[2]/div[1]/div/a/div/div/div').each do |e|
+                puts target_usernameList << e.text
               end
               puts target_usernameList.count
             end
