@@ -198,6 +198,20 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
             end
           rescue => e
             puts e
+            if fav.target_postLink == nil
+              options = {message: "\n#{account.profile_name}(ID:#{account.id})\n@#{fav.target_username}の最新投稿をいいねしました。"}
+              Notification.create(
+                title:"いいね",content:"\n#{account.profile_name}(ID:#{account.id})\n@#{fav.target_username}の最新投稿をいいねしました。",
+                notification_type:11,isRead:1,account_id:account.id,user_id:account.user_id
+              )
+            else
+              options = {message: "\n#{account.profile_name}(ID:#{account.id})\n#{fav.target_postLink}\nをいいねしました。"}
+              Notification.create(
+                title:"いいね",content:"\n#{account.profile_name}(ID:#{account.id})\n#{fav.target_postLink}\nをいいねしました。",
+                notification_type:11,isRead:1,account_id:account.id,user_id:account.user_id
+              )
+            end
+            line_notify.send(options)
             fav.destroy
             driver.quit
             next
