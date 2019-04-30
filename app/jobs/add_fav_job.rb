@@ -430,7 +430,7 @@ class AddFavJob < ApplicationJob
           if favCount < count
             while target_usernameList.count != favCount
               sleep(1)
-              wait.until {driver.find_element(xpath: '/html/body/div[5]/div/div[2]/div/div/div').displayed?}
+              wait.until {driver.find_element(xpath: '/html/body/div[5]/div/div[2]/div/div/div[1]').displayed?}
               gridCount = driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div').count
               driver.find_element(xpath: "/html/body/div[3]/div/div[5]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
               driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div/div[2]/div[1]/div/a/div/div/div').each do |e|
@@ -440,7 +440,7 @@ class AddFavJob < ApplicationJob
           else
             while target_usernameList.count < count
               sleep(1)
-              wait.until {driver.find_element(xpath: '/html/body/div[5]/div/div[2]/div/div/div').displayed?}
+              wait.until {driver.find_element(xpath: '/html/body/div[5]/div/div[2]/div/div/div[1]').displayed?}
               gridCount = driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div').count
               driver.find_element(xpath: "/html/body/div[3]/div/div[5]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
               driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div/div[2]/div[1]/div/a/div/div/div').each do |e|
