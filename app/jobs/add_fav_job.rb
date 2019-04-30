@@ -432,7 +432,7 @@ class AddFavJob < ApplicationJob
               sleep(1)
               wait.until {driver.find_element(xpath: '/html/body/div[5]/div/div[2]/div/div/div').displayed?}
               gridCount = driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div').count
-              driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
+              driver.find_element(xpath: "/html/body/div[3]/div/div[5]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
               driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
                 target_usernameList << e.text
               end
@@ -442,7 +442,7 @@ class AddFavJob < ApplicationJob
               sleep(1)
               wait.until {driver.find_element(xpath: '/html/body/div[5]/div/div[2]/div/div/div').displayed?}
               gridCount = driver.find_elements(xpath: '/html/body/div[5]/div/div[2]/div/div/div').count
-              driver.find_element(xpath: "/html/body/div[3]/div/div[2]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
+              driver.find_element(xpath: "/html/body/div[3]/div/div[5]/div/div/div#{[gridCount - 1]}").location_once_scrolled_into_view
               driver.find_elements(xpath: '/html/body/div[3]/div/div[2]/div/div/div/div[2]/div/div/a/div/div/div').each do |e|
                 target_usernameList << e.text
               end
