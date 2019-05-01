@@ -7,6 +7,7 @@ class Account < ApplicationRecord
   has_many :analyzes, foreign_key: :account_id, dependent: :delete_all
   has_many :follow_settings, foreign_key: :account_id, dependent: :delete_all
   has_many :un_follow_settings, foreign_key: :account_id, dependent: :delete_all
+  has_many :notifications, foreign_key: :account_id, dependent: :delete_all
 
   validates :username, uniqueness: { scope: [:user_id,:sns_type] }
 end
