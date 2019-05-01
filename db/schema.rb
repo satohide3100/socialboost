@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_26_061607) do
+ActiveRecord::Schema.define(version: 2019_05_01_050808) do
 
   create_table "accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "sns_type"
@@ -102,11 +102,9 @@ ActiveRecord::Schema.define(version: 2019_03_26_061607) do
     t.text "content"
     t.integer "notification_type"
     t.integer "isRead"
-    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
-    t.index ["account_id"], name: "index_notifications_on_account_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -154,7 +152,6 @@ ActiveRecord::Schema.define(version: 2019_03_26_061607) do
   add_foreign_key "favs", "accounts"
   add_foreign_key "follow_settings", "accounts"
   add_foreign_key "follows", "accounts"
-  add_foreign_key "notifications", "accounts"
   add_foreign_key "notifications", "users"
   add_foreign_key "un_follow_settings", "accounts"
   add_foreign_key "unfollows", "accounts"
