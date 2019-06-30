@@ -64,6 +64,7 @@ class FollowController < ApplicationController
     post = params[:post]
     word = params[:word]
     count = params[:count].to_i
+    isAll = false
     user_id = current_user.id
     if (option == "1" || option == "2") && user == ""
       flash[:alert] = "ユーザー名を入力してください。"
@@ -80,7 +81,10 @@ class FollowController < ApplicationController
       redirect_to("/follow/list")
       return
     end
-    AddFollowJob.perform_later(sns_type,option,user,post,word,count,user_id)
+    if params[:check]
+      isAll = true
+    end
+    AddFollowJob.perform_later(sns_type,option,user,post,word,count,user_id,isAll)
     flash[:notice] = "フォローリストの追加処理を開始しました。"
     redirect_to("/follow/list")
   end

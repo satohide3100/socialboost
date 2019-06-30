@@ -24,7 +24,6 @@ class FavController < ApplicationController
     else
       @fav2 = []
     end
-
   end
 
   def create
@@ -34,6 +33,7 @@ class FavController < ApplicationController
     post = params[:post]
     word = params[:word]
     count = params[:count].to_i
+    isAll = false
     user_id = current_user.id
     if option == "1" && word == ""
       flash[:alert] = "キーワードを入力してください。"
@@ -45,8 +45,11 @@ class FavController < ApplicationController
       redirect_to("/fav/list")
       return
     end
+    if params[:check]
+      isAll = true
+    end
     flash[:notice] = "いいねリストの追加処理を開始しました。"
-    AddFavJob.perform_later(sns_type,option,user,post,word,count,user_id)
+    AddFavJob.perform_later(sns_type,option,user,post,word,count,user_id,isAll)
     redirect_to("/fav/list")
   end
 

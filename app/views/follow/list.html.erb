@@ -1,428 +1,207 @@
 <h3><strong>フォローリスト</strong></h3>
 <p class="text-muted">自動フォローするアカウントのリストの確認と追加を行います。</p><br>
-<ul class="nav nav-pills mb-3 nav-fill" id="pills-tab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="twitter-tab" data-toggle="pill" href="#twitter" role="tab" aria-controls="twitter" aria-selected="true"><i class="fab fa-twitter-square"></i>&nbspTwitter</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="instagram-tab" data-toggle="pill" href="#instagram" role="tab" aria-controls="instagram" aria-selected="false"><i class="fab fa-instagram"></i>&nbspInstagram</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" id="facebook-tab" data-toggle="pill" href="#facebook" role="tab" aria-controls="facebook" aria-selected="false" tabindex="-1" aria-disabled="true"><i class="fab fa-facebook-square"></i>&nbspFacebook</a>
-  </li>
-</ul>
-<div class="tab-content" id="pills-tabContent">
-  <div class="tab-pane fade show active" id="twitter" role="tabpanel" aria-labelledby="twitter-tab">
-    <% if @twitterActive %>
-    <div class="media">
-      <a href="#" class="align-self-center mr-3">
-        <img src="<%= @twitterActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
-      </a>
-      <div class="media-body">
-        <br>
-        <h6 class="mt-0"><%= @twitterActive.profile_name %></h6>
-        <small class="text-muted">@<%= @twitterActive.username %></small>
+<% if @instagramActive %>
+<div class="media">
+  <a href="#" class="align-self-center mr-3">
+    <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
+  </a>
+  <div class="media-body">
+    <br>
+    <h6 class="mt-0"><%= @instagramActive.profile_name %></h6>
+    <small class="text-muted">@<%= @instagramActive.username %></small>
+  </div>
+</div><br>
+<% else %>
+<a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
+<% end %>
+<div class="card shadow">
+  <div class="card-header">
+    <strong>フォロー設定</strong>
+  </div>
+  <div class="card-body">
+    <form action="/follow/setting_create">
+      <div class="form-group" hidden>
+        <label for="sns_type">sns_type</label>
+        <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
       </div>
-    </div><br>
-    <% else %>
-    <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
-    <% end %>
-    <div class="card shadow">
-      <div class="card-header">
-        <strong>フォロー設定</strong>
-      </div>
-      <div class="card-body">
-        <form action="/follow/setting_create">
-          <div class="form-group" hidden>
-            <label for="sns_type">sns_type</label>
-            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="1">
-          </div>
-          <div class="form-group row">
-            <label for="limit" class="col-2 col-form-label">1日の上限</label>
-            <div class="col-2">
-              <div class="input-group mb-3">
-                <% if @twitterSetting %>
-                <input name="dayLimit" type="number" class="form-control" id="limit" min="1" value="<%= @twitterSetting.dayLimit %>" required>
-                <% else %>
-                <input name="dayLimit" type="number" class="form-control" id="limit" min="1" required>
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">件</span>
-                </div>
-              </div>
+      <div class="form-group row">
+        <label for="limit" class="col-2 col-form-label">1日の上限</label>
+        <div class="col-2">
+          <div class="input-group mb-3">
+            <% if @instagramSetting %>
+            <input name="dayLimit" type="number" class="form-control" id="limit" min="1" value="<%= @instagramSetting.dayLimit %>" required>
+            <% else %>
+            <input name="dayLimit" type="number" class="form-control" id="limit" min="1" required>
+            <% end %>
+            <div class="input-group-append">
+              <span class="input-group-text" id="basic-addon2">件</span>
             </div>
           </div>
-          <div class="form-group row">
-            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
-            <div class="col-2">
-              <div class="input-group mb-3">
-                <% if @twitterSetting %>
-                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @twitterSetting.intervalsec %>" required>
-                <% else %>
-                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">秒</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-6">
-              <div class="input-group mb-3">
-                <select name="interval" class="custom-select" id="interval1" value=1>
-                  <option>停止中</option>
-                  <% @intervalHour.each do |i| %>
-                    <% if @twitterSetting %>
-                      <% if i == @twitterSetting.interval %>
-                       <option value="<%= i %>" selected><%= i %></option>
-                      <% else %>
-                        <option value="<%= i %>"><%= i %></option>
-                      <% end %>
-                    <% else %>
-                      <option value="<%= i %>"><%= i %></option>
-                    <% end %>
-                  <% end %>
-                </select>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">時間おきに</span>
-                </div>
-                <% if @twitterSetting %>
-                <input name="count_by_interval" type="number" class="form-control" id="interval" min="1" value="<%= @twitterSetting.count_by_interval %>" required>
-                <% else %>
-                <input name="count_by_interval" type="number" class="form-control" id="interval" min="1" required>
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon3">件フォローする</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">保存</button>
-        </form>
-      </div>
-    </div><br>
-    <div class="card shadow">
-      <div class="card-header">
-        <strong>フォローリスト追加</strong>
-      </div>
-      <div class="card-body">
-        <form action="/follow/create">
-          <div class="form-group" hidden>
-            <label for="sns_type">sns_type</label>
-            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="1">
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <select name="option" class="custom-select addoption1" id="addoption" required>
-                <option selected value="">フォローリスト追加方法</option>
-                <option value="1">指定したユーザーのフォロワーを追加</option>
-                <option value="2">指定したユーザーのフォローを追加</option>
-                <option value="3">特定のキーワードを投稿しているユーザーを追加</option>
-              </select>
-            </div>
-            <div class="col-6">
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-6">
-              <div class="form-group user1 showform1" style="display:none;">
-                <input type="text" name="user" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
-              </div>
-              <div class="form-group word1 showform1" style="display:none;">
-                <input type="text" name="word" class="form-control" id="exampleInputEmail1" placeholder="特定のキーワード">
-              </div>
-              <div class="form-group post1 showform1" style="display:none;">
-                <input type="text" name="post" class="form-control" id="exampleInputEmail1" placeholder="投稿のURL">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <div class="form-group">
-                <select name="count" id="count" class="custom-select" required>
-                  <option selected value="">リスト追加数を選択</option>
-                  <option value=50>50</option>
-                  <option value=100>100</option>
-                  <option value=250>150</option>
-                  <option value=200>200</option>
-                  <option value=250>250</option>
-                  <option value=300>300</option>
-                  <option value=350>350</option>
-                  <option value=400>400</option>
-                  <option value=450>450</option>
-                  <option value=500>500</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary addLoading">追加</button>
-          <button class="btn btn-primary loading" type="button" disabled>
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Now Loading...
-          </button>
-        </form>
-      </div>
-    </div><br>
-    <div class="card shadow">
-      <div class="card-header">
-        <strong>フォローリスト一覧 （<%= @follows1.count %>人）</strong>
-      </div>
-      <div class="card-body">
-        <% if @follows1.count > 0 %>
-        <ul class="list-unstyled">
-        <div class="row">
-          <% count = 1 %>
-          <% @follows1.each do |follow| %>
-          <% if count > 50 %>
-          <div class="col-6 more1">
-            <li class="media">
-              <a href="#" class="mr-3">
-                <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
-              </a>
-              <div class="media-body">
-                <strong class="mt-0"><%= follow.target_name %></strong>
-                <small class="text-muted">@<%= follow.target_username %></small><br><br>
-                <a href="https://twitter.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
-                <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
-              </div>
-            </li><hr>
-          </div>
-          <% else %>
-          <div class="col-6">
-            <li class="media">
-              <a href="#" class="mr-3">
-                <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
-              </a>
-              <div class="media-body">
-                <strong class="mt-0"><%= follow.target_name %></strong>
-                <small class="text-muted">@<%= follow.target_username %></small><br><br>
-                <a href="https://twitter.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
-                <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
-              </div>
-            </li><hr>
-          </div>
-          <% end %>
-          <% count += 1 %>
-          <% end %>
         </div>
-        </ul>
-        <button class="btn btn-outline-primary morebtn1 btn-block">すべて表示する</button>
-        <% else %>
-        現在、フォロー予定のアカウントはありません。
-        <% end %>
       </div>
-    </div><br><br>
-  </div>
-  <div class="tab-pane fade" id="instagram" role="tabpanel" aria-labelledby="instagram-tab">
-    <% if @instagramActive %>
-    <div class="media">
-      <a href="#" class="align-self-center mr-3">
-        <img src="<%= @instagramActiveImage.profile_image %>" alt="中メディアの画像" class="rounded-circle shadow" width="100" height="100">
-      </a>
-      <div class="media-body">
-        <br>
-        <h6 class="mt-0"><%= @instagramActive.profile_name %></h6>
-        <small class="text-muted">@<%= @instagramActive.username %></small>
-      </div>
-    </div><br>
-    <% else %>
-    <a href="/account/list" class="btn btn-danger">アクティブアカウントを設定して下さい</a><br><br>
-    <% end %>
-    <div class="card shadow">
-      <div class="card-header">
-        <strong>フォロー設定</strong>
-      </div>
-      <div class="card-body">
-        <form action="/follow/setting_create">
-          <div class="form-group" hidden>
-            <label for="sns_type">sns_type</label>
-            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
-          </div>
-          <div class="form-group row">
-            <label for="limit" class="col-2 col-form-label">1日の上限</label>
-            <div class="col-2">
-              <div class="input-group mb-3">
-                <% if @instagramSetting %>
-                <input name="dayLimit" type="number" class="form-control" id="limit" min="1" value="<%= @instagramSetting.dayLimit %>" required>
-                <% else %>
-                <input name="dayLimit" type="number" class="form-control" id="limit" min="1" required>
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">件</span>
-                </div>
-              </div>
+      <div class="form-group row">
+        <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
+        <div class="col-2">
+          <div class="input-group mb-3">
+            <% if @instagramSetting %>
+            <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @instagramSetting.intervalsec %>" required>
+            <% else %>
+            <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
+            <% end %>
+            <div class="input-group-append">
+              <span class="input-group-text" id="basic-addon2">秒</span>
             </div>
           </div>
-          <div class="form-group row">
-            <label for="intervalsec" class="col-2 col-form-label">実行間隔</label>
-            <div class="col-2">
-              <div class="input-group mb-3">
-                <% if @instagramSetting %>
-                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" value="<%= @instagramSetting.intervalsec %>" required>
-                <% else %>
-                <input name="intervalsec" type="number" class="form-control" id="intervalsec" min="1" required>
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">秒</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-6">
-              <div class="input-group mb-3">
-                <select name="interval" class="custom-select" id="interval2">
-                  <option selected>停止中</option>
-                  <% @intervalHour.each do |i| %>
-                    <% if @instagramSetting %>
-                      <% if i == @instagramSetting.interval %>
-                       <option value="<%= i %>" selected><%= i %></option>
-                      <% else %>
-                        <option value="<%= i %>"><%= i %></option>
-                      <% end %>
-                    <% else %>
-                      <option value="<%= i %>"><%= i %></option>
-                    <% end %>
-                  <% end %>
-                </select>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">時間おきに</span>
-                </div>
-                <% if @instagramSetting %>
-                <input name="count_by_interval" type="number" class="form-control" id="interval" min="1" value="<%= @instagramSetting.count_by_interval %>" required>
-                <% else %>
-                <input name="count_by_interval" type="number" class="form-control" id="interval" min="1" required>
-                <% end %>
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon3">件フォローする</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">保存</button>
-        </form>
-      </div>
-    </div><br>
-    <div class="card shadow">
-      <div class="card-header">
-        <strong>フォローリスト追加</strong>
-      </div>
-      <div class="card-body">
-        <form action="/follow/create">
-          <div class="form-group" hidden>
-            <label for="sns_type">sns_type</label>
-            <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <select name="option" class="custom-select addoption2" id="addoption" required>
-                <option selected value="">フォローリスト追加方法</option>
-                <option value="1">指定したユーザーのフォロワーを追加</option>
-                <option value="2">指定したユーザーのフォローを追加</option>
-                <option value="3">特定のハッシュタグを投稿しているユーザーを追加</option>
-                <option value="4">特定の投稿にいいねしているユーザーを追加</option>
-              </select>
-            </div>
-            <div class="col-6">
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-6">
-              <div class="form-group user2 showform2" style="display:none;">
-                <input type="text" name="user" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
-              </div>
-              <div class="form-group word2 showform2" style="display:none;">
-                <input type="text" name="word" class="form-control" id="exampleInputEmail1" placeholder="特定のハッシュタグ">
-              </div>
-              <div class="form-group post2 showform2" style="display:none;">
-                <input type="text" name="post" class="form-control" id="exampleInputEmail1" placeholder="投稿のURL">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <div class="form-group">
-                <select name="count" id="count" class="custom-select" required>
-                  <option selected value="">リスト追加数を選択</option>
-                  <option value=50>50</option>
-                  <option value=100>100</option>
-                  <option value=250>150</option>
-                  <option value=200>200</option>
-                  <option value=250>250</option>
-                  <option value=300>300</option>
-                  <option value=350>350</option>
-                  <option value=400>400</option>
-                  <option value=450>450</option>
-                  <option value=500>500</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary">追加</button>
-        </form>
-      </div>
-    </div><br><br>
-    <div class="card shadow">
-      <div class="card-header">
-        <strong>フォローリスト一覧 （<%= @follows2.count %>人）</strong>
-      </div>
-      <div class="card-body">
-        <% if @follows2.count > 0 %>
-        <ul class="list-unstyled">
-        <div class="row">
-          <% count = 1 %>
-          <% @follows2.each do |follow| %>
-          <% if count > 50 %>
-          <div class="col-6 more2">
-            <li class="media">
-              <a href="#" class="mr-3">
-                <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
-              </a>
-              <div class="media-body">
-                <strong class="mt-0"><%= follow.target_name %></strong>
-                <small class="text-muted">@<%= follow.target_username %></small><br><br>
-                <a href="https://instagram.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
-                <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
-              </div>
-            </li><hr>
-          </div>
-          <% else %>
-          <div class="col-6">
-            <li class="media">
-              <a href="#" class="mr-3">
-                <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
-              </a>
-              <div class="media-body">
-                <strong class="mt-0"><%= follow.target_name %></strong>
-                <small class="text-muted">@<%= follow.target_username %></small><br><br>
-                <a href="https://instagram.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
-                <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
-              </div>
-            </li><hr>
-          </div>
-          <% end %>
-          <% count += 1 %>
-          <% end %>
         </div>
-        </ul>
-        <button class="btn btn-outline-primary morebtn2 btn-block">すべて表示する</button>
-        <% else %>
-        現在、フォロー予定のアカウントはありません。
-        <% end %>
       </div>
-    </div><br><br>
+      <div class="form-group row">
+        <div class="col-6">
+          <div class="input-group mb-3">
+            <select name="interval" class="custom-select" id="interval2">
+              <option selected>停止中</option>
+              <% @intervalHour.each do |i| %>
+                <% if @instagramSetting %>
+                  <% if i == @instagramSetting.interval %>
+                   <option value="<%= i %>" selected><%= i %></option>
+                  <% else %>
+                    <option value="<%= i %>"><%= i %></option>
+                  <% end %>
+                <% else %>
+                  <option value="<%= i %>"><%= i %></option>
+                <% end %>
+              <% end %>
+            </select>
+            <div class="input-group-append">
+              <span class="input-group-text" id="basic-addon2">時間おきに</span>
+            </div>
+            <% if @instagramSetting %>
+            <input name="count_by_interval" type="number" class="form-control" id="interval" min="1" value="<%= @instagramSetting.count_by_interval %>" required>
+            <% else %>
+            <input name="count_by_interval" type="number" class="form-control" id="interval" min="1" required>
+            <% end %>
+            <div class="input-group-append">
+              <span class="input-group-text" id="basic-addon3">件フォローする</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">保存</button>
+    </form>
   </div>
-  <div class="tab-pane fade" id="facebook" role="tabpanel" aria-labelledby="facebook-tab">
-
+</div><br>
+<div class="card shadow">
+  <div class="card-header">
+    <strong>フォローリスト追加</strong>
   </div>
-</div>
-
-
+  <div class="card-body">
+    <form action="/follow/create">
+      <div class="form-group" hidden>
+        <label for="sns_type">sns_type</label>
+        <input name="sns_type" type="number" class="form-control" id="sns_type" name="sns_type" value="2">
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <select name="option" class="custom-select addoption2" id="addoption" required>
+            <option selected value="">フォローリスト追加方法</option>
+            <option value="1">指定したユーザーのフォロワーを追加</option>
+            <option value="2">指定したユーザーのフォローを追加</option>
+            <option value="3">特定のハッシュタグを投稿しているユーザーを追加</option>
+            <option value="4">特定の投稿にいいねしているユーザーを追加</option>
+          </select>
+        </div>
+        <div class="col-6">
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group user2 showform2" style="display:none;">
+            <input type="text" name="user" class="form-control" id="exampleInputEmail1" placeholder="ユーザーのアカウント名（@以降）">
+          </div>
+          <div class="form-group word2 showform2" style="display:none;">
+            <input type="text" name="word" class="form-control" id="exampleInputEmail1" placeholder="特定のハッシュタグ">
+          </div>
+          <div class="form-group post2 showform2" style="display:none;">
+            <input type="text" name="post" class="form-control" id="exampleInputEmail1" placeholder="投稿のURL">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <select name="count" id="count" class="custom-select" required>
+              <option selected value="">リスト追加数を選択</option>
+              <option value=50>50</option>
+              <option value=100>100</option>
+              <option value=250>150</option>
+              <option value=200>200</option>
+              <option value=250>250</option>
+              <option value=300>300</option>
+              <option value=350>350</option>
+              <option value=400>400</option>
+              <option value=450>450</option>
+              <option value=500>500</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group form-check">
+        <input name="check" type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">全アカウントに適用する</label>
+      </div>
+      <button type="submit" class="btn btn-primary">追加</button>
+    </form>
+  </div>
+</div><br><br>
+<div class="card shadow">
+  <div class="card-header">
+    <strong>フォローリスト一覧 （<%= @follows2.count %>人）</strong>
+  </div>
+  <div class="card-body">
+    <% if @follows2.count > 0 %>
+    <ul class="list-unstyled">
+    <div class="row">
+      <% count = 1 %>
+      <% @follows2.each do |follow| %>
+      <% if count > 50 %>
+      <div class="col-6 more2">
+        <li class="media">
+          <a href="#" class="mr-3">
+            <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
+          </a>
+          <div class="media-body">
+            <strong class="mt-0"><%= follow.target_name %></strong>
+            <small class="text-muted">@<%= follow.target_username %></small><br><br>
+            <a href="https://instagram.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+            <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+          </div>
+        </li><hr>
+      </div>
+      <% else %>
+      <div class="col-6">
+        <li class="media">
+          <a href="#" class="mr-3">
+            <%= image_tag(follow.target_image, size:"60x60", class:"rounded-circle shadow") %>
+          </a>
+          <div class="media-body">
+            <strong class="mt-0"><%= follow.target_name %></strong>
+            <small class="text-muted">@<%= follow.target_username %></small><br><br>
+            <a href="https://instagram.com/<%= follow.target_username %>" class="btn btn-sm btn-info" target="_blank">詳細を見る</a>
+            <%= link_to "削除する", "/follow/#{follow.id}", method: :delete, data: { confirm:'本当に削除しますか?' }, class:"btn btn-sm btn-danger" %>
+          </div>
+        </li><hr>
+      </div>
+      <% end %>
+      <% count += 1 %>
+      <% end %>
+    </div>
+    </ul>
+    <button class="btn btn-outline-primary morebtn2 btn-block">すべて表示する</button>
+    <% else %>
+    現在、フォロー予定のアカウントはありません。
+    <% end %>
+  </div>
+</div><br><br>
 <script>
   $('.loading').hide();
   $('.more1').hide();
